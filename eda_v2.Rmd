@@ -1,0 +1,1027 @@
+---
+title: "EDA de Sobrevivência com Riscos Competitivos: Óbito Fetal vs Nascimento Vivo — SP (2018–2023)"
+author: ""
+geometry: "left=1cm,right=1cm,top=2cm,bottom=2cm"
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{H} 
+  - \renewcommand{\contentsname}{Contents}
+  - \usepackage{mdframed}
+  - \definecolor{shadecolor}{gray}{.90}
+  - \renewenvironment{Shaded}{\begin{mdframed}[
+      backgroundcolor=shadecolor,
+      linecolor = shadecolor,
+      leftmargin=\dimexpr\leftmargin-2pt\relax,
+      innerleftmargin=1.6pt,
+      innertopmargin=5pt,
+      skipabove=10pt,skipbelow=3pt
+    ]}{\end{mdframed}}
+output:   
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+    keep_tex: yes
+    latex_engine: xelatex
+  word_document: default
+  html_document:
+    self_contained: no
+---
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, include = FALSE, , results='hide', warning = FALSE, fig.width = 8, fig.height = 5, dpi = 300)
+set.seed(123)
+options(scipen = 999)
+
+\newpage
+
+# 1. Variáveis do conjunto de dados
+
+- `cod_cep` - ~
+- `codestab` - Código do estabelecimento de saúde
+- `origem` - Origem do registro
+- `codmunnatu` 
+  - SINASC: código do município de naturalidade da mãe; 
+  - SIM: código do município de naturalidade do falecido (o equivalente 
+no SINASC é a variável CODUFNATU) 
+  - Obs: nome da variável é a mesma, mas as informações são 
+diferentes.
+- `sexo` - ~
+- `racacor` - ~
+- `codmunres` - Código do município de residência (em caso de óbito fetal, 
+considera o município de residência da mãe)
+- `idademae` - Idade da mãe
+- `escmae` - Escolaridade da mãe em anos
+- `escmae2010` - Escolaridade 2010. Nível da última série
+concluída pela mãe
+- `qtdfilvivo` - Número de filhos vivos
+- `qtdfilmort` - Número de filhos mortos
+- `gravidez` - Tipo de gravidez
+- `semagestac` - Número de semanas de gestação
+- `gestacao` - Faixas de semanas de gestação
+- `parto` - Tipo de parto
+- `peso` - Peso ao nascer em gramas
+- `numerolote` - Número do lote 
+- `dtcadastro` - Data do cadastro do nascimento / óbito
+- `versaosist` - Versão do sistema
+- `dtrecebim` - Data do último recebimento do lote
+- `escmaeagr1` - Escolaridade da mãe agregada (formulário a partir de 2010)
+- `difdata` 
+  - SINASC: Diferença entre a data de Nascimento e data do 
+recebimento original da DN ([DTNASC] – [DTRECORIGA])
+  - SIM: Diferença entre a data de óbito e data do recebimento 
+original da DO ([DTOBITO] – [DTRECORIGA)
+- `contador` - Número identificador do registro
+- `codmunocornasc` 
+  - SINASC: Código do município de nascimento
+  - SIM: Código do município onde ocorreu o óbito
+- `lococornasc` 
+  - SINASC: Local de nascimento
+  - SIM: Local de ocorrência do óbito
+- `horaobitonasc` 
+  - SINASC: Horário de nascimento
+  - SIM: Horário do óbito
+- `ocupmaecodocupmae` 
+  - SINASC: Código de ocupação da mãe conforme tabela do 
+CBO (Código Brasileiro de Ocupações)
+  - SIM: Tipo de trabalho exercido habitualmente pela Mãe, de 
+acordo com Classificação Brasileira de Ocupações – CBO 2002. 
+No caso da mãe do falecido(a) ser “aposentada”, preencher 
+com a ocupação habitual anterior
+- `codmunnatucodufnatu` 
+  - SINASC: código UF de naturalidade
+  - SIM: Código do município e UF de naturalidade do falecido
+  - Obs: a variável CODUFNATU apresenta apenas o código da UF,
+enquanto CODMUNNATU apresenta tanto UF quanto município
+- `ano` - 2018 - 2022
+- `evento` - 0 = nascido vivo, 1 = óbito fetal
+- `pandemia` - 1 = 2020 ou 2021, 0 = os demais anos
+- `latitude` - latitude do estabelecimento de saúde do caso
+- `longitude` - longitude do estabelecimento de saúde do caso
+- `uf` - SP
+
+Para mais detalhes, conferir a planilha: [PLANILHA](https://docs.google.com/spreadsheets/d/1XTy0_TqlMx3RJITSiZk2ld_i7-6KZje4U3-41B9UQNI/edit?usp=sharing)
+
+
+# 2. Pacotes
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE, results='hide', quiet=TRUE}
+# Setup global 
+options(scipen = 999)
+set.seed(123)
+
+# Instala e carrega pacotes 
+pkg <- function(x){
+  if (!requireNamespace(x, quietly = TRUE)) install.packages(x, dep = TRUE)
+  suppressPackageStartupMessages(library(x, character.only = TRUE))
+}
+
+lapply(c("tidyverse","data.table","janitor","stringr","forcats","readxl",
+         "survival","survminer","cmprsk","muhaz","Matrix","viridis",
+         "naniar","visdat","skimr", "purrr"), pkg)
+```
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Carregamento 
+cat("=== ETAPA 1: CARREGAMENTO DOS DADOS ===\n")
+
+# dataset_combined_df gerado em load_data.Rmd
+dados_sp <- readRDS("dataset_combined_df.rds")
+
+dim(dados_sp)
+dplyr::glimpse(dados_sp, width = 80)
+```
+
+# 3. Padronização de faltantes e coerções
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Limpeza de faltantes e coerções
+
+# Ignorado está como "0"
+dados_sp$sexo <- ifelse(dados_sp$sexo == "0", "9", dados_sp$sexo) 
+
+# 743 casos com 99 filhos
+dados_sp <- filter(dados_sp, dados_sp$qtdfilvivo != 99) 
+
+# 254 casos com 99 filhos
+dados_sp <- filter(dados_sp, dados_sp$qtdfilmort != 99) 
+
+# 379 casos em semana gestacional 99
+dados_sp <- filter(dados_sp, dados_sp$semagestac != 99) 
+
+# Ignorado está como "09"
+dados_sp$escmaeagr1 <- ifelse(dados_sp$escmaeagr1 == "09", "9", dados_sp$escmaeagr1) 
+
+# Vars onde "9/99/999..." = Ignorado (baseado nos dicionários)
+vars_ignorado <- intersect(c("escmae","escmae2010","racacor", "escmae", "gravidez",
+                             "gestacao","parto","lococornasc", "sexo"),
+                           names(dados_sp))
+
+# Função: limpa espaços e troca "" e " " por NA
+clean_blank <- function(x){
+  if (is.character(x)) {
+    x <- stringr::str_squish(x)
+    x[x %in% c("", " ")] <- NA_character_
+  }
+  x
+}
+
+# Função que em variáveis elegíveis, troca "9+", "99+", "999+", etc... por NA
+as_na_ignorado <- function(x){
+  if (is.character(x)) {
+    x[grepl("^9+$", x)] <- NA_character_
+  }
+  x
+}
+
+dados_sp_cln <- dados_sp %>%
+  mutate(across(where(is.character), clean_blank)) %>%
+  mutate(across(all_of(vars_ignorado), as_na_ignorado)) %>%
+  # Coerções numéricas 
+  mutate(
+    semagestac = suppressWarnings(as.numeric(semagestac)),
+    idademae   = suppressWarnings(as.numeric(idademae)),
+    peso       = suppressWarnings(as.numeric(peso)),
+    ano        = suppressWarnings(as.integer(ano)),
+    evento     = suppressWarnings(as.integer(evento)),
+    pandemia   = suppressWarnings(as.integer(pandemia))
+  )
+
+#-------------- Definições de intervalos
+rng_sem   <- c(0, 45)     # semanas gestacionais plausíveis 
+rng_idade <- c(10, 49)    # idade materna plausível 
+peso_max  <- 7000         
+n0 <- nrow(dados_sp_cln)
+
+# Flags simples para sem/idade (NA passa)
+in_sem   <- dplyr::between(dados_sp_cln$semagestac, 
+                           rng_sem[1],   
+                           rng_sem[2]) | is.na(dados_sp_cln$semagestac)
+in_idade <- dplyr::between(dados_sp_cln$idademae,   
+                           rng_idade[1], 
+                           rng_idade[2]) | is.na(dados_sp_cln$idademae)
+
+# ------------------------ Aqui estou tentando usar a lógica dada no manual
+# de instruções da declaração de óbito, que caracteriza, também, óbito fetal
+# quando semana gestacional menor que 20, mas que o peso seja maior que 500g
+# (ver sessão de comentário ao final do arquivo)
+
+# Regra condicional para variável peso
+#    - Mantém NA como TRUE.
+#    - Garante teto de coerência (<= peso_max) quando peso não for NA.
+peso_ok <- with(dados_sp_cln, {
+  # normaliza evento para 0,1 e NA 
+  ev <- ifelse(evento %in% c(0L, 1L), evento, NA_integer_)
+  sg <- semagestac
+  pw <- peso
+  
+  cond <- rep(TRUE, length(pw))  # default: passa (NA tratado adiante)
+
+  # onde peso não é NA, aplica regras
+  idx_non_na <- !is.na(pw)
+  if (any(idx_non_na)) {
+    cond[idx_non_na] <- FALSE  # zera e vamos ligar situação a situação
+
+    # limites superiores coerentes (sempre exigidos quando há peso)
+    teto <- pw[idx_non_na] <= peso_max
+
+    # casos com evento == 1 (óbito fetal)
+    idx_fd <- idx_non_na & ev == 1L
+    if (any(idx_fd, na.rm = TRUE)) {
+      # a) semagestac <= 20: peso > 500
+      idx_a <- idx_fd & !is.na(sg) & sg <= 20
+      cond[idx_a] <- (pw[idx_a] > 500) & teto[idx_non_na][which(idx_a[idx_non_na])]
+
+      # b) semagestac > 20: peso > 0
+      idx_b <- idx_fd & !is.na(sg) & sg > 20
+      cond[idx_b] <- (pw[idx_b] > 0) & teto[idx_non_na][which(idx_b[idx_non_na])]
+
+      # c) se semagestac for NA quando evento==1, deixa passar (não decide aqui)
+      idx_c <- idx_fd & is.na(sg)
+      cond[idx_c] <- TRUE
+    }
+
+    # casos com evento == 0 (nascido vivo): peso > 0
+    idx_lv <- idx_non_na & ev == 0L
+    if (any(idx_lv, na.rm = TRUE)) {
+      cond[idx_lv] <- (pw[idx_lv] > 0) & teto[idx_non_na][which(idx_lv[idx_non_na])]
+    }
+
+    # evento NA (ou outro valor): não removemos aqui
+    idx_ev_na <- idx_non_na & is.na(ev)
+    cond[idx_ev_na] <- TRUE
+  }
+
+  # por fim, se peso é NA, mantém TRUE
+  cond[is.na(pw)] <- TRUE
+  cond
+})
+
+# Contagens de "fora" (não-NA) para relatório
+n_out_sem   <- sum(!is.na(dados_sp_cln$semagestac) & !dplyr::between(dados_sp_cln$semagestac,
+                                                                     rng_sem[1], 
+                                                                     rng_sem[2]))
+n_out_idade <- sum(!is.na(dados_sp_cln$idademae)   & !dplyr::between(dados_sp_cln$idademae, 
+                                                                     rng_idade[1], 
+                                                                     rng_idade[2]))
+
+# Para peso, contamos somente onde há informação suficiente para aplicar a regra
+tem_peso      <- !is.na(dados_sp_cln$peso)
+peso_invalido <- tem_peso & !peso_ok
+n_out_peso    <- sum(peso_invalido, na.rm = TRUE)
+
+cat("Outliers detectados (não-NA) com novas regras:\n",
+    sprintf(" - semagestac fora [%d,%d]: %d\n", rng_sem[1], rng_sem[2], n_out_sem),
+    sprintf(" - idademae   fora [%d,%d]: %d\n", rng_idade[1], rng_idade[2], n_out_idade),
+    sprintf(" - peso condicional inválido: %d\n", n_out_peso),
+    sep = "")
+
+# Remoção efetiva (mantém NA): precisa estar dentro das faixas e com peso_ok
+dados_sp_cln <- dados_sp_cln %>%
+  dplyr::filter(in_sem, in_idade, peso_ok)
+
+n1 <- nrow(dados_sp_cln)
+cat(sprintf("Linhas antes: %d | depois da remoção: %d | removidas: %d (%.3f%%)\n",
+            n0, n1, n0 - n1, 100*(n0 - n1)/n0))
+
+# Verificação pós-limpeza (ignorando NAs)
+if (sum(!is.na(dados_sp_cln$semagestac)) > 0) {
+  stopifnot(max(dados_sp_cln$semagestac, na.rm = TRUE) <= rng_sem[2])
+  stopifnot(min(dados_sp_cln$semagestac, na.rm = TRUE) >= rng_sem[1])
+}
+if (sum(!is.na(dados_sp_cln$idademae)) > 0) {
+  stopifnot(max(dados_sp_cln$idademae, na.rm = TRUE) <= rng_idade[2])
+  stopifnot(min(dados_sp_cln$idademae, na.rm = TRUE) >= rng_idade[1])
+}
+
+# Para peso, como há regra condicional, checamos apenas coerência superior quando peso não é NA
+if (sum(!is.na(dados_sp_cln$peso)) > 0) {
+  stopifnot(max(dados_sp_cln$peso, na.rm = TRUE) <= peso_max)
+}
+
+cat(sprintf("Faixas após limpeza (ignorando NAs):\n - semagestac: [%s, %s]\n - idademae: [%s, %s]\n",
+            suppressWarnings(min(dados_sp_cln$semagestac, na.rm=TRUE)),
+            suppressWarnings(max(dados_sp_cln$semagestac, na.rm=TRUE)),
+            suppressWarnings(min(dados_sp_cln$idademae,   na.rm=TRUE)),
+            suppressWarnings(max(dados_sp_cln$idademae,   na.rm=TRUE))))
+```
+
+
+# 4. Diagnóstico de faltantes
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Plano de variáveis (talvez façam sentido, mas nem todas) 
+
+vars_all <- c("codestab","sexo","racacor",
+              "codmunres","idademae","escmae","escmae2010","qtdfilvivo","qtdfilmort",
+              "gravidez","semagestac","gestacao","parto","peso","numerolote",
+              "dtcadastro","versaosist","dtrecebim","escmaeagr1","difdata","contador",
+              "codmunocornasc","lococornasc","horaobitonasc","ocupmaecodocupmae",
+              "codmunnatucodufnatu","ano","evento","pandemia", "uf_ocor", "uf_resid")
+
+present <- intersect(vars_all, names(dados_sp))
+
+# Função geral de contagem de NA pós-limpeza
+miss_summ <- function(df){
+  tibble(
+    variavel = names(df),
+    n_na     = sapply(df, function(x) sum(is.na(x))),
+    prop_na  = round(n_na / nrow(df), 4),
+    n_unique = sapply(df, function(x) length(unique(x)))
+  ) %>% arrange(desc(prop_na))
+}
+
+miss_tbl <- miss_summ(dados_sp_cln)
+
+knitr::kable(head(miss_tbl, 20),
+             caption = "Top 20 variáveis por proporção de faltantes (após padronização)")
+
+# Visual rápido
+naniar::gg_miss_var(dados_sp_cln %>% select(any_of(present))) +
+  ggtitle("% de faltantes por variável") +
+  theme_minimal(base_size = 12)
+```
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE, fig.height=9}
+# Preparação para facetas (rótulos) 
+dados_sp_cln_facets <- dados_sp_cln %>%
+  mutate(
+    evento_fac   = factor(evento, levels = c(0,1),
+                          labels = c("Nascido vivo","Óbito fetal")),
+    ano_fac      = factor(ano),
+    pandemia_fac = factor(pandemia, levels = c(0,1),
+                          labels = c("Não","Sim"))
+  )
+
+# % faltantes por variável, facetado por evento
+naniar::gg_miss_var(dados_sp_cln_facets, facet = evento_fac, show_pct = TRUE) +
+  labs(
+    title = "% de faltantes por variável (facetas = Evento)",
+    subtitle = "Comparação direta Nascido vivo vs. Óbito fetal",
+    x = NULL, y = "% faltantes"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 12}
+# % de dados faltantes por variável, facetado por ano 
+naniar::gg_miss_var(dados_sp_cln_facets, facet = ano_fac, show_pct = TRUE) +
+  labs(
+    title = "% de faltantes por variável (facetas = Ano)",
+    subtitle = "Variações temporais (2018–2023)",
+    x = NULL, y = "% faltantes"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 12}
+# Sumários de dados faltantes por variável x evento / ano 
+library(data.table)
+
+DT <- as.data.table(dados_sp_cln_facets)
+
+# Função auxiliar: proporção de NA por grupo
+prop_na_by <- function(DT, by_cols){
+  meltDT <- melt(DT, measure.vars = setdiff(names(DT), by_cols), variable.name = "variavel")
+  meltDT[, is_na := is.na(value)]
+  meltDT[, .(prop_na = mean(is_na, na.rm = TRUE)), by = c(by_cols, "variavel")]
+}
+
+# Por evento
+tab_evento <- prop_na_by(DT, by_cols = "evento_fac") %>%
+  tidyr::pivot_wider(names_from = evento_fac, values_from = prop_na) %>%
+  mutate(diff_abs = abs(`Óbito fetal` - `Nascido vivo`)) %>%
+  arrange(desc(diff_abs))
+
+knitr::kable(head(tab_evento, 30), digits = 3,
+             caption = "Top 30 variáveis com maior diferença de % faltantes entre eventos")
+
+# Por ano
+tab_ano <- prop_na_by(DT, by_cols = "ano_fac") %>%
+  tidyr::pivot_longer(-c(variavel, ano_fac), names_to = "metric", values_to = "prop_na")
+
+knitr::kable(tab_ano %>% group_by(variavel) %>% summarise(prop_na_média = mean(prop_na, na.rm=TRUE)) %>%
+               arrange(desc(prop_na_média)) %>% head(30),
+             digits = 3,
+             caption = "Top 30 variáveis com maior % médio de faltantes ao longo dos anos")
+```
+
+# 5. Recodificações principais e criação de objetos de tempo/evento
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE, fig.width = 10, fig.height = 12}
+# Recodificação essencial para análises seguintes
+dados_eda <- dados_sp_cln %>%
+  mutate(
+    sexo = case_when(sexo %in% c("1","2") ~ sexo, TRUE ~ NA_character_) %>%
+        factor(levels = c("1","2"), labels = c("Masculino","Feminino")),
+    gravidez = case_when(
+      gravidez == "1" ~ "Única",
+      gravidez == "2" ~ "Dupla",
+      gravidez == "3" ~ "Tripla ou mais",
+      TRUE ~ NA_character_) %>% 
+      factor(levels = c("Única","Dupla","Tripla ou mais")),
+    parto = factor(parto, levels = c("1","2"), labels = c("Vaginal","Cesáreo")),
+    lococornasc = case_when(
+      lococornasc == "1" ~ "Hospital",
+      lococornasc == "2" ~ "Outros est. saúde",
+      lococornasc == "3" ~ "Domicílio",
+      lococornasc == "4" ~ "Via pública",
+      lococornasc == "5" ~ "Outros",
+      TRUE ~ NA_character_) %>% 
+      factor(levels = c("Hospital","Outros est. saúde","Domicílio",
+                        "Via pública","Outros")),
+    pandemia = factor(pandemia, levels = c(0,1), labels = c("Não","Sim")),
+    # Objetos de tempo e eventos para as duas perspectivas
+    tempo = semagestac,
+    status_fd = ifelse(evento == 1L, 1L, 0L),   # 1 = óbito fetal
+    status_lv = ifelse(evento == 0L, 1L, 0L),   # 1 = nascimento vivo
+    fstatus   = case_when(evento == 1L ~ 1L,    # 1 = óbito fetal
+                          evento == 0L ~ 2L,    # 2 = nascido vivo (competidor)
+                          TRUE ~ 0L)            # 0 = censura
+  ) %>%
+  # remove linhas sem tempo ou evento definido
+  filter(!is.na(tempo), !is.na(fstatus))
+```
+
+# 6. Descrição básica
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Tamanho e taxa bruta de eventos
+n <- nrow(dados_eda)
+taxa_obito <- mean(dados_eda$status_fd)
+tab_evento <- table(Evento = ifelse(dados_eda$status_fd==1,"Óbito fetal","Nascido vivo"))
+
+list(n_registros = n, taxa_óbito_fetal = round(taxa_obito, 4))
+tab_evento
+
+# Distribuições de idade gestacional, idade materna e peso
+p1 <- ggplot(dados_eda, aes(x = tempo)) +
+  geom_histogram(bins = 60) + labs(x="Semanas de gestação", y="Frequência",
+                                    title="Distribuição de idade gestacional (tempo)") +
+  theme_minimal(base_size = 12)
+p1
+```
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+p2 <- ggplot(dados_eda, aes(x = idademae)) +
+  geom_histogram(bins = 60) + labs(x="Idade materna (anos)", y="Frequência") +
+  theme_minimal(base_size = 12)
+p2
+```
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+p3 <- ggplot(dados_eda, aes(x = peso)) +
+  geom_histogram(bins = 60) + labs(x="Peso ao nascer (g)", y="Frequência") +
+  theme_minimal(base_size = 12)
+p3
+```
+
+
+# 6.1 Kaplan–Meier (KM) sob as duas perspectivas
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd <- survfit(Surv(tempo, status_fd) ~ 1, data = dados_eda)
+survminer::ggsurvplot(
+  km_fd, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) (óbito fetal como evento)",
+  title = "KM – Óbito fetal (nascido vivo censurado)",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.985, 1.00)   # Zoom
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv <- survfit(Surv(tempo, status_lv) ~ 1, data = dados_eda)
+survminer::ggsurvplot(km_lv, data = dados_eda, conf.int = TRUE,
+                      xlab = "Semanas", ylab = "S(t) (nascido vivo como evento)",
+                      title = "KM – Nascido vivo (óbito fetal censurado)",
+                      ggtheme = theme_minimal(base_size = 12))
+
+```
+
+# 7. KM de cada caso 
+
+## Sexo
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_sexo <- survfit(Surv(tempo, status_fd) ~ sexo, data = dados_eda)
+survminer::ggsurvplot(
+  km_fd_sexo, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por sexo",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00)  
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_sexo <- survfit(Surv(tempo, status_lv) ~ sexo, data = dados_eda)
+survminer::ggsurvplot(
+  km_lv_sexo, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por sexo",
+  ggtheme = theme_minimal(base_size = 12)
+)
+```
+
+## Ano
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+dados_eda <- dados_eda %>%
+  dplyr::mutate(ano = factor(ano, levels = sort(unique(ano)), ordered = TRUE))
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_ano <- survfit(Surv(tempo, status_fd) ~ ano, data = dados_eda)
+survminer::ggsurvplot(
+  km_fd_ano, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por ano",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00)  
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_ano <- survfit(Surv(tempo, status_lv) ~ ano, data = dados_eda)
+survminer::ggsurvplot(
+  km_lv_ano, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por ano",
+  ggtheme = theme_minimal(base_size = 12)
+)
+```
+
+## Pandemia
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+dados_eda <- dados_eda %>%
+  dplyr::mutate(ano = factor(ano, levels = sort(unique(ano)), ordered = TRUE))
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_pandemia <- survfit(Surv(tempo, status_fd) ~ pandemia, data = dados_eda)
+survminer::ggsurvplot(
+  km_fd_pandemia, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por pandemia",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00)  
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_pandemia <- survfit(Surv(tempo, status_lv) ~ pandemia, data = dados_eda)
+survminer::ggsurvplot(
+  km_lv_pandemia, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por pandemia",
+  ggtheme = theme_minimal(base_size = 12)
+)
+```
+
+## Idade da mãe
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Cria faixas etárias usuais (OMS)
+dados_eda <- dados_eda %>%
+  dplyr::mutate(
+    idade_cat = dplyr::case_when(
+      is.na(idademae)               ~ NA_character_,
+      idademae < 20                 ~ "<20",
+      idademae >= 20 & idademae <= 34 ~ "20–34",
+      idademae >= 35 & idademae <= 39 ~ "35–39",
+      idademae >= 40                ~ "≥40"
+    ) %>% factor(levels = c("<20","20–34","35–39","≥40"))
+  )
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_idade <- survfit(Surv(tempo, status_fd) ~ idade_cat, data = dados_eda)
+survminer::ggsurvplot(
+  km_fd_idade, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por idade materna",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00)   
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_idade <- survfit(Surv(tempo, status_lv) ~ idade_cat, data = dados_eda)
+survminer::ggsurvplot(
+  km_lv_idade, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por idade materna",
+  ggtheme = theme_minimal(base_size = 12)
+)
+```
+
+## Peso
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Cria faixas de peso
+dados_eda <- dados_eda %>%
+  dplyr::mutate(
+    peso_cat = dplyr::case_when(
+      is.na(peso)              ~ NA_character_,
+      peso < 2500              ~ "<2500g",
+      peso >= 2500 & peso < 4000 ~ "2500–3999g",
+      peso >= 4000             ~ "≥4000g"
+    ) %>% factor(levels = c("<2500g","2500–3999g","≥4000g"))
+  )
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_peso <- survfit(Surv(tempo, status_fd) ~ peso_cat, data = dados_eda)
+survminer::ggsurvplot(
+  km_fd_peso, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por peso ao nascer",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00)   
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_peso <- survfit(Surv(tempo, status_lv) ~ peso_cat, data = dados_eda)
+survminer::ggsurvplot(
+  km_lv_peso, data = dados_eda, conf.int = TRUE,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por peso ao nascer",
+  ggtheme = theme_minimal(base_size = 12)
+)
+```
+
+## Parto
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+dados_parto <- subset(dados_eda, !is.na(tempo) & !is.na(status_fd) & !is.na(parto))
+table(dados_eda$parto, useNA = "ifany")
+with(dados_eda, table(is.na(tempo) | is.na(status_fd), useNA = "ifany"))
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_parto <- survfit(Surv(tempo, status_fd) ~ parto, data = dados_parto)
+survminer::ggsurvplot(
+  km_fd_parto, data = dados_parto, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por tipo de parto",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00)
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_parto <- survfit(Surv(tempo, status_lv) ~ parto, data = dados_parto)
+survminer::ggsurvplot(
+  km_lv_parto, data = dados_parto, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por tipo de parto",
+  ggtheme = theme_minimal(base_size = 12)
+)
+```
+
+
+## Faixas de gestação
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+dados_eda <- dados_eda %>%
+  dplyr::mutate(
+    gestacao_fac = factor(
+      gestacao,
+      levels = c("1","2","3","4","5","6"),
+      labels = c("<22","22–27","28–31","32–36","37–41","≥42")
+    )
+  )
+dados_gest <- subset(dados_eda, !is.na(gestacao_fac))
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_gest <- survfit(Surv(tempo, status_fd) ~ gestacao_fac, data = dados_gest)
+survminer::ggsurvplot(
+  km_fd_gest, data = dados_gest, conf.int = TRUE,
+  conf.int.style = "step",       # evita erro de ribbon 
+  linetype = 1, size = 0.7,      # fixa traço
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por faixa de gestação",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00)          # zoom perto de 1
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_gest <- survfit(Surv(tempo, status_lv) ~ gestacao_fac, data = dados_gest)
+survminer::ggsurvplot(
+  km_lv_gest, data = dados_gest, conf.int = TRUE,
+  conf.int.style = "step",       
+  linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por faixa de gestação",
+  ggtheme = theme_minimal(base_size = 12)
+)
+```
+
+## escmae (escolaridade da mãe)
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Rotulagem explícita de escmae2010 conforme o dicionário oficial
+dados_eda <- dados_eda %>%
+  dplyr::mutate(
+    escmae2010_lab = dplyr::case_when(
+      is.na(escmae2010)                     ~ NA_character_,
+      as.character(escmae2010) == "9"       ~ NA_character_,  # Ignorado -> NA
+      as.character(escmae2010) == "0"       ~ "Sem escolaridade",
+      as.character(escmae2010) == "1"       ~ "Fundamental 1 (1ª–4ª)",
+      as.character(escmae2010) == "2"       ~ "Fundamental 2 (5ª–8ª)",
+      as.character(escmae2010) == "3"       ~ "Médio (antigo 2º grau)",
+      as.character(escmae2010) == "4"       ~ "Superior incompleto",
+      as.character(escmae2010) == "5"       ~ "Superior completo",
+      TRUE                                  ~ NA_character_
+    ) %>% factor(levels = c("Sem escolaridade",
+                            "Fundamental 1 (1ª–4ª)",
+                            "Fundamental 2 (5ª–8ª)",
+                            "Médio (antigo 2º grau)",
+                            "Superior incompleto",
+                            "Superior completo"),
+                 ordered = TRUE)
+  )
+
+table(dados_eda$escmae2010_lab, useNA = "ifany")
+
+# Filtra casos com info necessária e com rótulo válido
+dados_esc10 <- subset(dados_eda, !is.na(tempo) & !is.na(status_fd) & !is.na(escmae2010_lab))
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_esc10 <- survfit(Surv(tempo, status_fd) ~ escmae2010_lab, data = dados_esc10)
+
+# rótulos na ordem exata das curvas
+labs_fd <- sub("^.*=", "", names(km_fd_esc10$strata))
+
+survminer::ggsurvplot(
+  km_fd_esc10, data = dados_esc10, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por escolaridade (escmae2010)",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.95, 1.00),
+  legend.title = NULL,     # sem título
+  legend.labs  = labs_fd   # apenas o nome da categoria
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_esc10 <- survfit(Surv(tempo, status_lv) ~ escmae2010_lab, data = dados_esc10)
+
+labs_lv <- sub("^.*=", "", names(km_lv_esc10$strata))
+
+survminer::ggsurvplot(
+  km_lv_esc10, data = dados_esc10, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por escolaridade (escmae2010)",
+  ggtheme = theme_minimal(base_size = 12),
+  legend.title = NULL,
+  legend.labs  = labs_lv
+)
+
+```
+
+## Local de ocorrência
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Padronizar a ordem dos níveis e remover NAs
+dados_loc <- dados_eda %>%
+  dplyr::mutate(
+    lococornasc = forcats::fct_relevel(
+      lococornasc,
+      "Hospital", "Outros est. saúde", "Domicílio", "Via pública", "Outros",
+      after = 0
+    )
+  ) %>%
+  dplyr::filter(!is.na(tempo), !is.na(status_fd), !is.na(lococornasc))
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_loco <- survfit(Surv(tempo, status_fd) ~ lococornasc, data = dados_loc)
+
+# Legenda sem 'lococornasc='
+labs_fd <- sub("^.*=", "", names(km_fd_loco$strata))
+
+survminer::ggsurvplot(
+  km_fd_loco, data = dados_loc, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,   # evita erro do ribbon
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por local de ocorrência/nasc",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00),
+  legend.title = NULL,
+  legend.labs  = labs_fd
+)
+
+
+# Nascido vivo como evento (óbito fetal censurado) 
+dados_loc_lv <- dplyr::filter(dados_eda, !is.na(tempo), !is.na(status_lv), !is.na(lococornasc))
+km_lv_loco <- survfit(Surv(tempo, status_lv) ~ lococornasc, data = dados_loc_lv)
+
+labs_lv <- sub("^.*=", "", names(km_lv_loco$strata))
+
+survminer::ggsurvplot(
+  km_lv_loco, data = dados_loc_lv, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por local de ocorrência/nasc",
+  ggtheme = theme_minimal(base_size = 12),
+  legend.title = NULL,
+  legend.labs  = labs_lv
+)
+```
+
+## Tipo de gravidez (níveis originais)
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Ordena níveis e remove NAs antes de ajustar
+dados_grav <- dados_eda %>%
+  dplyr::mutate(
+    gravidez = forcats::fct_relevel(gravidez, "Única", "Dupla", "Tripla ou mais")
+  ) %>%
+  dplyr::filter(!is.na(tempo), !is.na(gravidez), !is.na(status_fd))
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_grav <- survfit(Surv(tempo, status_fd) ~ gravidez, data = dados_grav)
+labs_fd <- sub("^.*=", "", names(km_fd_grav$strata))  # remove "gravidez=" da legenda
+
+survminer::ggsurvplot(
+  km_fd_grav, data = dados_grav, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por tipo de gravidez",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00),
+  legend.title = NULL, legend.labs = labs_fd
+)
+
+# Nascido vivo como evento (censura = óbito fetal) 
+dados_grav_lv <- dplyr::filter(dados_eda, !is.na(tempo), !is.na(gravidez), !is.na(status_lv))
+km_lv_grav <- survfit(Surv(tempo, status_lv) ~ gravidez, data = dados_grav_lv)
+labs_lv <- sub("^.*=", "", names(km_lv_grav$strata))
+
+survminer::ggsurvplot(
+  km_lv_grav, data = dados_grav_lv, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por tipo de gravidez",
+  ggtheme = theme_minimal(base_size = 12),
+  legend.title = NULL, legend.labs = labs_lv
+)
+```
+
+## Tipo de gravidez (Única vs Múltipla)
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Cria variável binária rotulada
+dados_eda <- dados_eda %>%
+  dplyr::mutate(
+    gravidez_bin = dplyr::case_when(
+      is.na(gravidez)                       ~ NA_character_,
+      gravidez == "Única"                   ~ "Única",
+      gravidez %in% c("Dupla","Tripla ou mais") ~ "Múltipla",
+      TRUE                                  ~ NA_character_
+    ) %>% forcats::fct_relevel("Única","Múltipla")
+  )
+
+# Filtra dados válidos
+dados_grav2_fd <- dplyr::filter(dados_eda, !is.na(tempo), !is.na(status_fd), !is.na(gravidez_bin))
+dados_grav2_lv <- dplyr::filter(dados_eda, !is.na(tempo), !is.na(status_lv), !is.na(gravidez_bin))
+
+# Óbito fetal como evento (censura = nascido vivo) 
+km_fd_grav2 <- survfit(Surv(tempo, status_fd) ~ gravidez_bin, data = dados_grav2_fd)
+labs_fd2 <- sub("^.*=", "", names(km_fd_grav2$strata))
+
+survminer::ggsurvplot(
+  km_fd_grav2, data = dados_grav2_fd, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) gravidez (Única x Múltipla)",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00),
+  legend.title = NULL, legend.labs = labs_fd2
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_grav2 <- survfit(Surv(tempo, status_lv) ~ gravidez_bin, data = dados_grav2_lv)
+labs_lv2 <- sub("^.*=", "", names(km_lv_grav2$strata))
+
+survminer::ggsurvplot(
+  km_lv_grav2, data = dados_grav2_lv, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) gravidez (Única x Múltipla)",
+  ggtheme = theme_minimal(base_size = 12),
+  legend.title = NULL, legend.labs = labs_lv2
+)
+```
+
+
+## qtdfilvivo (Número de filhos vivos) e qtdfilmort (Número de filhos mortos)
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+dados_eda <- dados_eda %>%
+  dplyr::mutate(
+    # filhos vivos anteriores
+    qtdfilvivo_n = suppressWarnings(as.integer(qtdfilvivo)),
+    # trata valores muito altos como NA (15 +)
+    qtdfilvivo_n = ifelse(qtdfilvivo_n > 15, NA_integer_, qtdfilvivo_n),
+    qtdfilvivo_cat = dplyr::case_when(
+      is.na(qtdfilvivo_n)     ~ NA_character_,
+      # Categorias escolhidas de forma arbitrária para exploração
+      #(verificar se faz sentido)
+      qtdfilvivo_n == 0       ~ "0",
+      qtdfilvivo_n %in% 1:2   ~ "1–2",
+      qtdfilvivo_n %in% 3:4   ~ "3–4",
+      qtdfilvivo_n >= 5       ~ "≥5"
+    ) %>% factor(levels = c("0","1–2","3–4","≥5")),
+
+    # filhos mortos anteriores
+    qtdfilmort_n = suppressWarnings(as.integer(qtdfilmort)),
+    qtdfilmort_n = ifelse(qtdfilmort_n > 10, NA_integer_, qtdfilmort_n),
+    qtdfilmort_cat = dplyr::case_when(
+      is.na(qtdfilmort_n)     ~ NA_character_,
+      # Categorias escolhidas de forma arbitrária para exploração 
+      #(verificar se faz sentido)
+      qtdfilmort_n == 0       ~ "0",
+      qtdfilmort_n == 1       ~ "1",
+      qtdfilmort_n >= 2       ~ "≥2"
+    ) %>% factor(levels = c("0","1","≥2"))
+  )
+
+table(dados_eda$qtdfilvivo_cat, useNA = "ifany")
+table(dados_eda$qtdfilmort_cat, useNA = "ifany")
+
+# Filtrar registros com info necessária
+dd_vivo_fd <- subset(dados_eda, !is.na(tempo) & !is.na(status_fd) & !is.na(qtdfilvivo_cat))
+dd_vivo_lv <- subset(dados_eda, !is.na(tempo) & !is.na(status_lv) & !is.na(qtdfilvivo_cat))
+
+# Óbito fetal como evento (nascido vivo censurado) 
+km_fd_qv <- survfit(Surv(tempo, status_fd) ~ qtdfilvivo_cat, data = dd_vivo_fd)
+labs_fd_qv <- sub("^.*=", "", names(km_fd_qv$strata))
+
+survminer::ggsurvplot(
+  km_fd_qv, data = dd_vivo_fd, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por nº de filhos vivos prévios",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00),
+  legend.title = NULL, legend.labs = labs_fd_qv
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_qv <- survfit(Surv(tempo, status_lv) ~ qtdfilvivo_cat, data = dd_vivo_lv)
+labs_lv_qv <- sub("^.*=", "", names(km_lv_qv$strata))
+
+survminer::ggsurvplot(
+  km_lv_qv, data = dd_vivo_lv, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por nº de filhos vivos prévios",
+  ggtheme = theme_minimal(base_size = 12),
+  legend.title = NULL, legend.labs = labs_lv_qv
+)
+```
+
+```{r, eval = TRUE, echo=TRUE, message = FALSE, warning = FALSE}
+# Filtrar registros com info necessária
+dd_mort_fd <- subset(dados_eda, !is.na(tempo) & !is.na(status_fd) & !is.na(qtdfilmort_cat))
+dd_mort_lv <- subset(dados_eda, !is.na(tempo) & !is.na(status_lv) & !is.na(qtdfilmort_cat))
+
+# Óbito fetal como evento (nascido vivo censurado) 
+km_fd_qm <- survfit(Surv(tempo, status_fd) ~ qtdfilmort_cat, data = dd_mort_fd)
+labs_fd_qm <- sub("^.*=", "", names(km_fd_qm$strata))
+
+survminer::ggsurvplot(
+  km_fd_qm, data = dd_mort_fd, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — óbito fetal",
+  title = "KM — Óbito fetal (censura: nascido vivo) por nº de filhos mortos prévios",
+  ggtheme = theme_minimal(base_size = 12),
+  ylim = c(0.987, 1.00),
+  legend.title = NULL, legend.labs = labs_fd_qm
+)
+
+# Nascido vivo como evento (óbito fetal censurado) 
+km_lv_qm <- survfit(Surv(tempo, status_lv) ~ qtdfilmort_cat, data = dd_mort_lv)
+labs_lv_qm <- sub("^.*=", "", names(km_lv_qm$strata))
+
+survminer::ggsurvplot(
+  km_lv_qm, data = dd_mort_lv, conf.int = TRUE,
+  conf.int.style = "step", linetype = 1, size = 0.7,
+  xlab = "Semanas", ylab = "S(t) — nascido vivo",
+  title = "KM — Nascido vivo (censura: óbito fetal) por nº de filhos mortos prévios",
+  ggtheme = theme_minimal(base_size = 12),
+  legend.title = NULL, legend.labs = labs_lv_qm
+)
+```
+
+# Comentários
+
+De acordo com o manual de instruções para preenchimento de declaração de óbito [Link:Manual de preenchimento](https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/declaracao-de-obito-manual-de-instrucoes-para-preenchimento.pdf?):
+
+- Condições para emissão da Declaração de Óbito.
+    - Óbito fetal, de acordo com os seguintes critérios: gestação com duração igual
+	ou superior a 20 semanas OU feto com peso corporal igual ou superior a 500 g
+	OU estatura igual ou superior a 25 cm.
+    - A DO não deve ser emitida se a gestação teve duração menor que 20 semanas E se o feto tiver
+	peso corporal menor que 500 g E estatura menor que 25 cm
+
+Porém como mencionado em [Link](https://www.scielo.br/j/ramb/a/pdQt3CN4KBFYG7k6HdRVkHg/?lang=pt):
+
+O Centro Nacional de Estatística da Saúde dos Estados Unidos conceitua morte fetal aquela ocorrida a partir de 20 semanas de gestação. Da mesma forma, para acomodar os interesses burocráticos, a maioria das estatísticas nacionais sobre o assunto preferem defini-lo a partir de 20 semanas de gestação ou peso no nascimento maior que 500 gramas.
+
+Após já ter visto os gráficos de kaplan-meier feitos posteriormente, foi possível notar que a queda da curva em praticamente todas as variáveis apenas ocorre após a semana gestacional 20, então, para evitar a longa calda à esquerda e ter uma melhor visualização dos gráficos, talvez vale considerar semana gestacional acima de 20.
+	
