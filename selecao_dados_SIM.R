@@ -15,274 +15,339 @@ library(survival)
 library(survminer)
 library(patchwork)
 library(RColorBrewer)
+library(readxl)
+library(stringr)
+library(tidyr)
+library(scales)
 
-# dados_simdofet2023 <- fetch_datasus(year_start = 2023, year_end = 2023, information_system = "SIM-DOFET")
+# #-------------------- Bloco de preparação dos dados ----------------------------
+# # dados_simdofet2023 <- fetch_datasus(year_start = 2023, year_end = 2023, information_system = "SIM-DOFET")
+# #
+# # saveRDS(dados_simdofet2023, file = "dados_simdofet2023.rds")
+# dados_simdofet2023 <- readRDS("dados_simdofet2023.rds")
 # 
-# saveRDS(dados_simdofet2023, file = "dados_simdofet2023.rds")
-dados_simdofet2023 <- readRDS("dados_simdofet2023.rds")
-
-create1_uf_and_filter <- function(data, uf){
-  uf_map <- c(
-    "11"="RO","12"="AC","13"="AM","14"="RR","15"="PA","16"="AP","17"="TO",
-    "21"="MA","22"="PI","23"="CE","24"="RN","25"="PB","26"="PE","27"="AL","28"="SE","29"="BA",
-    "31"="MG","32"="ES","33"="RJ","35"="SP",
-    "41"="PR","42"="SC","43"="RS",
-    "50"="MS","51"="MT","52"="GO","53"="DF"
-  )
-  
-  data <- data %>%
-    mutate(
-      # uf ocorrência
-      uf_ocor = uf_map[
-        ifelse(
-          is.na(CODMUNOCOR), NA,
-          substr(sprintf("%06d", as.integer(CODMUNOCOR)), 1, 2)
-        )
-      ],
-      # uf residência
-      uf_resid = uf_map[
-        ifelse(
-          is.na(CODMUNRES), NA,
-          substr(sprintf("%06d", as.integer(CODMUNRES)), 1, 2)
-        )
-      ]  
-    )
-  data <- filter(data, uf_resid == uf)
-}
-
-dados_simdofet2023 <- create1_uf_and_filter(dados_simdofet2023, "SP")
-
-
-# 1 = óbito fetal, 0 = nascido vivo
-dados_simdofet2023$EVENTO <- 1
-
-common_vars <- c("SEXO", "CODMUNRES", "IDADEMAE", 
-                 "ESCMAE2010", "QTDFILVIVO", 
-                 "QTDFILMORT", "GRAVIDEZ", 
-                 "SEMAGESTAC", "PARTO", "PESO", "OBITOPARTO", "EVENTO")
-
-check_var <- function(df, common_vars){
-  # Verifica se todas as colunas em common_vars estão no dataframe
-  all_columns_present <- all(common_vars %in% names(df))
-  
-  if (all_columns_present) {
-    print("Todas as colunas estão presentes no dataframe.")
-  } else {
-    print("Algumas colunas estão faltando no dataframe.")
-    missing_columns <- setdiff(common_vars, names(df))
-    print(paste("Colunas ausentes:", paste(missing_columns, collapse = ", ")))
-  }
-}
-
-cat("Verifica se as variáveis previamente catalogadas como comum entre ambas as bases de fato existem:")
-
-check_var(dados_simdofet2023, common_vars)
-
-
-# Função para verificar se as colunas não são inteiramente NA ou colunas em branco
-check_columns_not_only_na_blank <- function(df, cols) {
-  result <- list()
-  
-  for (col in cols) {
-    if (col %in% names(df)) {
-      # Verifica se a coluna inteira é NA ou está em branco
-      not_only_na_blank <- sum(!is.na(df[[col]]) & df[[col]] != "") > 0
-      result[[col]] <- not_only_na_blank
-    } else {
-      # Se a coluna não existir, é identificada como ausente
-      result[[col]] <- NA
-    }
-  }
-  
-  return(result)
-}
-
-check_columns_results <- function(df, common_vars){
-  # Aplica a função ao seu dataframe e common_vars
-  not_only_na_blank_check <- check_columns_not_only_na_blank(df, common_vars)
-  
-  for (col in names(not_only_na_blank_check)) {
-    if (is.na(not_only_na_blank_check[[col]])) {
-      print(paste("Column", col, "is missing from the dataframe."))
-    } else if (not_only_na_blank_check[[col]]) {
-      print(paste("Column", col, "is NOT only NA or blank."))
-    } else {
-      print(paste("Column", col, "is entirely NA or blank."))
-    }
-  }
-}
-
-#---------------- Verifica colunas NA ou em branco
-check_columns_results(dados_simdofet2023, common_vars)
-
-#------------ Colunas existentes am ambas, mas com nomes diferentes
-SIM_vars <- c("LOCOCOR")
-
-check_var(dados_simdofet2023, SIM_vars)
-
-check_columns_results(dados_simdofet2023, SIM_vars)
-
-# Adiciona colunas padronizadas em ambos datasets seguindo a catalogação prévia
-# que identificou que são colunas com o mesmo dado
-dados_simdofet2023$lococornasc <- dados_simdofet2023$LOCOCOR
-
-# Todas as colunas em comum até o momento no SIM-DOFET e SINASC
-all_vars <- c(
-  "SEXO", 
-  "CODMUNRES", 
-  "IDADEMAE", 
-  "ESCMAE2010", 
-  "QTDFILVIVO", 
-  "QTDFILMORT", 
-  "GRAVIDEZ", 
-  "SEMAGESTAC", 
-  "PARTO", 
-  "PESO", 
-  "lococornasc", 
-  "uf_resid", 
-  "EVENTO", 
-  "OBITOPARTO")
-
-# Seleciona apenas as colunas obtidas até agora
-simdofet2023 <- dados_simdofet2023 %>% select(all_of(all_vars))
-
-dados_def_ob <- simdofet2023
-#vamos considerar SEMAGESTAC > = 20 OU peso >500g para óbitos fetais
-table(dados_def_ob$SEMAGESTAC, dados_def_ob$PESO, useNA = "always")
-
-dados_def_ob$indic_gestac <- ifelse(is.na(dados_def_ob$SEMAGESTAC), 1, 0)
-dados_def_ob$indic_peso <- ifelse(is.na(dados_def_ob$PESO), 1, 0)
-table(dados_def_ob$indic_gestac, dados_def_ob$indic_peso)
-
-#   0      1
-# 0 4384  176
-# 1   78  169
-
-#vamos perder 169 casos que é NA para peso e semagestac
-
-dados_def_ob$obito_fetal <- ifelse(!is.na(dados_def_ob$SEMAGESTAC) & dados_def_ob$SEMAGESTAC >= 20, 1,
-                                   ifelse(!is.na(dados_def_ob$PESO) & dados_def_ob$PESO >= 500, 1,
-                                          ifelse(is.na(dados_def_ob$SEMAGESTAC) & is.na(dados_def_ob$PESO), NA, 0)))
-table(dados_def_ob$obito_fetal, useNA = "always")
-
-# 0    1   <NA> 
-# 190 4448  169 
-
-# 190 casos que são do SIM-DOFET, mas não se encaixam na definição de óbito fetal e nem é NA para peso e semagestac
-
-#ficamos com 4448 casos de óbitos fetais (SEMAGESTAC > = 20 OU peso > 500g)
-
-dados_def_ob_final <- dados_def_ob %>% 
-  filter(obito_fetal == 1) %>% 
-  select( "SEXO", 
-          "CODMUNRES", 
-          "IDADEMAE", 
-          "ESCMAE2010", 
-          "QTDFILVIVO", 
-          "QTDFILMORT", 
-          "GRAVIDEZ", 
-          "SEMAGESTAC", 
-          "PARTO", 
-          "PESO", 
-          "lococornasc", 
-          "uf_resid", 
-          "EVENTO", 
-          "OBITOPARTO")
-
-sim_df <- dados_def_ob_final
-
-# Converte nomes de colunas para letras minúsculas
-names(sim_df) <- tolower(names(sim_df))
-
-names(sim_df)
-table(sim_df$evento)
-
-# Nasc vivos  Óbito fetal 
-# 503910        4448 
-
-# total
-# [1] 508358
-
-sim_df$sexo[sim_df$sexo == 0] <- NA
-sim_df$lococornasc[sim_df$lococornasc == 9] <- NA
-sim_df$escmae2010[sim_df$escmae2010 == 9] <- NA
-sim_df$qtdfilvivo[sim_df$qtdfilvivo == 99] <- NA
-sim_df$qtdfilmort[sim_df$qtdfilmort == 99] <- NA
-sim_df$gravidez[sim_df$gravidez == 9] <- NA
-sim_df$parto[sim_df$parto == 9] <- NA
-sim_df$obitoparto[sim_df$obitoparto == 9] <- NA
-sim_df$semagestac[sim_df$semagestac == 99] <- NA
-sim_df$idademae[sim_df$idademae == 99] <- NA
-
-
-# Considera apenas casos de Idade mãe entre 10 e 49 anos
-# sim_df2 <- filter(sim_df, sim_df$idademae >= 10 & sim_df$idademae <= 49)
-sim_df2 <- sim_df
-# > nrow(sim_df2)
-# [1] 508038
-
-# Função para calcular a porcentagem de valores ausentes (NA ou em branco) em cada coluna
-percentage_missing <- function(df) {
-  sapply(df, function(x) {
-    sum(is.na(x) | x == "") / length(x) * 100
-  })
-}
-
-# Aplica a função ao seu dataframe combined_data
-missing_percentages <- percentage_missing(sim_df2)
-
-# Cria um tibble com as porcentagens
-missing_percentage_table <- tibble(
-  Column = names(missing_percentages),
-  Missing_Percentage = missing_percentages
-)
-
-# Exibir a tabela
-print(missing_percentage_table, n = 34)
-
-# Verifica se há algum valor NA no dataframe
-has_na <- any(is.na(sim_df2))
-
-# Exibir o resultado
-if (has_na) {
-  print("The dataframe contains NA values.")
-} else {
-  print("The dataframe does not contain any NA values.")
-}
-
-sim_df2 <- as_tibble(sim_df2)
-
-# Selecionar apenas os casos completos nessas variáveis
-sim_df2_clean <- sim_df2[complete.cases(sim_df2[, ]), ]
-
-# # teste <- filter(sim_df2_clean, as.numeric(sim_df2_clean$semagestac) >= 28)
-# # dim(teste)
-# 3268 total de casos válidos
-# 1894 (57.96%) casos de natimortos (semagestac >= 28, definição OMS)
-# 1374 (42.04%) demais casos de óbitos fetais
-
-# # teste <- filter(sim_df2_clean, as.numeric(sim_df2_clean$semagestac) >= 20)
-# # dim(teste)
-# 3268 total de casos válidos
-# 3251 (99.48%) casos de natimortos (semagestac >= 20, definição EUA)
-# 17 (0.52%) demais casos de óbitos fetais
-
-
-
-# Observação:
-# 1 – vaginal; 2 – cesáreo
-# table(sim_df2_clean$parto)
-# 1    2 
-# 2312 956
+# create1_uf_and_filter <- function(data, uf){
+#   uf_map <- c(
+#     "11"="RO","12"="AC","13"="AM","14"="RR","15"="PA","16"="AP","17"="TO",
+#     "21"="MA","22"="PI","23"="CE","24"="RN","25"="PB","26"="PE","27"="AL","28"="SE","29"="BA",
+#     "31"="MG","32"="ES","33"="RJ","35"="SP",
+#     "41"="PR","42"="SC","43"="RS",
+#     "50"="MS","51"="MT","52"="GO","53"="DF"
+#   )
 # 
-# 1 = 70.75%
-# 2 = 29.25%
+#   data <- data %>%
+#     mutate(
+#       # uf ocorrência
+#       uf_ocor = uf_map[
+#         ifelse(
+#           is.na(CODMUNOCOR), NA,
+#           substr(sprintf("%06d", as.integer(CODMUNOCOR)), 1, 2)
+#         )
+#       ],
+#       # uf residência
+#       uf_resid = uf_map[
+#         ifelse(
+#           is.na(CODMUNRES), NA,
+#           substr(sprintf("%06d", as.integer(CODMUNRES)), 1, 2)
+#         )
+#       ]
+#     )
+#   data <- filter(data, uf_resid == uf)
+# }
+# 
+# dados_simdofet2023 <- create1_uf_and_filter(dados_simdofet2023, "SP")
+# 
+# 
+# # 1 = óbito fetal, 0 = nascido vivo
+# dados_simdofet2023$EVENTO <- 1
+# 
+# common_vars <- c("SEXO", "CODMUNRES", "IDADEMAE",
+#                  "ESCMAE2010", "QTDFILVIVO",
+#                  "QTDFILMORT", "GRAVIDEZ",
+#                  "SEMAGESTAC", "PARTO", "PESO", "OBITOPARTO", "EVENTO")
+# 
+# check_var <- function(df, common_vars){
+#   # Verifica se todas as colunas em common_vars estão no dataframe
+#   all_columns_present <- all(common_vars %in% names(df))
+# 
+#   if (all_columns_present) {
+#     print("Todas as colunas estão presentes no dataframe.")
+#   } else {
+#     print("Algumas colunas estão faltando no dataframe.")
+#     missing_columns <- setdiff(common_vars, names(df))
+#     print(paste("Colunas ausentes:", paste(missing_columns, collapse = ", ")))
+#   }
+# }
+# 
+# cat("Verifica se as variáveis previamente catalogadas como comum entre ambas as bases de fato existem:")
+# 
+# check_var(dados_simdofet2023, common_vars)
+# 
+# 
+# # Função para verificar se as colunas não são inteiramente NA ou colunas em branco
+# check_columns_not_only_na_blank <- function(df, cols) {
+#   result <- list()
+# 
+#   for (col in cols) {
+#     if (col %in% names(df)) {
+#       # Verifica se a coluna inteira é NA ou está em branco
+#       not_only_na_blank <- sum(!is.na(df[[col]]) & df[[col]] != "") > 0
+#       result[[col]] <- not_only_na_blank
+#     } else {
+#       # Se a coluna não existir, é identificada como ausente
+#       result[[col]] <- NA
+#     }
+#   }
+# 
+#   return(result)
+# }
+# 
+# check_columns_results <- function(df, common_vars){
+#   # Aplica a função ao seu dataframe e common_vars
+#   not_only_na_blank_check <- check_columns_not_only_na_blank(df, common_vars)
+# 
+#   for (col in names(not_only_na_blank_check)) {
+#     if (is.na(not_only_na_blank_check[[col]])) {
+#       print(paste("Column", col, "is missing from the dataframe."))
+#     } else if (not_only_na_blank_check[[col]]) {
+#       print(paste("Column", col, "is NOT only NA or blank."))
+#     } else {
+#       print(paste("Column", col, "is entirely NA or blank."))
+#     }
+#   }
+# }
+# 
+# #---------------- Verifica colunas NA ou em branco
+# check_columns_results(dados_simdofet2023, common_vars)
+# 
+# #------------ Colunas existentes am ambas, mas com nomes diferentes
+# SIM_vars <- c("LOCOCOR")
+# 
+# check_var(dados_simdofet2023, SIM_vars)
+# 
+# check_columns_results(dados_simdofet2023, SIM_vars)
+# 
+# # Adiciona colunas padronizadas em ambos datasets seguindo a catalogação prévia
+# # que identificou que são colunas com o mesmo dado
+# dados_simdofet2023$lococornasc <- dados_simdofet2023$LOCOCOR
+# 
+# # Todas as colunas em comum até o momento no SIM-DOFET e SINASC
+# all_vars <- c(
+#   "SEXO",
+#   "CODMUNRES",
+#   "IDADEMAE",
+#   "ESCMAE2010",
+#   "QTDFILVIVO",
+#   "QTDFILMORT",
+#   "GRAVIDEZ",
+#   "SEMAGESTAC",
+#   "PARTO",
+#   "PESO",
+#   "lococornasc",
+#   "uf_resid",
+#   "EVENTO",
+#   "OBITOPARTO")
+# 
+# # Seleciona apenas as colunas obtidas até agora
+# simdofet2023 <- dados_simdofet2023 %>% select(all_of(all_vars))
+# 
+# dados_def_ob <- simdofet2023
+# #vamos considerar SEMAGESTAC > = 20 OU peso >500g para óbitos fetais
+# table(dados_def_ob$SEMAGESTAC, dados_def_ob$PESO, useNA = "always")
+# 
+# dados_def_ob$indic_gestac <- ifelse(is.na(dados_def_ob$SEMAGESTAC), 1, 0)
+# dados_def_ob$indic_peso <- ifelse(is.na(dados_def_ob$PESO), 1, 0)
+# table(dados_def_ob$indic_gestac, dados_def_ob$indic_peso)
+# 
+# #   0      1
+# # 0 4384  176
+# # 1   78  169
+# 
+# #vamos perder 169 casos que é NA para peso e semagestac
+# 
+# dados_def_ob$obito_fetal <- ifelse(!is.na(dados_def_ob$SEMAGESTAC) & dados_def_ob$SEMAGESTAC >= 20, 1,
+#                                    ifelse(!is.na(dados_def_ob$PESO) & dados_def_ob$PESO >= 500, 1,
+#                                           ifelse(is.na(dados_def_ob$SEMAGESTAC) & is.na(dados_def_ob$PESO), NA, 0)))
+# table(dados_def_ob$obito_fetal, useNA = "always")
+# 
+# # 0    1   <NA>
+# # 190 4448  169
+# 
+# # 190 casos que são do SIM-DOFET, mas não se encaixam na definição de óbito fetal e nem é NA para peso e semagestac
+# 
+# #ficamos com 4448 casos de óbitos fetais (SEMAGESTAC > = 20 OU peso > 500g)
+# 
+# dados_def_ob_final <- dados_def_ob %>%
+#   filter(obito_fetal == 1) %>%
+#   select( "SEXO",
+#           "CODMUNRES",
+#           "IDADEMAE",
+#           "ESCMAE2010",
+#           "QTDFILVIVO",
+#           "QTDFILMORT",
+#           "GRAVIDEZ",
+#           "SEMAGESTAC",
+#           "PARTO",
+#           "PESO",
+#           "lococornasc",
+#           "uf_resid",
+#           "EVENTO",
+#           "OBITOPARTO")
+# 
+# sim_df <- dados_def_ob_final
+# 
+# # Converte nomes de colunas para letras minúsculas
+# names(sim_df) <- tolower(names(sim_df))
+# 
+# names(sim_df)
+# table(sim_df$evento)
+# 
+# # Nasc vivos  Óbito fetal
+# # 503910        4448
+# 
+# # total
+# # [1] 508358
+# 
+# sim_df$sexo[sim_df$sexo == 0] <- NA
+# sim_df$lococornasc[sim_df$lococornasc == 9] <- NA
+# sim_df$escmae2010[sim_df$escmae2010 == 9] <- NA
+# sim_df$qtdfilvivo[sim_df$qtdfilvivo == 99] <- NA
+# sim_df$qtdfilmort[sim_df$qtdfilmort == 99] <- NA
+# sim_df$gravidez[sim_df$gravidez == 9] <- NA
+# sim_df$parto[sim_df$parto == 9] <- NA
+# sim_df$obitoparto[sim_df$obitoparto == 9] <- NA
+# sim_df$semagestac[sim_df$semagestac == 99] <- NA
+# sim_df$idademae[sim_df$idademae == 99] <- NA
+# 
+# 
+# # Considera apenas casos de Idade mãe entre 10 e 49 anos
+# # sim_df2 <- filter(sim_df, sim_df$idademae >= 10 & sim_df$idademae <= 49)
+# sim_df2 <- sim_df
+# # > nrow(sim_df2)
+# # [1] 508038
+# 
+# # Função para calcular a porcentagem de valores ausentes (NA ou em branco) em cada coluna
+# percentage_missing <- function(df) {
+#   sapply(df, function(x) {
+#     sum(is.na(x) | x == "") / length(x) * 100
+#   })
+# }
+# 
+# # Aplica a função ao seu dataframe combined_data
+# missing_percentages <- percentage_missing(sim_df2)
+# 
+# # Cria um tibble com as porcentagens
+# missing_percentage_table <- tibble(
+#   Column = names(missing_percentages),
+#   Missing_Percentage = missing_percentages
+# )
+# 
+# # Exibir a tabela
+# print(missing_percentage_table, n = 34)
+# 
+# # Verifica se há algum valor NA no dataframe
+# has_na <- any(is.na(sim_df2))
+# 
+# # Exibir o resultado
+# if (has_na) {
+#   print("The dataframe contains NA values.")
+# } else {
+#   print("The dataframe does not contain any NA values.")
+# }
+# 
+# sim_df2 <- as_tibble(sim_df2)
+# 
+# # Selecionar apenas os casos completos nessas variáveis
+# sim_df2_clean <- sim_df2[complete.cases(sim_df2[, ]), ]
+# 
+# # # teste <- filter(sim_df2_clean, as.numeric(sim_df2_clean$semagestac) >= 28)
+# # # dim(teste)
+# # 3268 total de casos válidos
+# # 1894 (57.96%) casos de natimortos (semagestac >= 28, definição OMS)
+# # 1374 (42.04%) demais casos de óbitos fetais
+# 
+# # # teste <- filter(sim_df2_clean, as.numeric(sim_df2_clean$semagestac) >= 20)
+# # # dim(teste)
+# # 3268 total de casos válidos
+# # 3251 (99.48%) casos de natimortos (semagestac >= 20, definição EUA)
+# # 17 (0.52%) demais casos de óbitos fetais
+# 
+# 
+# 
+# # Observação:
+# # 1 – vaginal; 2 – cesáreo
+# # table(sim_df2_clean$parto)
+# # 1    2
+# # 2312 956
+# #
+# # 1 = 70.75%
+# # 2 = 29.25%
+# 
+# 
+# dim(sim_df2_clean)
+# 
+# # -------------------- Adiciona colunas sobre as RRAS --------------------------
+# # 1) Garantir o tipo/forma do código do município
+# #    (no seu fluxo, 'codmunres' já está em minúsculo)
+# stopifnot("codmunres" %in% names(sim_df2_clean))
+# 
+# sim_df2_clean <- sim_df2_clean %>%
+#   mutate(
+#     codmunres = as.character(codmunres),
+#     codmunres = str_trim(codmunres)
+#   )
+# 
+# # 2) Ler e preparar a tabela auxiliar município -> RRAS
+# #    Ajuste o nome do arquivo/campos se necessário
+# df_aux_rras <- read_excel("tabela_auxiliar_municipios.xlsx") %>%
+#   filter(uf %in% c("São Paulo", "SP")) %>%
+#   select(codmunres, cod_macro_r_saude, macro_r_saude) %>%
+#   rename(
+#     cod_mun_ibge = codmunres,
+#     rras_id_raw  = cod_macro_r_saude,
+#     rras_nome_raw = macro_r_saude
+#   ) %>%
+#   mutate(
+#     cod_mun_ibge = as.character(cod_mun_ibge),
+#     cod_mun_ibge = str_trim(cod_mun_ibge),
+# 
+#     # Extrair só o número do identificador
+#     rras_id = as.integer(str_replace_all(as.character(rras_id_raw), "[^0-9]", "")),
+# 
+#     # Padronizar nome textual da RRAS
+#     rras_nome = str_to_upper(as.character(rras_nome_raw)),
+#     rras_nome = str_replace(rras_nome, "^(RRAS)\\s*0*([0-9]+)$", "\\1 \\2")
+#   ) %>%
+#   select(cod_mun_ibge, rras_id, rras_nome) %>%
+#   distinct()
+# 
+# # 3) Join pelo município de residência
+# sim_df2_clean <- sim_df2_clean %>%
+#   left_join(df_aux_rras, by = c("codmunres" = "cod_mun_ibge"))
+# 
+# # 4) Checagem rápida de perdas de identificação
+# n_total <- nrow(sim_df2_clean)
+# n_sem_rras <- sum(is.na(sim_df2_clean$rras_id))
+# 
+# message("RRAS - total de linhas no dataset final: ", n_total)
+# message("RRAS - linhas sem identificação de RRAS: ", n_sem_rras,
+#         " (", round(100 * n_sem_rras / n_total, 2), "%)")
+# 
+# # 5) Criar codificações úteis para modelos com frailty e/ou INLA
+# rras_levels <- sort(unique(sim_df2_clean$rras_id[!is.na(sim_df2_clean$rras_id)]))
+# 
+# sim_df2_clean <- sim_df2_clean %>%
+#   mutate(
+#     rras_fac = factor(rras_id, levels = rras_levels),
+#     rras_int = as.integer(rras_fac)
+#   )
+# 
+# sim_df2_clean <- sim_df2_clean %>% filter(!is.na(rras_id))
+# 
+# # saveRDS(sim_df2_clean, file = "dataset_sim_df.rds")
+# #-------------------------------------------------------------------------------
 
-
-dim(sim_df2_clean)
-
-# saveRDS(sim_df2_clean, file = "dataset_sim_df.rds")
-
+sim_df2_clean <- readRDS("dataset_sim_df.rds")
 ################################################################################
 ##################### DESCRITIVA SÓ DO SIM-DOFET ISOLADO #######################
 ################################################################################
@@ -599,17 +664,19 @@ grafico_km_obito <- ggsurvplot(
   km_obito, data = dados_eda_clean,
   conf.int = FALSE,
   xlab = "Semanas de gestação",
-  ylab = "S(t) empírico (óbitos fetais)",
-  title = "Curva empírica por momento do óbito (antes ou durante o parto)",
+  ylab = "S(t)",
+  title = "KM (sem censura) - óbito fetal (por momento do óbito em relação ao parto)",
   legend.title = "",
   legend.labs = levels(dados_eda_clean$obitoparto),
-  ggtheme = theme_minimal()
+  xlim       = c(19, 45), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_km_obito)
 
-# png("km_obitos_obitoparto.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_obito)
-# dev.off()
+png("km_obitos_obitoparto.png", units="in", width=7.5, height=4, res=112)
+print(grafico_km_obito)
+dev.off()
 
 # Teste de log‑rank
 logrank_obito <- survdiff(Surv(tempo, status_evento) ~ obitoparto, data = dados_eda_clean)

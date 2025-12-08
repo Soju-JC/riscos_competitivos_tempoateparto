@@ -5,144 +5,208 @@ library(survival)
 library(survminer)
 library(patchwork)
 library(RColorBrewer)
+library(readxl)
+library(stringr)
+library(tidyr)
+library(scales)
 
-# dados_sinasc2023 <- fetch_datasus(year_start = 2023, year_end = 2023, information_system = "SINASC")
+# #-------------------- Bloco de preparação dos dados ----------------------------
+# # dados_sinasc2023 <- fetch_datasus(year_start = 2023, year_end = 2023, information_system = "SINASC")
+# #
+# # saveRDS(dados_sinasc2023, file = "dados_sinasc2023.rds")
+# dados_sinasc <- readRDS("dados_sinasc2023.rds")
 # 
-# saveRDS(dados_sinasc2023, file = "dados_sinasc2023.rds")
-dados_sinasc <- readRDS("dados_sinasc2023.rds")
-
-#selecionar só os casos de SP
-create2_uf_and_filter <- function(data, uf){
-  uf_map <- c(
-    "11"="RO","12"="AC","13"="AM","14"="RR","15"="PA","16"="AP","17"="TO",
-    "21"="MA","22"="PI","23"="CE","24"="RN","25"="PB","26"="PE","27"="AL","28"="SE","29"="BA",
-    "31"="MG","32"="ES","33"="RJ","35"="SP",
-    "41"="PR","42"="SC","43"="RS",
-    "50"="MS","51"="MT","52"="GO","53"="DF"
-  )
-  
-  data <- data %>%
-    mutate(
-      # uf ocorrência
-      uf_ocor = uf_map[
-        ifelse(
-          is.na(CODMUNNASC), NA,
-          substr(sprintf("%06d", as.integer(CODMUNNASC)), 1, 2)
-        )
-      ],
-      # uf residência
-      uf_resid = uf_map[
-        ifelse(
-          is.na(CODMUNRES), NA,
-          substr(sprintf("%06d", as.integer(CODMUNRES)), 1, 2)
-        )
-      ]  
-    )
-  data <- filter(data, uf_resid == uf)
-}
-
-
-dados_sinasc_sp <- create2_uf_and_filter(dados_sinasc , "SP")
-
-# Função para gerar tabelas de frequência com NA
-freq_table <- function(data, vars) {
-  result <- list()
-  
-  for (var in vars) {
-    if (var %in% names(data)) {
-      tab <- table(data[[var]], useNA = "ifany")
-      freq <- as.data.frame(tab)
-      names(freq) <- c(var, "Freq")
-      result[[var]] <- freq
-    } else {
-      warning(paste("Variável", var, "não encontrada no data frame."))
-    }
-  }
-  
-  return(result)
-}
-
-freq_table(dados_sinasc_sp, c("TPROBSON"))
-
-table(dados_sinasc_sp$SEMAGESTAC, dados_sinasc_sp$PESO, useNA = "always")
-
-##variaveis selecionadas para a base de dados
-dados_final <- dados_sinasc_sp %>% 
-  select(
-        CODMUNRES,
-        LOCNASC,
-        IDADEMAE,
-        ESCMAE2010,
-        RACACORMAE,
-        PARIDADE,
-        QTDFILVIVO,
-        QTDFILMORT,
-        QTDGESTANT,
-        QTDPARTNOR,
-        QTDPARTCES,
-        CONSULTAS,
-        MESPRENAT,
-        GRAVIDEZ,
-        PARTO,
-        STTRABPART,
-        STCESPARTO,
-        SEXO,
-        APGAR5,
-        PESO,
-        IDANOMAL,
-        SEMAGESTAC
-        )
-
-# 1 = óbito fetal, 0 = nascido vivo
-dados_final$EVENTO <- 0
-
-##arrumar algumas variáveis
-dados_final$IDADEMAE <- as.numeric(dados_final$IDADEMAE)
-dados_final$IDADEMAE <- ifelse(dados_final$IDADEMAE == 99, NA, dados_final$IDADEMAE)
-
-dados_final$QTDGESTANT <- as.numeric(dados_final$QTDGESTANT)
-dados_final$QTDGESTANT <- ifelse(dados_final$QTDGESTANT == 99, NA, dados_final$QTDGESTANT)
-
-dados_final$QTDPARTNOR <- as.numeric(dados_final$QTDPARTNOR)
-dados_final$QTDPARTNOR <- ifelse(dados_final$QTDPARTNOR == 99, NA, dados_final$QTDPARTNOR)
-
-dados_final$QTDPARTCES <- as.numeric(dados_final$QTDPARTCES)
-dados_final$QTDPARTCES <- ifelse(dados_final$QTDPARTCES == 99, NA, dados_final$QTDPARTCES)
-
-dados_final$MESPRENAT <- as.numeric(dados_final$MESPRENAT)
-dados_final$MESPRENAT <- ifelse(dados_final$MESPRENAT == 99, NA, dados_final$MESPRENAT)
-
-dados_final$APGAR5 <- as.numeric(dados_final$APGAR5)
-dados_final$APGAR5 <- ifelse(dados_final$APGAR5 == 99, NA, dados_final$APGAR5)
-
-dados_final$PESO <- as.numeric(dados_final$PESO)
-
-dados_final$SEMAGESTAC <- as.numeric(dados_final$SEMAGESTAC)
-
-# Recodificação de valores específicos para NA
-
-dados_final$LOCNASC[dados_final$LOCNASC == 9] <- NA
-dados_final$ESCMAE2010[dados_final$ESCMAE2010 == 9] <- NA
-dados_final$CONSULTAS[dados_final$CONSULTAS == 9] <- NA
-dados_final$GRAVIDEZ[dados_final$GRAVIDEZ == 9] <- NA
-dados_final$PARTO[dados_final$PARTO == 9] <- NA
-dados_final$STTRABPART[dados_final$STTRABPART == 9] <- NA
-dados_final$STCESPARTO[dados_final$STCESPARTO == 9] <- NA
-dados_final$SEXO[dados_final$SEXO == 0] <- NA
-dados_final$IDANOMAL[dados_final$IDANOMAL == 9] <- NA
-dados_final$QTDFILVIVO[dados_final$QTDFILVIVO == 99] <- NA
-dados_final$QTDFILMORT[dados_final$QTDFILMORT == 99] <- NA
-
-# freq_table(dados_final, c(#"CODESTAB",
-#   #"CODMUNNASC",
-#   #"CODMUNRES",
-#   "LOCNASC",
+# #selecionar só os casos de SP
+# create2_uf_and_filter <- function(data, uf){
+#   uf_map <- c(
+#     "11"="RO","12"="AC","13"="AM","14"="RR","15"="PA","16"="AP","17"="TO",
+#     "21"="MA","22"="PI","23"="CE","24"="RN","25"="PB","26"="PE","27"="AL","28"="SE","29"="BA",
+#     "31"="MG","32"="ES","33"="RJ","35"="SP",
+#     "41"="PR","42"="SC","43"="RS",
+#     "50"="MS","51"="MT","52"="GO","53"="DF"
+#   )
+# 
+#   data <- data %>%
+#     mutate(
+#       # uf ocorrência
+#       uf_ocor = uf_map[
+#         ifelse(
+#           is.na(CODMUNNASC), NA,
+#           substr(sprintf("%06d", as.integer(CODMUNNASC)), 1, 2)
+#         )
+#       ],
+#       # uf residência
+#       uf_resid = uf_map[
+#         ifelse(
+#           is.na(CODMUNRES), NA,
+#           substr(sprintf("%06d", as.integer(CODMUNRES)), 1, 2)
+#         )
+#       ]
+#     )
+#   data <- filter(data, uf_resid == uf)
+# }
+# 
+# 
+# dados_sinasc_sp <- create2_uf_and_filter(dados_sinasc , "SP")
+# 
+# # Função para gerar tabelas de frequência com NA
+# freq_table <- function(data, vars) {
+#   result <- list()
+# 
+#   for (var in vars) {
+#     if (var %in% names(data)) {
+#       tab <- table(data[[var]], useNA = "ifany")
+#       freq <- as.data.frame(tab)
+#       names(freq) <- c(var, "Freq")
+#       result[[var]] <- freq
+#     } else {
+#       warning(paste("Variável", var, "não encontrada no data frame."))
+#     }
+#   }
+# 
+#   return(result)
+# }
+# 
+# freq_table(dados_sinasc_sp, c("TPROBSON"))
+# 
+# table(dados_sinasc_sp$SEMAGESTAC, dados_sinasc_sp$PESO, useNA = "always")
+# 
+# ##variaveis selecionadas para a base de dados
+# dados_final <- dados_sinasc_sp %>%
+#   select(
+#         CODMUNRES,
+#         LOCNASC,
+#         IDADEMAE,
+#         ESCMAE2010,
+#         RACACORMAE,
+#         PARIDADE,
+#         QTDFILVIVO,
+#         QTDFILMORT,
+#         QTDGESTANT,
+#         QTDPARTNOR,
+#         QTDPARTCES,
+#         CONSULTAS,
+#         MESPRENAT,
+#         GRAVIDEZ,
+#         PARTO,
+#         STTRABPART,
+#         STCESPARTO,
+#         SEXO,
+#         APGAR5,
+#         PESO,
+#         IDANOMAL,
+#         SEMAGESTAC
+#         )
+# 
+# # 1 = óbito fetal, 0 = nascido vivo
+# dados_final$EVENTO <- 0
+# 
+# ##arrumar algumas variáveis
+# dados_final$IDADEMAE <- as.numeric(dados_final$IDADEMAE)
+# dados_final$IDADEMAE <- ifelse(dados_final$IDADEMAE == 99, NA, dados_final$IDADEMAE)
+# 
+# dados_final$QTDGESTANT <- as.numeric(dados_final$QTDGESTANT)
+# dados_final$QTDGESTANT <- ifelse(dados_final$QTDGESTANT == 99, NA, dados_final$QTDGESTANT)
+# 
+# dados_final$QTDPARTNOR <- as.numeric(dados_final$QTDPARTNOR)
+# dados_final$QTDPARTNOR <- ifelse(dados_final$QTDPARTNOR == 99, NA, dados_final$QTDPARTNOR)
+# 
+# dados_final$QTDPARTCES <- as.numeric(dados_final$QTDPARTCES)
+# dados_final$QTDPARTCES <- ifelse(dados_final$QTDPARTCES == 99, NA, dados_final$QTDPARTCES)
+# 
+# dados_final$MESPRENAT <- as.numeric(dados_final$MESPRENAT)
+# dados_final$MESPRENAT <- ifelse(dados_final$MESPRENAT == 99, NA, dados_final$MESPRENAT)
+# 
+# dados_final$APGAR5 <- as.numeric(dados_final$APGAR5)
+# dados_final$APGAR5 <- ifelse(dados_final$APGAR5 == 99, NA, dados_final$APGAR5)
+# 
+# dados_final$PESO <- as.numeric(dados_final$PESO)
+# 
+# dados_final$SEMAGESTAC <- as.numeric(dados_final$SEMAGESTAC)
+# 
+# # Recodificação de valores específicos para NA
+# 
+# dados_final$LOCNASC[dados_final$LOCNASC == 9] <- NA
+# dados_final$ESCMAE2010[dados_final$ESCMAE2010 == 9] <- NA
+# dados_final$CONSULTAS[dados_final$CONSULTAS == 9] <- NA
+# dados_final$GRAVIDEZ[dados_final$GRAVIDEZ == 9] <- NA
+# dados_final$PARTO[dados_final$PARTO == 9] <- NA
+# dados_final$STTRABPART[dados_final$STTRABPART == 9] <- NA
+# dados_final$STCESPARTO[dados_final$STCESPARTO == 9] <- NA
+# dados_final$SEXO[dados_final$SEXO == 0] <- NA
+# dados_final$IDANOMAL[dados_final$IDANOMAL == 9] <- NA
+# dados_final$QTDFILVIVO[dados_final$QTDFILVIVO == 99] <- NA
+# dados_final$QTDFILMORT[dados_final$QTDFILMORT == 99] <- NA
+# 
+# # freq_table(dados_final, c(#"CODESTAB",
+# #   #"CODMUNNASC",
+# #   #"CODMUNRES",
+# #   "LOCNASC",
+# #   "IDADEMAE",
+# #   #"ESTCIVMAE",
+# #   "ESCMAE2010",
+# #   "RACACORMAE",
+# #   #"CODOCUPMAE",
+# #   "PARIDADE",
+# #   "QTDGESTANT",
+# #   "QTDPARTNOR",
+# #   "QTDPARTCES",
+# #   "CONSULTAS",
+# #   "MESPRENAT",
+# #   "GRAVIDEZ",
+# #   "PARTO",
+# #   "STTRABPART",
+# #   "STCESPARTO",
+# #   "SEXO",
+# #   "APGAR5",
+# #   #"PESO",
+# #   "IDANOMAL"
+# #   #"SEMAGESTAC"
+# # ))
+# 
+# summary(dados_final$SEMAGESTAC)
+# summary(dados_final$PESO)
+# 
+# 
+# colnames(dados_final)[colnames(dados_final) == "LOCNASC"] <- "LOCOCORNASC"
+# #ver dados completos
+# 
+# # Definir vetor de variáveis de interesse
+# # vars <- c(
+# #   "CODMUNRES",
+# #   "LOCOCORNASC",
+# #   "IDADEMAE",
+# #   "ESCMAE2010",
+# #   "RACACORMAE",
+# #   "PARIDADE",
+# #   "QTDFILVIVO",
+# #   "QTDFILMORT",
+# #   "QTDGESTANT",
+# #   "QTDPARTNOR",
+# #   "QTDPARTCES",
+# #   "CONSULTAS",
+# #   "MESPRENAT",
+# #   "GRAVIDEZ",
+# #   "PARTO",
+# #   "STTRABPART",
+# #   "STCESPARTO",
+# #   "SEXO",
+# #   "APGAR5",
+# #   "PESO",
+# #   "IDANOMAL",
+# #   "SEMAGESTAC",
+# #   "EVENTO"
+# # )
+# 
+# vars <- c(
+#   "CODMUNRES",
+#   "LOCOCORNASC",
 #   "IDADEMAE",
-#   #"ESTCIVMAE",
 #   "ESCMAE2010",
 #   "RACACORMAE",
-#   #"CODOCUPMAE",
 #   "PARIDADE",
+#   "QTDFILVIVO",
+#   "QTDFILMORT",
 #   "QTDGESTANT",
 #   "QTDPARTNOR",
 #   "QTDPARTCES",
@@ -154,82 +218,110 @@ dados_final$QTDFILMORT[dados_final$QTDFILMORT == 99] <- NA
 #   "STCESPARTO",
 #   "SEXO",
 #   "APGAR5",
-#   #"PESO",
-#   "IDANOMAL"
-#   #"SEMAGESTAC"
-# ))
+#   "PESO",
+#   "IDANOMAL",
+#   "SEMAGESTAC",
+#   "EVENTO",
+#   "rras_id",
+#   "rras_nome",
+#   "rras_fac",
+#   "rras_int"
+# )
+# 
+# # # Considera apenas casos de Idade mãe entre 10 e 49 anos
+# # dados_final <- filter(dados_final, dados_final$IDADEMAE >= 10 & dados_final$IDADEMAE <= 49)
+# 
+# # Converte nomes de colunas para letras minúsculas
+# names(dados_final) <- tolower(names(dados_final))
+# 
+# names(dados_final)
+# 
+# # -------------------- Adiciona colunas sobre as RRAS --------------------------
+# # 1) Garantir o tipo/forma do código do município
+# stopifnot("codmunres" %in% names(dados_final))
+# 
+# dados_final <- dados_final %>%
+#   mutate(
+#     codmunres = as.character(codmunres),
+#     codmunres = str_trim(codmunres)
+#   )
+# 
+# # 2) Ler e preparar a tabela auxiliar município -> RRAS
+# df_aux_rras <- read_excel("tabela_auxiliar_municipios.xlsx") %>%
+#   filter(uf %in% c("São Paulo", "SP")) %>%
+#   select(codmunres, cod_macro_r_saude, macro_r_saude) %>%
+#   rename(
+#     cod_mun_ibge  = codmunres,
+#     rras_id_raw   = cod_macro_r_saude,
+#     rras_nome_raw = macro_r_saude
+#   ) %>%
+#   mutate(
+#     cod_mun_ibge = as.character(cod_mun_ibge),
+#     cod_mun_ibge = str_trim(cod_mun_ibge),
+# 
+#     # Extrair só o número do identificador
+#     rras_id = as.integer(str_replace_all(as.character(rras_id_raw), "[^0-9]", "")),
+# 
+#     # Padronizar nome textual da RRAS
+#     rras_nome = str_to_upper(as.character(rras_nome_raw)),
+#     rras_nome = str_replace(rras_nome, "^(RRAS)\\s*0*([0-9]+)$", "\\1 \\2")
+#   ) %>%
+#   select(cod_mun_ibge, rras_id, rras_nome) %>%
+#   distinct()
+# 
+# # 3) Join pelo município de residência
+# dados_final <- dados_final %>%
+#   left_join(df_aux_rras, by = c("codmunres" = "cod_mun_ibge"))
+# 
+# # 4) Checagem rápida de consistência
+# n_total <- nrow(dados_final)
+# n_sem_rras <- sum(is.na(dados_final$rras_id))
+# 
+# message("RRAS - total de linhas no SINASC final: ", n_total)
+# message("RRAS - linhas sem identificação de RRAS: ", n_sem_rras,
+#         " (", round(100 * n_sem_rras / n_total, 2), "%)")
+# 
+# # 5) Criar codificações úteis para modelos
+# rras_levels <- sort(unique(dados_final$rras_id[!is.na(dados_final$rras_id)]))
+# 
+# dados_final <- dados_final %>%
+#   mutate(
+#     rras_fac = factor(rras_id, levels = rras_levels),
+#     rras_int = as.integer(rras_fac)
+#   )
+# 
+# dados_final <- dados_final %>% filter(!is.na(rras_id))
+# #---------------------------- Dados faltantes
+# # Função para calcular a porcentagem de valores ausentes (NA ou em branco) em cada coluna
+# percentage_missing <- function(df) {
+#   sapply(df, function(x) {
+#     sum(is.na(x) | x == "" | x == " ") / length(x) * 100
+#   })
+# }
+# 
+# # Aplica a função ao seu dataframe combined_data
+# missing_percentages <- percentage_missing(dados_final)
+# 
+# # Cria um tibble com as porcentagens
+# missing_percentage_table <- tibble(
+#   Column = names(missing_percentages),
+#   Missing_Percentage = missing_percentages
+# )
+# 
+# # Exibir a tabela
+# print(missing_percentage_table, n = 34)
+# 
+# # Selecionar apenas os casos completos nessas variáveis
+# vars <- tolower(vars)
+# dados_completos <- dados_final[complete.cases(dados_final[, vars]), ]
+# 
+# dim(dados_final)
+# dim(dados_completos)
+# # 
+# # saveRDS(dados_completos, file = "dataset_sinasc_df.rds")
+# #-------------------------------------------------------------------------------
 
-summary(dados_final$SEMAGESTAC)
-summary(dados_final$PESO)
-
-
-colnames(dados_final)[colnames(dados_final) == "LOCNASC"] <- "LOCOCORNASC"
-#ver dados completos
-
-# Definir vetor de variáveis de interesse
-vars <- c(
-  "CODMUNRES",
-  "LOCOCORNASC",
-  "IDADEMAE",
-  "ESCMAE2010",
-  "RACACORMAE",
-  "PARIDADE",
-  "QTDFILVIVO",
-  "QTDFILMORT",
-  "QTDGESTANT",
-  "QTDPARTNOR",
-  "QTDPARTCES",
-  "CONSULTAS",
-  "MESPRENAT",
-  "GRAVIDEZ",
-  "PARTO",
-  "STTRABPART",
-  "STCESPARTO",
-  "SEXO",
-  "APGAR5",
-  "PESO",
-  "IDANOMAL",
-  "SEMAGESTAC",
-  "EVENTO"
-)
-
-# Considera apenas casos de Idade mãe entre 10 e 49 anos
-dados_final <- filter(dados_final, dados_final$IDADEMAE >= 10 & dados_final$IDADEMAE <= 49)
-
-# Converte nomes de colunas para letras minúsculas
-names(dados_final) <- tolower(names(dados_final))
-
-names(dados_final)
-
-# Função para calcular a porcentagem de valores ausentes (NA ou em branco) em cada coluna
-percentage_missing <- function(df) {
-  sapply(df, function(x) {
-    sum(is.na(x) | x == "" | x == " ") / length(x) * 100
-  })
-}
-
-# Aplica a função ao seu dataframe combined_data
-missing_percentages <- percentage_missing(dados_final)
-
-# Cria um tibble com as porcentagens
-missing_percentage_table <- tibble(
-  Column = names(missing_percentages),
-  Missing_Percentage = missing_percentages
-)
-
-# Exibir a tabela
-print(missing_percentage_table, n = 34)
-
-# Selecionar apenas os casos completos nessas variáveis
-vars <- tolower(vars)
-dados_completos <- dados_final[complete.cases(dados_final[, vars]), ]
-
-dim(dados_final)
-
-dim(dados_completos)
-
-# saveRDS(dados_completos, file = "dataset_sinasc_df.rds")
-
+dados_completos <- readRDS("dataset_sinasc_df.rds")
 ################################################################################
 ####################### DESCRITIVA SÓ DO SINASC ISOLADO ########################
 ################################################################################
@@ -490,186 +582,191 @@ knitr::kable(cat_summary_all,
 dados_eda_clean <- dados_eda_clean %>%
   mutate(status_evento = 1L)
 
-#------------------------------------------------------------------------------
-# 1. Sexo do recém-nascido             ****************************************
-#------------------------------------------------------------------------------
-# Ajuste do modelo Kaplan–Meier por sexo
-km_sexo <- survfit(Surv(tempo, status_evento) ~ sexo, data = dados_eda_clean)
+min_tempo2 <- 24
 
-# Plot da curva empírica para sexo
-grafico_km_sexo <- ggsurvplot(
-  km_sexo,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,         # sem intervalo de confiança, pois não há censura
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica do tempo até o parto por sexo",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$sexo),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_sexo)
+# Limites de tempo para os eixos x dos gráficos
+max_tempo <- max(dados_eda_clean$tempo, na.rm = TRUE)
 
-# png("km_nascidosvivos_sexo.png", units="in", width=6, height=4, res=300)
+# #------------------------------------------------------------------------------
+# # 1. Sexo do recém-nascido             ****************************************
+# #------------------------------------------------------------------------------
+# # Ajuste do modelo Kaplan–Meier por sexo
+# km_sexo <- survfit(Surv(tempo, status_evento) ~ sexo, data = dados_eda_clean)
+# 
+# # Plot da curva empírica para sexo
+# grafico_km_sexo <- ggsurvplot(
+#   km_sexo,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,         # sem intervalo de confiança, pois não há censura
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica do tempo até o parto por sexo",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$sexo),
+#   ggtheme    = theme_minimal()
+# )
 # print(grafico_km_sexo)
-# dev.off()
-
-# Teste de Log‑Rank para comparar as curvas entre sexos
-logrank_sexo <- survdiff(Surv(tempo, status_evento) ~ sexo, data = dados_eda_clean)
-print(logrank_sexo)
-
-p_sexo <- 1 - pchisq(logrank_sexo$chisq, df = length(logrank_sexo$n) - 1)
-print(paste("p-valor:", signif(p_sexo, 3)))
-
-# Tenta detectar se de fato existe diferença
-#------  efeito mediana
-medianas_sexo <- tapply(dados_eda_clean$tempo, dados_eda_clean$sexo, median, na.rm = TRUE)
-medianas_sexo
-
-#------  Estimador wilcox de diferença de localização (Hodges–Lehmann)
-wilcox_sexo <- wilcox.test(tempo ~ sexo,
-                           data = dados_eda_clean,
-                           conf.int = TRUE,
-                           conf.level = 0.95,
-                           exact = FALSE)  # exact=FALSE pela amostra grande
-
-wilcox_sexo
-#ex de interpretação
-# O estimador de Hodges–Lehmann indicou que o tempo de gestação em nascidos do sexo 
-# masculino é, em mediana, 0,1 semana menor do que em nascidos do 
-# sexo feminino (IC95%: −0,12 a −0,08 semana). Embora a diferença seja 
-# estatisticamente significativa, a magnitude é muito pequena.
-
-# Interpretação: valores de d em torno de 0,2 = efeito pequeno, 0,5 = médio, 0,8 = grande.
-
-#------ Via modelo de cox
-# Garantir que "Feminino" seja a categoria de referência
-dados_eda_clean$sexo <- relevel(dados_eda_clean$sexo, ref = "Feminino")
-
-# Ajustar o modelo de Cox
-cox_sexo <- coxph(Surv(tempo, status_evento) ~ sexo, data = dados_eda_clean)
-summary(cox_sexo)
-
-#Se HR > 1: o grupo no numerador (Masculino) tem partos mais precoces, em média (gestação mais curta).
-#Se HR < 1: partos mais tardios que o grupo de referência.
-#HR + IC95% (magnitude relativa)
-HR_sexo <- exp(coef(cox_sexo))
-IC_sexo <- exp(confint(cox_sexo))
-
-HR_sexo
-IC_sexo
-
-#------------------------------------------------------------------------------
-# 2. Escolaridade da mãe (escmae2010)  ****************************************
-#------------------------------------------------------------------------------
-km_esc <- survfit(Surv(tempo, status_evento) ~ escmae2010, data = dados_eda_clean)
-
-grafico_km_esc <- ggsurvplot(
-  km_esc,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por escolaridade materna",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$escmae2010),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_esc)
-
-# png("km_nascidosvivos_escolaridade.png", units="in", width=6, height=4, res=300)
+# 
+# # png("km_nascidosvivos_sexo.png", units="in", width=6, height=4, res=300)
+# # print(grafico_km_sexo)
+# # dev.off()
+# 
+# # Teste de Log‑Rank para comparar as curvas entre sexos
+# logrank_sexo <- survdiff(Surv(tempo, status_evento) ~ sexo, data = dados_eda_clean)
+# print(logrank_sexo)
+# 
+# p_sexo <- 1 - pchisq(logrank_sexo$chisq, df = length(logrank_sexo$n) - 1)
+# print(paste("p-valor:", signif(p_sexo, 3)))
+# 
+# # Tenta detectar se de fato existe diferença
+# #------  efeito mediana
+# medianas_sexo <- tapply(dados_eda_clean$tempo, dados_eda_clean$sexo, median, na.rm = TRUE)
+# medianas_sexo
+# 
+# #------  Estimador wilcox de diferença de localização (Hodges–Lehmann)
+# wilcox_sexo <- wilcox.test(tempo ~ sexo,
+#                            data = dados_eda_clean,
+#                            conf.int = TRUE,
+#                            conf.level = 0.95,
+#                            exact = FALSE)  # exact=FALSE pela amostra grande
+# 
+# wilcox_sexo
+# #ex de interpretação
+# # O estimador de Hodges–Lehmann indicou que o tempo de gestação em nascidos do sexo 
+# # masculino é, em mediana, 0,1 semana menor do que em nascidos do 
+# # sexo feminino (IC95%: −0,12 a −0,08 semana). Embora a diferença seja 
+# # estatisticamente significativa, a magnitude é muito pequena.
+# 
+# # Interpretação: valores de d em torno de 0,2 = efeito pequeno, 0,5 = médio, 0,8 = grande.
+# 
+# #------ Via modelo de cox
+# # Garantir que "Feminino" seja a categoria de referência
+# dados_eda_clean$sexo <- relevel(dados_eda_clean$sexo, ref = "Feminino")
+# 
+# # Ajustar o modelo de Cox
+# cox_sexo <- coxph(Surv(tempo, status_evento) ~ sexo, data = dados_eda_clean)
+# summary(cox_sexo)
+# 
+# #Se HR > 1: o grupo no numerador (Masculino) tem partos mais precoces, em média (gestação mais curta).
+# #Se HR < 1: partos mais tardios que o grupo de referência.
+# #HR + IC95% (magnitude relativa)
+# HR_sexo <- exp(coef(cox_sexo))
+# IC_sexo <- exp(confint(cox_sexo))
+# 
+# HR_sexo
+# IC_sexo
+# 
+# #------------------------------------------------------------------------------
+# # 2. Escolaridade da mãe (escmae2010)  ****************************************
+# #------------------------------------------------------------------------------
+# km_esc <- survfit(Surv(tempo, status_evento) ~ escmae2010, data = dados_eda_clean)
+# 
+# grafico_km_esc <- ggsurvplot(
+#   km_esc,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica por escolaridade materna",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$escmae2010),
+#   ggtheme    = theme_minimal()
+# )
 # print(grafico_km_esc)
-# dev.off()
-
-logrank_esc <- survdiff(Surv(tempo, status_evento) ~ escmae2010, data = dados_eda_clean)
-print(logrank_esc)
-
-p_esc <- 1 - pchisq(logrank_esc$chisq, df = length(logrank_esc$n) - 1)
-print(paste("p-valor:", signif(p_esc, 3)))
-
-#------------------------------------------------------------------------------
-# 3. Tipo de gravidez (gravidez: Única vs Múltipla)
-#------------------------------------------------------------------------------
-km_grav <- survfit(Surv(tempo, status_evento) ~ gravidez, data = dados_eda_clean)
-
-grafico_km_grav <- ggsurvplot(
-  km_grav,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por tipo de gravidez",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$gravidez),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_grav)
-
-# png("km_nascidosvivos_gravidez.png", units="in", width=6, height=4, res=300)
+# 
+# # png("km_nascidosvivos_escolaridade.png", units="in", width=6, height=4, res=300)
+# # print(grafico_km_esc)
+# # dev.off()
+# 
+# logrank_esc <- survdiff(Surv(tempo, status_evento) ~ escmae2010, data = dados_eda_clean)
+# print(logrank_esc)
+# 
+# p_esc <- 1 - pchisq(logrank_esc$chisq, df = length(logrank_esc$n) - 1)
+# print(paste("p-valor:", signif(p_esc, 3)))
+# 
+# #------------------------------------------------------------------------------
+# # 3. Tipo de gravidez (gravidez: Única vs Múltipla)
+# #------------------------------------------------------------------------------
+# km_grav <- survfit(Surv(tempo, status_evento) ~ gravidez, data = dados_eda_clean)
+# 
+# grafico_km_grav <- ggsurvplot(
+#   km_grav,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica por tipo de gravidez",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$gravidez),
+#   ggtheme    = theme_minimal()
+# )
 # print(grafico_km_grav)
-# dev.off()
-
-logrank_grav <- survdiff(Surv(tempo, status_evento) ~ gravidez, data = dados_eda_clean)
-print(logrank_grav)
-
-p_grav <- 1 - pchisq(logrank_grav$chisq, df = length(logrank_grav$n) - 1)
-print(paste("p-valor:", signif(p_grav, 3)))
-
-#------------------------------------------------------------------------------
-# 4. Tipo de parto (Vaginal vs Cesáreo)****************************************
-#------------------------------------------------------------------------------
-km_parto <- survfit(Surv(tempo, status_evento) ~ parto, data = dados_eda_clean)
-
-grafico_km_parto <- ggsurvplot(
-  km_parto,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por tipo de parto",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$parto),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_parto)
-
-# png("km_nascidosvivos_parto.png", units="in", width=6, height=4, res=300)
+# 
+# # png("km_nascidosvivos_gravidez.png", units="in", width=6, height=4, res=300)
+# # print(grafico_km_grav)
+# # dev.off()
+# 
+# logrank_grav <- survdiff(Surv(tempo, status_evento) ~ gravidez, data = dados_eda_clean)
+# print(logrank_grav)
+# 
+# p_grav <- 1 - pchisq(logrank_grav$chisq, df = length(logrank_grav$n) - 1)
+# print(paste("p-valor:", signif(p_grav, 3)))
+# 
+# #------------------------------------------------------------------------------
+# # 4. Tipo de parto (Vaginal vs Cesáreo)****************************************
+# #------------------------------------------------------------------------------
+# km_parto <- survfit(Surv(tempo, status_evento) ~ parto, data = dados_eda_clean)
+# 
+# grafico_km_parto <- ggsurvplot(
+#   km_parto,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica por tipo de parto",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$parto),
+#   ggtheme    = theme_minimal()
+# )
 # print(grafico_km_parto)
+# 
+# # png("km_nascidosvivos_parto.png", units="in", width=6, height=4, res=300)
+# # print(grafico_km_parto)
+# # dev.off()
+# 
+# logrank_parto <- survdiff(Surv(tempo, status_evento) ~ parto, data = dados_eda_clean)
+# print(logrank_parto)
+# 
+# p_parto <- 1 - pchisq(logrank_parto$chisq, df = length(logrank_parto$n) - 1)
+# print(paste("p-valor:", signif(p_parto, 3)))
+# 
+# #------------------------------------------------------------------------------
+# # 5. Local de ocorrência do parto (Hospital vs Outros)*************************
+# #------------------------------------------------------------------------------
+# km_loc <- survfit(Surv(tempo, status_evento) ~ lococornasc, data = dados_eda_clean)
+# 
+# grafico_km_loc <- ggsurvplot(
+#   km_loc,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica por local de ocorrência",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$lococornasc),
+#   ggtheme    = theme_minimal()
+# )
+# print(grafico_km_loc)
+# 
+# png("km_nascidosvivos_loconasc.png", units="in", width=6, height=4, res=300)
+# print(grafico_km_loc)
 # dev.off()
-
-logrank_parto <- survdiff(Surv(tempo, status_evento) ~ parto, data = dados_eda_clean)
-print(logrank_parto)
-
-p_parto <- 1 - pchisq(logrank_parto$chisq, df = length(logrank_parto$n) - 1)
-print(paste("p-valor:", signif(p_parto, 3)))
-
-#------------------------------------------------------------------------------
-# 5. Local de ocorrência do parto (Hospital vs Outros)*************************
-#------------------------------------------------------------------------------
-km_loc <- survfit(Surv(tempo, status_evento) ~ lococornasc, data = dados_eda_clean)
-
-grafico_km_loc <- ggsurvplot(
-  km_loc,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por local de ocorrência",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$lococornasc),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_loc)
-
-png("km_nascidosvivos_loconasc.png", units="in", width=6, height=4, res=300)
-print(grafico_km_loc)
-dev.off()
-
-logrank_loc <- survdiff(Surv(tempo, status_evento) ~ lococornasc, data = dados_eda_clean)
-print(logrank_loc)
-
-p_loc <- 1 - pchisq(logrank_loc$chisq, df = length(logrank_loc$n) - 1)
-print(paste("p-valor:", signif(p_loc, 3)))
+# 
+# logrank_loc <- survdiff(Surv(tempo, status_evento) ~ lococornasc, data = dados_eda_clean)
+# print(logrank_loc)
+# 
+# p_loc <- 1 - pchisq(logrank_loc$chisq, df = length(logrank_loc$n) - 1)
+# print(paste("p-valor:", signif(p_loc, 3)))
 
 #------------------------------------------------------------------------------
 # 6. Número de consultas pré-natais
@@ -681,17 +778,19 @@ grafico_km_consultas <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por número de consultas pré-natais",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por número de consultas pré-natais)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$consultas),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_consultas)
 
-# png("km_nascidosvivos_consultas.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_consultas)
-# dev.off()
+png("km_nascidosvivos_consultas.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_consultas)
+dev.off()
 
 logrank_consultas <- survdiff(Surv(tempo, status_evento) ~ consultas, data = dados_eda_clean)
 print(logrank_consultas)
@@ -709,17 +808,19 @@ grafico_km_anomalia <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por presença de anomalias congênitas",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por presença de anomalias congênitas)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$idanomal),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_anomalia)
 
-# png("km_nascidosvivos_anomalia.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_anomalia)
-# dev.off()
+png("km_nascidosvivos_anomalia.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_anomalia)
+dev.off()
 
 logrank_anomalia <- survdiff(Surv(tempo, status_evento) ~ idanomal, data = dados_eda_clean)
 print(logrank_anomalia)
@@ -737,17 +838,19 @@ grafico_km_raca <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por raça/cor da mãe",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por raça/cor da mãe)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$racacormae),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_raca)
 
-# png("km_nascidosvivos_racamae.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_raca)
-# dev.off()
+png("km_nascidosvivos_racamae.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_raca)
+dev.off()
 
 logrank_raca <- survdiff(Surv(tempo, status_evento) ~ racacormae, data = dados_eda_clean)
 print(logrank_raca)
@@ -765,17 +868,19 @@ grafico_km_trabalho <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por indução do trabalho de parto",
+  ylab       = "S(t) empírico",
+  title      = "KM (sem censura) - nascido vivo (por indução do trabalho de parto)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$sttrabpart),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_trabalho)
 
-# png("km_nascidosvivos_indtrabalhoparto.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_trabalho)
-# dev.off()
+png("km_nascidosvivos_indtrabalhoparto.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_trabalho)
+dev.off()
 
 logrank_trabalho <- survdiff(Surv(tempo, status_evento) ~ sttrabpart, data = dados_eda_clean)
 print(logrank_trabalho)
@@ -793,17 +898,19 @@ grafico_km_cesarea <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por realização de cesárea programada",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por realização de cesárea programada)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$stcesparto),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_cesarea)
 
-# png("km_nascidosvivos_stcesparto.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_cesarea)
-# dev.off()
+png("km_nascidosvivos_stcesparto.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_cesarea)
+dev.off()
 
 logrank_cesarea <- survdiff(Surv(tempo, status_evento) ~ stcesparto, data = dados_eda_clean)
 print(logrank_cesarea)
@@ -821,17 +928,19 @@ grafico_km_paridade <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por paridade",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por paridade)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$paridade),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_paridade)
 
-# png("km_nascidosvivos_paridade.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_paridade)
-# dev.off()
+png("km_nascidosvivos_paridade.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_paridade)
+dev.off()
 
 logrank_paridade <- survdiff(Surv(tempo, status_evento) ~ paridade, data = dados_eda_clean)
 print(logrank_paridade)
@@ -839,117 +948,117 @@ print(logrank_paridade)
 p_paridade <- 1 - pchisq(logrank_paridade$chisq, df = length(logrank_paridade$n) - 1)
 print(paste("p-valor:", signif(p_paridade, 3)))
 
-#------------------------------------------------------------------------------
-# 12. Faixa etária da mãe (idademae_categorico)********************************
-#------------------------------------------------------------------------------
-km_idade <- survfit(Surv(tempo, status_evento) ~ idademae_categorico, data = dados_eda_clean)
-
-grafico_km_idade <- ggsurvplot(
-  km_idade,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por faixa etária da mãe",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$idademae_categorico),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_idade)
-
-# png("km_nascidosvivos_idademae.png", units="in", width=6, height=4, res=300)
+# #------------------------------------------------------------------------------
+# # 12. Faixa etária da mãe (idademae_categorico)********************************
+# #------------------------------------------------------------------------------
+# km_idade <- survfit(Surv(tempo, status_evento) ~ idademae_categorico, data = dados_eda_clean)
+# 
+# grafico_km_idade <- ggsurvplot(
+#   km_idade,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica por faixa etária da mãe",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$idademae_categorico),
+#   ggtheme    = theme_minimal()
+# )
 # print(grafico_km_idade)
-# dev.off()
-
-logrank_idade <- survdiff(Surv(tempo, status_evento) ~ idademae_categorico, data = dados_eda_clean)
-print(logrank_idade)
-
-p_idade <- 1 - pchisq(logrank_idade$chisq, df = length(logrank_idade$n) - 1)
-print(paste("p-valor:", signif(p_idade, 3)))
-
-#------------------------------------------------------------------------------
-# 13. Faixa de peso ao nascer (peso_categorico)
-#------------------------------------------------------------------------------
-km_peso <- survfit(Surv(tempo, status_evento) ~ peso_categorico, data = dados_eda_clean)
-
-grafico_km_peso <- ggsurvplot(
-  km_peso,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por faixa de peso ao nascer",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$peso_categorico),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_peso)
-
-# png("km_nascidosvivos_peso.png", units="in", width=6, height=4, res=300)
+# 
+# # png("km_nascidosvivos_idademae.png", units="in", width=6, height=4, res=300)
+# # print(grafico_km_idade)
+# # dev.off()
+# 
+# logrank_idade <- survdiff(Surv(tempo, status_evento) ~ idademae_categorico, data = dados_eda_clean)
+# print(logrank_idade)
+# 
+# p_idade <- 1 - pchisq(logrank_idade$chisq, df = length(logrank_idade$n) - 1)
+# print(paste("p-valor:", signif(p_idade, 3)))
+# 
+# #------------------------------------------------------------------------------
+# # 13. Faixa de peso ao nascer (peso_categorico)
+# #------------------------------------------------------------------------------
+# km_peso <- survfit(Surv(tempo, status_evento) ~ peso_categorico, data = dados_eda_clean)
+# 
+# grafico_km_peso <- ggsurvplot(
+#   km_peso,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica por faixa de peso ao nascer",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$peso_categorico),
+#   ggtheme    = theme_minimal()
+# )
 # print(grafico_km_peso)
-# dev.off()
-
-logrank_peso <- survdiff(Surv(tempo, status_evento) ~ peso_categorico, data = dados_eda_clean)
-print(logrank_peso)
-
-p_peso <- 1 - pchisq(logrank_peso$chisq, df = length(logrank_peso$n) - 1)
-print(paste("p-valor:", signif(p_peso, 3)))
-
-#------------------------------------------------------------------------------
-# 14. Presença de filhos vivos previamente (qtdfilvivo_categorico)*************
-#------------------------------------------------------------------------------
-km_filhos_vivos <- survfit(Surv(tempo, status_evento) ~ qtdfilvivo_categorico, data = dados_eda_clean)
-
-grafico_km_filhos_vivos <- ggsurvplot(
-  km_filhos_vivos,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por presença de filhos vivos prévios",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$qtdfilvivo_categorico),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_filhos_vivos)
-
-# png("km_nascidosvivos_qtdfilvivo.png", units="in", width=6, height=4, res=300)
+# 
+# # png("km_nascidosvivos_peso.png", units="in", width=6, height=4, res=300)
+# # print(grafico_km_peso)
+# # dev.off()
+# 
+# logrank_peso <- survdiff(Surv(tempo, status_evento) ~ peso_categorico, data = dados_eda_clean)
+# print(logrank_peso)
+# 
+# p_peso <- 1 - pchisq(logrank_peso$chisq, df = length(logrank_peso$n) - 1)
+# print(paste("p-valor:", signif(p_peso, 3)))
+# 
+# #------------------------------------------------------------------------------
+# # 14. Presença de filhos vivos previamente (qtdfilvivo_categorico)*************
+# #------------------------------------------------------------------------------
+# km_filhos_vivos <- survfit(Surv(tempo, status_evento) ~ qtdfilvivo_categorico, data = dados_eda_clean)
+# 
+# grafico_km_filhos_vivos <- ggsurvplot(
+#   km_filhos_vivos,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica por presença de filhos vivos prévios",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$qtdfilvivo_categorico),
+#   ggtheme    = theme_minimal()
+# )
 # print(grafico_km_filhos_vivos)
-# dev.off()
-
-logrank_filhos_vivos <- survdiff(Surv(tempo, status_evento) ~ qtdfilvivo_categorico, data = dados_eda_clean)
-print(logrank_filhos_vivos)
-
-p_filhos_vivos <- 1 - pchisq(logrank_filhos_vivos$chisq, df = length(logrank_filhos_vivos$n) - 1)
-print(paste("p-valor:", signif(p_filhos_vivos, 3)))
-
-#------------------------------------------------------------------------------
-# 15. Presença de filhos mortos previamente (qtdfilmort_categorico)************
-#------------------------------------------------------------------------------
-km_filhos_mortos <- survfit(Surv(tempo, status_evento) ~ qtdfilmort_categorico, data = dados_eda_clean)
-
-grafico_km_filhos_mortos <- ggsurvplot(
-  km_filhos_mortos,
-  data       = dados_eda_clean,
-  conf.int   = FALSE,
-  xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por presença de filhos mortos prévios",
-  legend.title = "",
-  legend.labs  = levels(dados_eda_clean$qtdfilmort_categorico),
-  ggtheme    = theme_minimal()
-)
-print(grafico_km_filhos_mortos)
-
-# png("km_nascidosvivos_qtfilhosmortos.png", units="in", width=6, height=4, res=300)
+# 
+# # png("km_nascidosvivos_qtdfilvivo.png", units="in", width=6, height=4, res=300)
+# # print(grafico_km_filhos_vivos)
+# # dev.off()
+# 
+# logrank_filhos_vivos <- survdiff(Surv(tempo, status_evento) ~ qtdfilvivo_categorico, data = dados_eda_clean)
+# print(logrank_filhos_vivos)
+# 
+# p_filhos_vivos <- 1 - pchisq(logrank_filhos_vivos$chisq, df = length(logrank_filhos_vivos$n) - 1)
+# print(paste("p-valor:", signif(p_filhos_vivos, 3)))
+# 
+# #------------------------------------------------------------------------------
+# # 15. Presença de filhos mortos previamente (qtdfilmort_categorico)************
+# #------------------------------------------------------------------------------
+# km_filhos_mortos <- survfit(Surv(tempo, status_evento) ~ qtdfilmort_categorico, data = dados_eda_clean)
+# 
+# grafico_km_filhos_mortos <- ggsurvplot(
+#   km_filhos_mortos,
+#   data       = dados_eda_clean,
+#   conf.int   = FALSE,
+#   xlab       = "Semanas de gestação",
+#   ylab       = "S(t) empírico (nascidos vivos)",
+#   title      = "Curva empírica por presença de filhos mortos prévios",
+#   legend.title = "",
+#   legend.labs  = levels(dados_eda_clean$qtdfilmort_categorico),
+#   ggtheme    = theme_minimal()
+# )
 # print(grafico_km_filhos_mortos)
-# dev.off()
-
-logrank_filhos_mortos <- survdiff(Surv(tempo, status_evento) ~ qtdfilmort_categorico, data = dados_eda_clean)
-print(logrank_filhos_mortos)
-
-p_filhos_mortos <- 1 - pchisq(logrank_filhos_mortos$chisq, df = length(logrank_filhos_mortos$n) - 1)
-print(paste("p-valor:", signif(p_filhos_mortos, 3)))
+# 
+# # png("km_nascidosvivos_qtfilhosmortos.png", units="in", width=6, height=4, res=300)
+# # print(grafico_km_filhos_mortos)
+# # dev.off()
+# 
+# logrank_filhos_mortos <- survdiff(Surv(tempo, status_evento) ~ qtdfilmort_categorico, data = dados_eda_clean)
+# print(logrank_filhos_mortos)
+# 
+# p_filhos_mortos <- 1 - pchisq(logrank_filhos_mortos$chisq, df = length(logrank_filhos_mortos$n) - 1)
+# print(paste("p-valor:", signif(p_filhos_mortos, 3)))
 
 #------------------------------------------------------------------------------
 # 16. Escore de Apgar aos 5 minutos (apgar5_categorico)
@@ -961,17 +1070,19 @@ grafico_km_apgar <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por escore Apgar aos 5 minutos",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por escore Apgar aos 5 minutos)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$apgar5_categorico),
-  ggtheme    = theme_minimal()
+  xlim       = c(20, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_apgar)
 
-# png("km_nascidosvivos_apgar.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_apgar)
-# dev.off()
+png("km_nascidosvivos_apgar.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_apgar)
+dev.off()
 
 logrank_apgar <- survdiff(Surv(tempo, status_evento) ~ apgar5_categorico, data = dados_eda_clean)
 print(logrank_apgar)
@@ -989,17 +1100,19 @@ grafico_km_gestant <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por número de gestações anteriores",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por número de gestações anteriores)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$qtdgestant_categorico),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_gestant)
 
-# png("km_nascidosvivos_qtdgestant.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_gestant)
-# dev.off()
+png("km_nascidosvivos_qtdgestant.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_gestant)
+dev.off()
 
 logrank_gestant <- survdiff(Surv(tempo, status_evento) ~ qtdgestant_categorico, data = dados_eda_clean)
 print(logrank_gestant)
@@ -1017,17 +1130,19 @@ grafico_km_partnor <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por número de partos vaginais anteriores",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por número de partos vaginais anteriores)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$qtdpartnor_categorico),
-  ggtheme    = theme_minimal()
+  xlim       = c(29, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_partnor)
 
-# png("km_nascidosvivos_qtdpartnor.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_partnor)
-# dev.off()
+png("km_nascidosvivos_qtdpartnor.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_partnor)
+dev.off()
 
 logrank_partnor <- survdiff(Surv(tempo, status_evento) ~ qtdpartnor_categorico, data = dados_eda_clean)
 print(logrank_partnor)
@@ -1045,17 +1160,19 @@ grafico_km_partces <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por número de partos cesáreos anteriores",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por número de partos cesáreos anteriores)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$qtdpartces_categorico),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_partces)
 
-# png("km_nascidosvivos_qtdpartces.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_partces)
-# dev.off()
+png("km_nascidosvivos_qtdpartces.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_partces)
+dev.off()
 
 logrank_partces <- survdiff(Surv(tempo, status_evento) ~ qtdpartces_categorico, data = dados_eda_clean)
 print(logrank_partces)
@@ -1073,17 +1190,19 @@ grafico_km_mesprenat <- ggsurvplot(
   data       = dados_eda_clean,
   conf.int   = FALSE,
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) empírico (nascidos vivos)",
-  title      = "Curva empírica por trimestre de início do pré-natal",
+  ylab       = "S(t)",
+  title      = "KM (sem censura) - nascido vivo (por trimestre de início do pré-natal)",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$mesprenat_categorico),
-  ggtheme    = theme_minimal()
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_mesprenat)
 
-# png("km_nascidosvivos_mesprenat.png", units="in", width=6, height=4, res=300)
-# print(grafico_km_mesprenat)
-# dev.off()
+png("km_nascidosvivos_mesprenat.png", units="in", width=7.5, height=5, res=112)
+print(grafico_km_mesprenat)
+dev.off()
 
 logrank_mesprenat <- survdiff(Surv(tempo, status_evento) ~ mesprenat_categorico, data = dados_eda_clean)
 print(logrank_mesprenat)

@@ -5,6 +5,12 @@ library(survival)
 library(survminer)
 library(patchwork)
 library(RColorBrewer)
+library(scales)
+library(sf)
+library(ggplot2)
+library(stringr)
+library(readxl)
+library(ggrepel)
 
 dados_simsp <- readRDS("dataset_sim_df.rds") # selecao_dados_SIM
 
@@ -32,6 +38,383 @@ dados_sp_cln <- dados_sp_cln %>%
     qtdfilmort = suppressWarnings(as.numeric(qtdfilmort)),
     evento = suppressWarnings(as.integer(evento))
   )
+
+#-------------------------------- RRAS -----------------------------------------
+# FUNÇÕES DE APOIO
+
+# Função para frequências por RRAS 
+contar_rras <- function(df, id_col = "rras_id", nome_col = "rras_nome") {
+  stopifnot(id_col %in% names(df))
+  has_nome <- nome_col %in% names(df)
+  
+  df <- df %>%
+    mutate(
+      .rras_id   = as.integer(.data[[id_col]]),
+      .rras_nome = if (has_nome) as.character(.data[[nome_col]]) else NA_character_
+    )
+  
+  total <- nrow(df)
+  
+  out <- df %>%
+    filter(!is.na(.rras_id)) %>%
+    group_by(.rras_id, .rras_nome) %>%
+    summarise(n = n(), .groups = "drop") %>%
+    arrange(.rras_id) %>%
+    mutate(
+      freq = n / total,
+      perc = 100 * freq
+    )
+  
+  if (!has_nome) {
+    out <- out %>% select(rras_id = .rras_id, n, freq, perc)
+  } else {
+    out <- out %>% select(rras_id = .rras_id, rras_nome = .rras_nome, n, freq, perc)
+  }
+  
+  attr(out, "total_linhas_df") <- total
+  out
+}
+
+formatar_tabela_rras <- function(tab) {
+  tab %>%
+    arrange(desc(n)) %>%
+    mutate(
+      freq = round(freq, 6),
+      perc = round(perc, 2)
+    )
+}
+
+# Padronização de código municipal (6 dígitos)
+padronizar_codmun6 <- function(x) {
+  x <- as.character(x)
+  x <- str_trim(x)
+  x <- str_pad(x, width = 6, pad = "0")
+  x
+}
+
+# =============================================================================
+# CONFIGURAÇÃO 
+# =============================================================================
+caminho_shape_mun_sp <- "SP_Municipios_2024/SP_Municipios_2024.shp"
+id_mun_shape         <- "CD_MUN"     # coluna de município no shapefile
+id_mun_dados         <- "codmunres"  # coluna de município nos seus dados
+id_rras_dados        <- "rras_id"
+nome_rras_dados      <- "rras_nome"
+
+# =============================================================================
+# TABELAS SIMPLES POR RRAS
+# =============================================================================
+tabela_rras_sim    <- contar_rras(dados_simsp_comum)
+tabela_rras_sinasc <- contar_rras(dados_sinascsp_comum)
+
+print(formatar_tabela_rras(tabela_rras_sim), n = Inf)
+print(formatar_tabela_rras(tabela_rras_sinasc), n = Inf)
+
+# =============================================================================
+# LER SHAPE MUNICIPAL
+# =============================================================================
+mun_sp_sf <- st_read(caminho_shape_mun_sp, quiet = TRUE)
+stopifnot(id_mun_shape %in% names(mun_sp_sf))
+
+mun_sp_sf <- mun_sp_sf %>%
+  mutate(
+    cod_mun7 = str_pad(as.character(.data[[id_mun_shape]]), width = 7, pad = "0"),
+    cod_mun6 = str_sub(cod_mun7, 1, 6)
+  )
+
+# =============================================================================
+# CONSTRUIR TABELA MUNICÍPIO -> RRAS A PARTIR DOS DADOS
+# =============================================================================
+map_mun_rras <- bind_rows(
+  dados_simsp %>%
+    transmute(
+      cod_mun6  = padronizar_codmun6(.data[[id_mun_dados]]),
+      rras_id   = as.integer(.data[[id_rras_dados]]),
+      rras_nome = if (nome_rras_dados %in% names(dados_simsp))
+        as.character(.data[[nome_rras_dados]]) else NA_character_
+    ),
+  dados_sinascsp %>%
+    transmute(
+      cod_mun6  = padronizar_codmun6(.data[[id_mun_dados]]),
+      rras_id   = as.integer(.data[[id_rras_dados]]),
+      rras_nome = if (nome_rras_dados %in% names(dados_sinascsp))
+        as.character(.data[[nome_rras_dados]]) else NA_character_
+    )
+) %>%
+  filter(!is.na(cod_mun6), cod_mun6 != "", !is.na(rras_id)) %>%
+  distinct(cod_mun6, rras_id, rras_nome)
+
+# =============================================================================
+# VERIFICAR COBERTURA DO MAPEAMENTO
+# =============================================================================
+mun_sem_rras <- mun_sp_sf %>%
+  st_drop_geometry() %>%
+  distinct(cod_mun6) %>%
+  left_join(map_mun_rras, by = "cod_mun6") %>%
+  filter(is.na(rras_id))
+
+if (nrow(mun_sem_rras) > 0) {
+  message("ATENÇÃO: Existem municípios no shapefile sem RRAS no mapeamento derivado dos dados.")
+  message("Quantidade de municípios sem RRAS no join: ", nrow(mun_sem_rras))
+} else {
+  message("OK: todos os municípios do shapefile receberam RRAS via join.")
+}
+
+# =============================================================================
+# JUNTAR SHAPE MUNICIPAL COM RRAS E DISSOLVER
+# =============================================================================
+mun_sp_rras_sf <- mun_sp_sf %>%
+  left_join(map_mun_rras, by = "cod_mun6")
+
+mun_sp_rras_sf <- st_make_valid(mun_sp_rras_sf)
+
+rras_sf <- mun_sp_rras_sf %>%
+  filter(!is.na(rras_id)) %>%
+  group_by(rras_id) %>%
+  summarise(
+    rras_nome = dplyr::first(na.omit(rras_nome)),
+    geometry  = st_union(geometry),
+    .groups   = "drop"
+  ) %>%
+  mutate(
+    rras_nome = ifelse(is.na(rras_nome), paste0("RRAS ", rras_id), rras_nome)
+  )
+
+print(rras_sf)
+
+# =============================================================================
+# CONTAGENS: ÓBITO FETAL (SIM) E NASCIDO VIVO (SINASC)
+# =============================================================================
+obitos_rras   <- dados_simsp_comum    %>% count(rras_id, name = "n_of")
+nascidos_rras <- dados_sinascsp_comum %>% count(rras_id, name = "n_lv")
+
+# =============================================================================
+# POPULAÇÃO POR RRAS (CENSO 2022 agregada)
+# =============================================================================
+pop_raw <- readxl::read_excel("POP2022_Municipios_20230622.xlsx") %>%
+  filter(UF == "SP")
+
+pop_df <- pop_raw %>%
+  rename(
+    uf        = UF,
+    cod_uf    = `COD. UF`,
+    cod_munic = `COD. MUNIC`,
+    pop_txt   = POPULAÇÃO
+  ) %>%
+  mutate(
+    cod_uf    = str_pad(as.character(cod_uf), 2, pad = "0"),
+    cod_munic = str_pad(as.character(cod_munic), 5, pad = "0"),
+    cod_mun7  = paste0(cod_uf, cod_munic),
+    cod_mun6  = str_sub(cod_mun7, 1, 6),
+    pop       = suppressWarnings(as.numeric(pop_txt))
+  ) %>%
+  select(cod_mun6, pop)
+
+map_mun_rras_std <- map_mun_rras %>%
+  mutate(cod_mun6 = str_pad(as.character(cod_mun6), 6, pad = "0")) %>%
+  select(cod_mun6, rras_id)
+
+pop_rras <- pop_df %>%
+  left_join(map_mun_rras_std, by = "cod_mun6") %>%
+  group_by(rras_id) %>%
+  summarise(pop_rras = sum(pop, na.rm = TRUE), .groups = "drop") %>%
+  arrange(rras_id)
+
+# =============================================================================
+# INDICADORES FINAIS POR RRAS
+# =============================================================================
+rras_indicadores <- pop_rras %>%
+  left_join(obitos_rras,   by = "rras_id") %>%
+  left_join(nascidos_rras, by = "rras_id") %>%
+  mutate(
+    n_of = ifelse(is.na(n_of), 0L, n_of),
+    n_lv = ifelse(is.na(n_lv), 0L, n_lv),
+    n_total_nasc = n_of + n_lv
+  ) %>%
+  mutate(
+    # Participação no total do estado
+    perc_fd_total = 100 * n_of / sum(n_of, na.rm = TRUE),
+    perc_lv_total = 100 * n_lv / sum(n_lv, na.rm = TRUE),
+    
+    # Taxa obstétrica clássica por 1000 nascimentos
+    taxa_fd_1000_nasc = 1000 * n_of / n_total_nasc,
+    
+    # Razão OF por 1000 NV (útil como medida alternativa)
+    razao_fd_1000_lv  = 1000 * n_of / ifelse(n_lv == 0, NA_real_, n_lv),
+    
+    # Taxa demográfica de NV por 1000 habitantes
+    taxa_lv_1000_pop  = 1000 * n_lv / pop_rras
+  )
+
+# =============================================================================
+# UNTAR COM O SHAPE DAS RRAS
+# =============================================================================
+map_rras <- rras_sf %>%
+  left_join(rras_indicadores, by = "rras_id")
+
+# =============================================================================
+# RÓTULOS COM REPEL (RESOLVE RRAS 1-6 COM LABEL MUITO PRÓXIMAS)
+# =============================================================================
+# Trabalhar rótulos em CRS projetado melhora muito o posicionamento
+map_rras_proj <- st_transform(map_rras, 31983)  # SIRGAS 2000 / UTM 23S
+
+rotulos_rras_proj <- map_rras_proj %>%
+  st_point_on_surface() %>%
+  mutate(
+    rras_nome_lab = str_wrap(rras_nome, width = 18)
+  )
+
+# Extrair coordenadas para usar com ggrepel
+coords <- st_coordinates(rotulos_rras_proj)
+
+rotulos_rras_df <- rotulos_rras_proj %>%
+  st_drop_geometry() %>%
+  mutate(
+    x = coords[, 1],
+    y = coords[, 2]
+  )
+
+# =============================================================================
+# TEMA
+# =============================================================================
+tema_mapa <- theme_minimal(base_size = 11) +
+  theme(
+    panel.grid.major = element_line(linewidth = 0.15),
+    panel.grid.minor = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    
+    legend.title = element_text(size = 9),
+    legend.text  = element_text(size = 8),
+    
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(size = 9),
+    
+    plot.margin = margin(5.5, 5.5, 5.5, 5.5)
+  )
+
+# =============================================================================
+# MAPAS LIMPOS (CORES MAIS OPACAS)
+# =============================================================================
+# Paletas suaves sequenciais do Brewer
+pal_fd <- "Blues"
+pal_lv <- "Greys"
+
+# Mapa A
+p_fd <- ggplot() +
+  geom_sf(
+    data = map_rras_proj,
+    aes(fill = perc_fd_total),
+    color = "white",
+    linewidth = 0.2
+  ) +
+  geom_label_repel(
+    data = rotulos_rras_df,
+    aes(x = x, y = y, label = rras_nome_lab),
+    size = 2.5,
+    fontface = "bold",
+    color = "black",
+    fill = "white",
+    alpha = 0.85,
+    label.size = 0.15,
+    min.segment.length = 0,
+    seed = 123,
+    box.padding = 0.35,
+    point.padding = 0.25,
+    max.overlaps = Inf
+  ) +
+  scale_fill_distiller(
+    name = "% do total\nestadual de óbitos fetais",
+    palette = "Reds",
+    direction = 1,
+    na.value = "grey90"
+  ) +
+  labs(
+    title    = "Óbitos fetais por RRAS",
+    subtitle = "Participação percentual no total do estado"
+  ) +
+  coord_sf(crs = 31983) +
+  tema_mapa
+
+# Mapa B
+p_lv <- ggplot() +
+  geom_sf(
+    data = map_rras_proj,
+    aes(fill = perc_lv_total),
+    color = "white",
+    linewidth = 0.2
+  ) +
+  geom_label_repel(
+    data = rotulos_rras_df,
+    aes(x = x, y = y, label = rras_nome_lab),
+    size = 2.5,
+    fontface = "bold",
+    color = "black",
+    fill = "white",
+    alpha = 0.85,
+    label.size = 0.15,
+    min.segment.length = 0,
+    seed = 123,
+    box.padding = 0.35,
+    point.padding = 0.25,
+    max.overlaps = Inf
+  ) +
+  scale_fill_distiller(
+    name = "% do total\nestadual de nascidos vivos",
+    palette = pal_lv,
+    direction = 1,
+    na.value = "grey90"
+  ) +
+  labs(
+    title    = "Nascidos vivos por RRAS",
+    subtitle = "Participação percentual no total do estado"
+  ) +
+  coord_sf(crs = 31983) +
+  tema_mapa
+
+# Painel final
+painel <- p_fd + p_lv +
+  plot_layout(ncol = 2, guides = "collect") &
+  theme(legend.position = "bottom")
+
+print(painel)
+
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("mapas_RRAS.png", units = "in", width = 10, height = 5, res = 300)
+# print(painel)
+# dev.off()
+
+# =============================================================================
+# TABELA COMPLETA
+# =============================================================================
+tabela_rras_compacta <- map_rras %>%
+  st_drop_geometry() %>%
+  transmute(
+    rras_nome,
+    pop_rras,
+    obitos_fetais = n_of,
+    perc_fd_total = round(perc_fd_total, 2),
+    taxa_fd_1000_nasc = round(taxa_fd_1000_nasc, 2),
+    nascidos_vivos = n_lv,
+    perc_lv_total  = round(perc_lv_total, 2),
+    taxa_lv_1000_pop = round(taxa_lv_1000_pop, 2)  
+  ) %>%
+  mutate(
+    rras_num = as.integer(str_extract(rras_nome, "\\d+"))
+  ) %>%
+  arrange(rras_num) %>%
+  select(-rras_num)
+
+knitr::kable(
+  tabela_rras_compacta,
+  caption = paste0(
+    "Indicadores essenciais por RRAS (SP), organizados pela ordem numérica do nome da RRAS. ",
+    "População agregada com base no Censo 2022. ",
+    "Óbitos fetais por 1.000 nascimentos = 1.000 × óbitos fetais/(óbitos fetais + nascidos vivos). ",
+    "Nascidos vivos por 1.000 habitantes = 1.000 × nascidos vivos/população. ",
+    "Percentuais referem-se à participação de cada RRAS no total estadual."
+  )
+)
 
 ################################################################################
 ######################## DESCRITIVA DOS DATASETS UNIDOS ########################
@@ -104,7 +487,7 @@ dados_eda_clean <- dados_sp_cln %>%
                           TRUE ~ 0L)            # 0 = censura
   )
 
-#--------------------- Tamanho, taxa bruta de eventos e histogramas
+#--------------------- Tamanho, taxa bruta de eventos
 n <- nrow(dados_eda_clean)
 taxa_obito <- mean(dados_eda_clean$status_fd)
 tab_evento <- table(Evento = ifelse(dados_eda_clean$status_fd==1,"Óbito fetal","Nascido vivo"))
@@ -118,6 +501,99 @@ p1 <- ggplot(dados_eda_clean, aes(x = tempo)) +
                           title="Distribuição de idade gestacional (tempo)") +
   theme_minimal(base_size = 12)
 p1
+
+#-------------------------------------------------------------------------------
+# Painel estilizado: histograma da idade gestacional por desfecho (evento)
+#   evento = 1 -> óbito fetal
+#   evento = 0 -> nascimento vivo
+#-------------------------------------------------------------------------------
+
+# Cria rótulos legíveis para o artigo
+dados_eda_clean <- dados_eda_clean %>%
+  dplyr::mutate(
+    evento_lab = factor(
+      evento,
+      levels = c(1, 0),
+      labels = c("Óbito fetal", "Nascimento vivo")
+    )
+  )
+
+# Tema "padrão artigo" reaproveitável
+tema_artigo <- theme_minimal(base_size = 12) +
+  theme(
+    # grade horizontal suave, sem grade vertical
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_line(linewidth = 0.3, colour = "grey80"),
+    
+    # título mais forte e centralizado
+    plot.title = element_text(
+      face  = "bold",
+      hjust = 0.5,
+      size  = 12
+    ),
+    
+    # eixos
+    axis.title = element_text(size = 11),
+    axis.text  = element_text(size = 9, colour = "black"),  # um pouco menor para caber melhor
+    
+    # faixas dos facets
+    strip.text = element_text(face = "bold", size = 11),
+    strip.background = element_rect(fill = "grey90", colour = NA),
+    
+    # margens compactas
+    plot.margin = margin(5.5, 5.5, 5.5, 5.5, unit = "pt")
+  )
+
+# Intervalo de idade gestacional
+range_tempo <- range(dados_eda_clean$tempo, na.rm = TRUE)
+
+# Queremos ticks de 5 em 5, começando em 0
+break_by <- 5
+
+# Máximo observado
+max_tempo <- max(dados_eda_clean$tempo, na.rm = TRUE)
+
+# Opcional: arredondar para o múltiplo de 5 imediatamente acima do máximo
+limite_sup <- ceiling(max_tempo / break_by) * break_by
+
+# sequência de ticks: 0, 5, 10, ..., limite_sup
+breaks_tempo <- seq(0, limite_sup, by = break_by)
+
+p_hist_tempo_evento <- ggplot(dados_eda_clean, aes(x = tempo)) +
+  geom_histogram(
+    binwidth = 1,
+    boundary = 0,
+    closed   = "right",
+    colour   = "grey30",
+    fill     = "grey75"
+  ) +
+  facet_wrap(
+    ~ evento_lab,
+    nrow   = 1,
+    scales = "free_y"
+  ) +
+  scale_x_continuous(
+    limits = c(0, limite_sup),   # eixo de 0 até o máximo arredondado
+    breaks = breaks_tempo        # 0, 5, 10, 15, ...
+  ) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.05))
+  ) +
+  labs(
+    title = "",
+    x     = "Semanas de gestação",
+    y     = "Frequência (n)"
+  ) +
+  tema_artigo
+
+print(p_hist_tempo_evento)
+
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("histograma_ambas_causas.png", units = "in", width = 10, height = 5, res = 300)
+# print(p_hist_tempo_evento)
+# dev.off()
 
 # Distribuição da idade materna
 p2 <- ggplot(dados_eda_clean, aes(x = idademae)) +
@@ -178,12 +654,51 @@ num_summary <- map_dfr(num_vars, function(v){
   )
 }) %>% arrange(variavel)
 
+# Variáveis numéricas
 knitr::kable(
   num_summary,
   digits  = c(0, 0, 2, 2, 2, 2, 2),
   caption = "Medidas: n, média, DP, mediana, Q1, Q3"
 )
 
+#-------------------------------------------------------------------------------
+# Tabela: idade gestacional (tempo) por causa do desfecho (evento)
+#-------------------------------------------------------------------------------
+
+# Garante que temos um rótulo legível da causa
+dados_eda_clean <- dados_eda_clean %>%
+  dplyr::mutate(
+    evento_lab = factor(
+      evento,
+      levels = c(1, 0),
+      labels = c("Óbito fetal", "Nascimento vivo")
+    )
+  )
+
+# Resumo numérico da idade gestacional por causa
+tempo_por_causa <- dados_eda_clean %>%
+  dplyr::group_by(evento_lab) %>%
+  dplyr::summarise(
+    n       = sum(!is.na(tempo)),
+    minimo  = min(tempo, na.rm = TRUE),
+    media   = mean(tempo, na.rm = TRUE),
+    mediana = median(tempo, na.rm = TRUE),
+    q1      = quantile(tempo, 0.25, na.rm = TRUE, names = FALSE),
+    q3      = quantile(tempo, 0.75, na.rm = TRUE, names = FALSE),
+    maximo  = max(tempo, na.rm = TRUE),
+    dp      = sd(tempo, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  dplyr::rename(causa = evento_lab)
+
+tempo_por_causa
+
+# Tabela em LaTeX/HTML com kable
+knitr::kable(
+  tempo_por_causa,
+  digits  = c(0, 0, 2, 2, 2, 2, 2, 2, 2),
+  caption = "Medidas descritivas da idade gestacional (semanas) segundo o desfecho da gestação"
+)
 #-------------------------------------------------------------------------------
 #--------------------- Variáveis categóricas de interesse ----------------------
 #-------------------------------------------------------------------------------
@@ -210,6 +725,7 @@ cat_summary_all <- map_dfr(cat_vars, function(v){
     )
 }) %>% arrange(variavel)
 
+# Variáveis categóricas
 knitr::kable(cat_summary_all,
              caption = "Categóricas — n e % do total"
 )
@@ -217,6 +733,18 @@ knitr::kable(cat_summary_all,
 #-------------------------------------------------------------------------------
 #--------------------------- Kaplan-meier e Log-Rank ---------------------------
 #-------------------------------------------------------------------------------
+min_tempo1 <- 19
+min_tempo2 <- 24
+
+# Limites de tempo para os eixos x dos gráficos
+max_tempo <- max(dados_eda_clean$tempo, na.rm = TRUE)
+
+# Transformar fstatus em fator com rótulos desejados
+dados_eda_clean$fstatus_cr <- factor(
+  dados_eda_clean$fstatus,
+  levels = c(0, 1, 2),
+  labels = c("Censura", "Óbito fetal", "Nascimento vivo")
+)
 
 #-------------------------------- KM global
 
@@ -225,33 +753,37 @@ km_fd <- survfit(Surv(tempo, status_fd) ~ 1, data = dados_eda_clean)
 grafico_km_fd <- ggsurvplot(
   km_fd,
   data       = dados_eda_clean,
-  conf.int   = TRUE,         # Há censura
+  conf.int   = FALSE,         # Há censura
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) (óbito fetal como evento)",
-  title      = "KM – Óbito fetal (nascido vivo censurado)",
+  ylab       = "S(t)",
+  title      = "KM - Óbito fetal (nascido vivo censurado)",
   legend     = "none",       # remove a legenda
-  ylim       = c(0.985, 1.00),   # Zoom
-  ggtheme    = theme_minimal(base_size = 12)
+  ylim       = c(0.985, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_fd)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("km_global_fd.png", units="in", width = 10, height = 5, res=300)
-print(grafico_km_fd)
-dev.off()
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("km_global_fd.png", units="in", width = 10, height = 5, res=300)
+# print(grafico_km_fd)
+# dev.off()
 
 # Nascido vivo como evento (óbito fetal censurado) 
 km_lv <- survfit(Surv(tempo, status_lv) ~ 1, data = dados_eda_clean)
 grafico_km_lv <- ggsurvplot(
   km_lv,
   data       = dados_eda_clean,
-  conf.int   = TRUE,         # Há censura
+  conf.int   = FALSE,         # Há censura
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) (nascido vivo como evento)",
-  title      = "KM – Nascido vivo (óbito fetal censurado)",
+  ylab       = "S(t)",
+  title      = "KM - Nascido vivo (óbito fetal censurado)",
   legend     = "none",       # remove a legenda
-  ylim       = c(0, 1.00),   # Zoom
-  ggtheme    = theme_minimal(base_size = 12),
+  ylim       = c(0, 1.00), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme     = theme_minimal(base_size = 12),
   palette      = "blue",
   conf.int.fill  = "lightblue"
 )
@@ -274,9 +806,123 @@ painel_km_global <- ggarrange(
 print(painel_km_global)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("km_global.png", units="in", width=10, height=5, res=300)
+png("0_ambos_km_global.png", units="in", width=10, height=5, res=112)
 print(painel_km_global)
 dev.off()
+
+# CIF global separada por causa (óbito fetal vs nascimento vivo) ---------------
+
+# Objeto de incidência acumulada (CIF para competing risks)
+ci_global <- cmprsk::cuminc(
+  ftime   = dados_eda_clean$tempo,
+  fstatus = dados_eda_clean$fstatus_cr,  # fator com níveis: Censura, Óbito fetal, Nascimento vivo
+  cencode = "Censura"
+)
+
+# Conferir nomes das curvas para saber como extrair cada causa
+print(names(ci_global))
+
+# Extrair curvas de CIF de cada evento separadamente -----------------------
+
+# Óbito fetal
+ci_fd_global <- ci_global[grep("Óbito fetal", names(ci_global))][[1]]
+
+# Nascimento vivo
+ci_lv_global <- ci_global[grep("Nascimento vivo", names(ci_global))][[1]]
+
+# Transformar em data.frames longos ----------------------------------------
+df_cif_fd_global <- data.frame(
+  tempo = ci_fd_global$time,
+  cif   = ci_fd_global$est
+)
+
+df_cif_lv_global <- data.frame(
+  tempo = ci_lv_global$time,
+  cif   = ci_lv_global$est
+)
+
+# Definir limite superior comum e sequência de ticks
+max_tempo_cif <- max(
+  df_cif_fd_global$tempo,
+  df_cif_lv_global$tempo,
+  na.rm = TRUE
+)
+breaks_tempo_cif <- seq(20, max_tempo_cif, by = 5)
+
+# CIF global – óbito fetal
+p_cif_fd_global <- ggplot(df_cif_fd_global, aes(x = tempo, y = cif)) +
+  geom_step(
+    color     = "#d62728",
+    linewidth = 0.9
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif
+  ) +
+  scale_y_continuous(
+    limits = c(0, max(df_cif_fd_global$cif, na.rm = TRUE) * 1.05),
+    expand = expansion(mult = c(0, 0.02))
+  ) +
+  coord_cartesian(xlim = c(min_tempo1, max_tempo_cif)) +  # zoom a partir da semana 19
+  labs(
+    title = "Óbito fetal",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12)
+
+# CIF global – nascimento vivo
+p_cif_lv_global <- ggplot(df_cif_lv_global, aes(x = tempo, y = cif)) +
+  geom_step(
+    color     = "#1f77b4",
+    linewidth = 0.9
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = expansion(mult = c(0, 0.02))
+  ) +
+  coord_cartesian(xlim = c(min_tempo2, max_tempo_cif)) +  # mesmo zoom
+  labs(
+    title = "Nascido vivo",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12)
+
+# Painel 
+painel_cif_global <- ggpubr::ggarrange(
+  p_cif_fd_global,
+  p_cif_lv_global,
+  ncol   = 2,
+  nrow   = 1,
+  # labels = c("A", "B"),   
+  common.legend = FALSE
+)
+
+print(painel_cif_global)
+
+#-------------------  SALVA GRÁFICO LOCALMENTE
+png("cif_global_painel.png", units = "in", width = 10, height = 5, res = 112)
+print(painel_cif_global)
+dev.off()
+
+# painel_km_cif_global <- painel_km_global / painel_cif_global +
+#   patchwork::plot_layout(heights = c(2, 1)) +  # KM ocupa mais altura
+#   plot_annotation(
+#     title = "Curvas de sobrevivência e incidência acumulada por desfecho",
+#     theme = theme(
+#       plot.title = element_text(
+#         face = "bold",
+#         hjust = 0.5,
+#         size = 13
+#       )
+#     )
+#   )
+# 
+# # Visualizar no R
+# print(painel_km_cif_global)
 
 #----------- KM, CIF, Testes de Log-rank e de Gray para cada caso
 
@@ -291,13 +937,15 @@ km_fd_sexo <- survfit(Surv(tempo, status_fd) ~ sexo, data = dados_eda_clean)
 grafico_kmglobal_sexo_fd <- ggsurvplot(
   km_fd_sexo,
   data       = dados_eda_clean,
-  conf.int   = TRUE,        
+  conf.int   = FALSE,        
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) — óbito fetal",
-  title      = "KM — Óbito fetal (censura: nascido vivo)\npor sexo",
+  ylab       = "S(t)",
+  title      = "KM - Óbito fetal (censura: nascido vivo)\npor sexo",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$sexo),
-  ylim = c(0.987, 1.00), 
+  ylim = c(0.987, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
   ggtheme = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_sexo_fd)
@@ -307,14 +955,16 @@ km_lv_sexo <- survfit(Surv(tempo, status_lv) ~ sexo, data = dados_eda_clean)
 grafico_kmglobal_sexo_lv <- ggsurvplot(
   km_lv_sexo,
   data       = dados_eda_clean,
-  conf.int   = TRUE,        
+  conf.int   = FALSE,        
   xlab       = "Semanas de gestação",
-  ylab       = "S(t) — nascido vivo",
-  title      = "KM — Nascido vivo (censura: óbito fetal)\npor sexo",
+  ylab       = "S(t)",
+  title      = "KM - Nascido vivo (censura: óbito fetal)\npor sexo",
   legend.title = "",
   legend.labs  = levels(dados_eda_clean$sexo),
-  ylim = c(0, 1), # Não chega exatamente à zero (0.0025)
-  ggtheme = theme_minimal(base_size = 12)
+  ylim = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_sexo_lv)
 
@@ -336,7 +986,7 @@ painel_kmglobal_sexo <- ggarrange(
 print(painel_kmglobal_sexo)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_sexo.png", units="in", width=10, height=5, res=300)
+png("kmglobal_sexo.png", units="in", width=10, height=5, res=112)
 print(painel_kmglobal_sexo)
 dev.off()
 
@@ -356,13 +1006,6 @@ p_sexo <- 1 - pchisq(logrank_lv_sexo$chisq, df = length(logrank_lv_sexo$n) - 1)
 print(paste("p-valor:", signif(p_sexo, 3)))
 
 #------------------------------- Teste de gray
-# Transformar fstatus em fator com rótulos desejados
-dados_eda_clean$fstatus_cr <- factor(
-  dados_eda_clean$fstatus,
-  levels = c(0, 1, 2),
-  labels = c("Censura", "Óbito fetal", "Nascimento vivo")
-)
-
 # Teste de Gray da variável sexo
 ci_sexo <- cmprsk::cuminc(
   ftime   = dados_eda_clean$tempo,
@@ -372,71 +1015,189 @@ ci_sexo <- cmprsk::cuminc(
 )
 print(ci_sexo)
 
-# Apenas o teste (sem informações extras)
+# Teste de Gray da variável sexo (sem informações extras)
 ci_sexo$Tests
 
-#------------------------------- CIF
+#------------------------------- CIF por sexo
+# Partimos de 'ci_sexo' já criado com cmprsk::cuminc()
 
-# CIF da variável sexo (1 = óbito fetal, 2 = nascido vivo)
-p_cif_sexo <- ggcompetingrisks(
-  fit            = ci_sexo,
-  multiple_panels = TRUE,   # Plota ou não cada grupo em painéis separados
-  ggtheme         = theme_minimal(base_size = 12),
-  palette         = c("#1f77b4", "#d62728"),
-  legend.title    = "Evento",
-  legend.labs     = c("Óbito fetal", "Nascimento vivo"),
-  xlab            = "Semanas de gestação",
-  ylab            = "Incidência acumulada",
-  title           = "Gráfico de Incidência Acumulada (CIF)"
+# Separar curvas do evento 1 (Óbito fetal) e evento 2 (Nascimento vivo)
+ci_sexo_evento1 <- ci_sexo[grep("Óbito fetal$", names(ci_sexo))]        # evento 1
+ci_sexo_evento2 <- ci_sexo[grep("Nascimento vivo$", names(ci_sexo))]   # evento 2
+
+#--------------------------- Data frame longo – ÓBITO FETAL (evento 1)
+
+df_cif_fd_sexo <- purrr::map_dfr(
+  names(ci_sexo_evento1),
+  function(nm) {
+    comp <- ci_sexo_evento1[[nm]]
+    
+    # Remove o sufixo " Óbito fetal" para obter o rótulo do sexo
+    sexo_grupo <- sub(" Óbito fetal$", "", nm)
+    
+    tibble::tibble(
+      tempo = comp$time,
+      cif   = comp$est,
+      sexo  = sexo_grupo
+    )
+  }
+) %>%
+  dplyr::mutate(
+    sexo = factor(sexo, levels = c("Masculino", "Feminino"))
+  ) %>%
+  dplyr::arrange(sexo, tempo)
+
+print(table(df_cif_fd_sexo$sexo, useNA = "ifany"))
+
+#--------------------------- Data frame longo – NASCIMENTO VIVO (evento 2)
+
+df_cif_lv_sexo <- purrr::map_dfr(
+  names(ci_sexo_evento2),
+  function(nm) {
+    comp <- ci_sexo_evento2[[nm]]
+    
+    # Remove o sufixo " Nascimento vivo" para obter o rótulo do sexo
+    sexo_grupo <- sub(" Nascimento vivo$", "", nm)
+    
+    tibble::tibble(
+      tempo = comp$time,
+      cif   = comp$est,
+      sexo  = sexo_grupo
+    )
+  }
+) %>%
+  dplyr::mutate(
+    sexo = factor(sexo, levels = c("Masculino", "Feminino"))
+  ) %>%
+  dplyr::arrange(sexo, tempo)
+
+print(table(df_cif_lv_sexo$sexo, useNA = "ifany"))
+
+#--------------------------- Definição de limite de tempo e breaks (zoom a partir da semana 19)
+
+max_tempo_cif_sexo <- max(
+  df_cif_fd_sexo$tempo,
+  df_cif_lv_sexo$tempo,
+  na.rm = TRUE
 )
-print(p_cif_sexo)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_sexo.png", units="in", width = 10, height = 5, res=300)
-print(p_cif_sexo)
-dev.off()
+breaks_tempo_cif_sexo <- seq(20, max_tempo_cif_sexo, by = 5)
 
-# CIF da variável sexo (olhando mais de perto o evento de óbitos)
-
-# Selecionar apenas as curvas do evento 1 (óbito fetal)
-ci_sexo_evento1 <- ci_sexo[c("Masculino Óbito fetal", "Feminino Óbito fetal")]
-
-# Extrair os nomes sem o código do evento
-group_names_sexo <- sub(" 1$", "", names(ci_sexo_evento1)[names(ci_sexo_evento1) != "Tests"])
-# Isso gera c("Masculino", "Feminino")
-
-# Construir o gráfico
-p_cif_fd_sexo <- ggcompetingrisks(
-  fit             = ci_sexo_evento1,
-  multiple_panels = FALSE,
-  ggtheme         = theme_minimal(base_size = 12)
+#--------------------------- CIF apenas ÓBITOS FETAIS por sexo
+p_cif_fd_sexo <- ggplot(
+  df_cif_fd_sexo,
+  aes(x = tempo,
+      y = cif,
+      linetype = sexo)
 ) +
-  # Mapea cada sexo a um tipo de linha de forma explícita
+  geom_step(
+    color     = "#d62728",   # vermelho para óbito fetal
+    linewidth = 0.9
+  ) +
   scale_linetype_manual(
     name   = "Sexo",
-    values = c("Feminino" = "solid",
-               "Masculino" = "dashed"),
-    labels = c("Feminino", "Masculino"),
-    breaks = c("Feminino", "Masculino")
-  ) +
-  # Esconde a legenda de cor e pinta as linhas da legenda de vermelho
-  guides(
-    color = "none" ,
-    linetype = guide_legend(
-      override.aes = list(colour = rep("#d62728", length(group_names_sexo)))
+    values = c(
+      "Masculino" = "dashed",
+      "Feminino"  = "solid"
     )
   ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_sexo
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_sexo)
+  ) +
   labs(
-    title = "CIF apenas dos óbitos (sexo)",
+    title = "Óbito fetal (por sexo)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    # aumenta o espaço horizontal do símbolo da legenda
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  # legenda neutra, mas preservando o padrão de linha
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour   = "grey20",
+        linetype = c("dashed", "solid")  # na ordem dos níveis
+      )
+    )
   )
 
 print(p_cif_fd_sexo)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_sexo.png", units="in", width = 10, height = 5, res=300)
-print(p_cif_fd_sexo)
+#--------------------------- CIF apenas NASCIDOS VIVOS por sexo
+
+p_cif_lv_sexo <- ggplot(
+  df_cif_lv_sexo,
+  aes(x = tempo,
+      y = cif,
+      linetype = sexo)
+) +
+  geom_step(
+    color     = "#1f77b4",   # azul para nascimento vivo
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Sexo",
+    values = c(
+      "Masculino" = "dashed",
+      "Feminino"  = "solid"
+    )
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_sexo
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_sexo)
+  ) +
+  labs(
+    title = "Nascido vivo (por sexo)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour   = "grey20",
+        linetype = c("dashed", "solid")
+      )
+    )
+  )
+
+print(p_cif_lv_sexo)
+
+#--------------------------- Painel: CIF Nascidos vivos (esq.) e Óbitos fetais (dir.)
+
+painel_cif_sexo <- ggpubr::ggarrange(
+  p_cif_fd_sexo,
+  p_cif_lv_sexo,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_sexo)
+
+#-------------------  SALVA PAINEL LOCALMENTE
+png(
+  "ambos_cif_sexo.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res = 112
+)
+print(painel_cif_sexo)
 dev.off()
 
 #------------------------------------------------------------------------------
@@ -454,14 +1215,16 @@ km_fd_idade <- survfit(
 grafico_kmglobal_idade_fd <- ggsurvplot(
   km_fd_idade,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — óbito fetal",
-  title       = "KM — Óbito fetal (censura: nascido vivo)\npor faixa etária materna",
+  ylab        = "S(t)",
+  title       = "KM - Óbito fetal (censura: nascido vivo)\npor faixa etária materna",
   legend.title = "Faixa etária materna",
   legend.labs  = levels(dados_eda_clean$idademae_categorico),
-  ylim        = c(0.985, 1.00),   # mesmo padrão usado no sexo
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0.985, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_idade_fd)
 
@@ -474,14 +1237,16 @@ km_lv_idade <- survfit(
 grafico_kmglobal_idade_lv <- ggsurvplot(
   km_lv_idade,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — nascido vivo",
-  title       = "KM — Nascido vivo (censura: óbito fetal)\npor faixa etária materna",
+  ylab        = "S(t)",
+  title       = "KM - Nascido vivo (censura: óbito fetal)\npor faixa etária materna",
   legend.title = "Faixa etária materna",
   legend.labs  = levels(dados_eda_clean$idademae_categorico),
-  ylim        = c(0, 1),          # segue o padrão do sexo
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_idade_lv)
 
@@ -502,11 +1267,11 @@ painel_kmglobal_idade <- ggarrange(
 print(painel_kmglobal_idade)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_idade_mae.png", units = "in", width = 10, height = 5, res = 300)
+png("kmglobal_idade_mae.png", units = "in", width = 10, height = 5, res = 112)
 print(painel_kmglobal_idade)
 dev.off()
 
-#------------------------------- Log-Rank
+#------------------------------- Log-Rank Faixa etária da mãe
 
 # LOG-RANK — óbito fetal como evento de interesse (censura: nascido vivo)
 logrank_fd_idade <- survdiff(
@@ -547,70 +1312,93 @@ ci_idade <- cmprsk::cuminc(
 )
 print(ci_idade)
 
-# Apenas o teste (sem informações extras)
+# Teste de Gray para a variável Faixa etária da mãe (idademae_categorico)
 ci_idade$Tests
 
-#------------------------------- CIF
-p_cif_idade <- ggcompetingrisks(
-  fit             = ci_idade,
-  multiple_panels = TRUE,   # painel por categoria de idade materna
-  ggtheme         = theme_minimal(base_size = 12),
-  palette         = c("#1f77b4", "#d62728"),   # 1 = óbito fetal, 2 = nascido vivo
-  legend.title    = "Evento",
-  legend.labs     = c("Óbito fetal", "Nascimento vivo"),
-  xlab            = "Semanas de gestação",
-  ylab            = "Incidência acumulada",
-  title           = "Gráfico de Incidência Acumulada (CIF) por faixa etária materna"
-)
-print(p_cif_idade)
+#--------------------------------------------------------------
+# CIF – Faixa etária da mãe (idademae_categorico)
+# Painel: Nascidos vivos (evento 2) x Óbitos fetais (evento 1)
+#--------------------------------------------------------------
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_idademae.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_idade)
-dev.off()
+# Separar curvas do evento 1 (Óbito fetal) e evento 2 (Nascimento vivo)
+ci_idade_evento1 <- ci_idade[grep("Óbito fetal$",     names(ci_idade))]  # evento 1
+ci_idade_evento2 <- ci_idade[grep("Nascimento vivo$", names(ci_idade))]  # evento 2
 
-# CIF focada apenas no evento óbito fetal (evento 1) por faixa etária
+#--------------------------- Data frame longo – ÓBITO FETAL (evento 1)
 
-# Selecionar apenas as curvas com o evento "Óbito fetal"
-ci_idade_evento1 <- ci_idade[grep("Óbito fetal$", names(ci_idade))]
-
-# Verificar nomes
-print(names(ci_idade_evento1))
-
-# Converter o objeto 'cuminc' (apenas evento 1) em um data.frame longo
 df_cif_fd_idade <- purrr::map_dfr(
   names(ci_idade_evento1),
   function(nm) {
     comp <- ci_idade_evento1[[nm]]
     
-    # Extrair a faixa etária removendo o sufixo " Óbito fetal"
+    # nm vem no formato "<20 Óbito fetal", "20–34 Óbito fetal", "35+ Óbito fetal"
     faixa <- sub(" Óbito fetal$", "", nm)
     
-    # Construir data.frame com tempo, CIF e faixa etária
-    data.frame(
+    tibble::tibble(
       tempo = comp$time,
       cif   = comp$est,
-      faixa = faixa,
-      stringsAsFactors = FALSE
+      faixa = faixa
     )
   }
 ) %>%
-  # Garantir ordem das faixas etárias de interesse
   dplyr::mutate(
-    faixa = factor(faixa, levels = c("<20", "20–34", "35+"))
-  )
+    faixa = factor(
+      faixa,
+      levels = c("<20", "20–34", "35+")
+    )
+  ) %>%
+  dplyr::arrange(faixa, tempo)
 
-# Conferir se as faixas ficaram corretas
 print(table(df_cif_fd_idade$faixa, useNA = "ifany"))
 
-# Construção do gráfico CIF apenas dos óbitos fetais
-p_cif_fd_idade <- ggplot(df_cif_fd_idade,
-                         aes(x = tempo,
-                             y = cif,
-                             linetype = faixa)) +
+#--------------------------- Data frame longo – NASCIMENTO VIVO (evento 2)
+
+df_cif_lv_idade <- purrr::map_dfr(
+  names(ci_idade_evento2),
+  function(nm) {
+    comp <- ci_idade_evento2[[nm]]
+    
+    # nm vem no formato "<20 Nascimento vivo", etc.
+    faixa <- sub(" Nascimento vivo$", "", nm)
+    
+    tibble::tibble(
+      tempo = comp$time,
+      cif   = comp$est,
+      faixa = faixa
+    )
+  }
+) %>%
+  dplyr::mutate(
+    faixa = factor(
+      faixa,
+      levels = c("<20", "20–34", "35+")
+    )
+  ) %>%
+  dplyr::arrange(faixa, tempo)
+
+print(table(df_cif_lv_idade$faixa, useNA = "ifany"))
+
+#--------------------------- Limites de tempo e breaks (zoom a partir da semana 19)
+
+max_tempo_cif_idade <- max(
+  df_cif_fd_idade$tempo,
+  df_cif_lv_idade$tempo,
+  na.rm = TRUE
+)
+
+breaks_tempo_cif_idade <- seq(20, max_tempo_cif_idade, by = 5)
+
+#--------------------------- CIF apenas ÓBITOS FETAIS por faixa etária
+
+p_cif_fd_idade <- ggplot(
+  df_cif_fd_idade,
+  aes(x = tempo,
+      y = cif,
+      linetype = faixa)
+) +
   geom_step(
-    color    = "#d62728",  # todas as curvas em vermelho (destacando óbito fetal)
-    linewidth = 0.7
+    color     = "#d62728",   # vermelho para óbito fetal
+    linewidth = 0.9
   ) +
   scale_linetype_manual(
     name   = "Faixa etária materna",
@@ -620,21 +1408,103 @@ p_cif_fd_idade <- ggplot(df_cif_fd_idade,
       "35+"   = "dotted"
     )
   ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_idade
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_idade)
+  ) +
   labs(
-    title = "CIF apenas para óbitos fetais por faixa etária materna",
+    title = "Óbito fetal (por faixa etária materna)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    legend.position = "bottom"
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  # Legenda neutra (apenas linetype informa a categoria)
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour   = "grey20",
+        linetype = c("solid", "dashed", "dotted")
+      )
+    )
   )
 
 print(p_cif_fd_idade)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_idademae.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_fd_idade)
+#--------------------------- CIF apenas NASCIDOS VIVOS por faixa etária
+
+p_cif_lv_idade <- ggplot(
+  df_cif_lv_idade,
+  aes(x = tempo,
+      y = cif,
+      linetype = faixa)
+) +
+  geom_step(
+    color     = "#1f77b4",   # azul para nascimento vivo
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Faixa etária materna",
+    values = c(
+      "<20"   = "solid",
+      "20–34" = "dashed",
+      "35+"   = "dotted"
+    )
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_idade
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_idade)
+  ) +
+  labs(
+    title = "Nascido vivo (por faixa etária materna)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour   = "grey20",
+        linetype = c("solid", "dashed", "dotted")
+      )
+    )
+  )
+
+print(p_cif_lv_idade)
+
+#--------------------------- Painel: CIF Nascidos vivos (esq.) x Óbitos fetais (dir.)
+
+painel_cif_idade <- ggpubr::ggarrange(
+  p_cif_fd_idade,
+  p_cif_lv_idade,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_idade)
+
+#-------------------  SALVA PAINEL LOCALMENTE
+png(
+  "cif_idademae_painel_ambos.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res   = 112
+)
+print(painel_cif_idade)
 dev.off()
 
 #------------------------------------------------------------------------------
@@ -652,14 +1522,16 @@ km_fd_esc <- survfit(
 grafico_kmglobal_esc_fd <- ggsurvplot(
   km_fd_esc,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — óbito fetal",
-  title       = "KM — Óbito fetal (censura: nascido vivo)\npor escolaridade materna",
+  ylab        = "S(t)",
+  title       = "KM - Óbito fetal (censura: nascido vivo)\npor escolaridade materna",
   legend.title = "Escolaridade materna",
   legend.labs  = levels(dados_eda_clean$escmae2010),
-  ylim        = c(0.975, 1.00),   # mesmo padrão das demais KM de óbito fetal
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0.975, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_esc_fd)
 
@@ -672,14 +1544,16 @@ km_lv_esc <- survfit(
 grafico_kmglobal_esc_lv <- ggsurvplot(
   km_lv_esc,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — nascido vivo",
-  title       = "KM — Nascido vivo (censura: óbito fetal)\npor escolaridade materna",
+  ylab        = "S(t)",
+  title       = "KM - Nascido vivo (censura: óbito fetal)\npor escolaridade materna",
   legend.title = "Escolaridade materna",
   legend.labs  = levels(dados_eda_clean$escmae2010),
-  ylim        = c(0, 1),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_esc_lv)
 
@@ -702,11 +1576,11 @@ painel_kmglobal_esc <- ggarrange(
 print(painel_kmglobal_esc)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_escmae2010.png", units = "in", width = 10, height = 5, res = 300)
+png("kmglobal_escmae2010.png", units = "in", width = 10, height = 5, res = 112)
 print(painel_kmglobal_esc)
 dev.off()
 
-#------------------------------- Log-Rank
+#------------------------------- Log-Rank Escolaridade da mãe
 
 # LOG-RANK — óbito fetal como evento de interesse (censura: nascido vivo)
 logrank_fd_esc <- survdiff(
@@ -751,7 +1625,7 @@ ci_esc <- cmprsk::cuminc(
 )
 print(ci_esc)
 
-# Apenas o teste (sem informações extras)
+# Teste de Gray para escmae2010
 ci_esc$Tests
 
 #------------------------------- CIF
@@ -848,16 +1722,30 @@ p_cif_esc <- ggplot(
 
 print(p_cif_esc)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_escmae2010.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_esc)
-dev.off()
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("cif_escmae2010.png", units = "in", width = 10, height = 5, res = 112)
+# print(p_cif_esc)
+# dev.off()
 
 # CIF apenas para o evento óbito fetal (1) por escolaridade materna
 
 cif_df_fd <- cif_df_all %>%
   dplyr::filter(evento == "Óbito fetal") %>%
   dplyr::arrange(grupo, tempo)
+
+# CIF apenas para o evento Nascimento vivo (2) por escolaridade materna
+cif_df_lv <- cif_df_all %>%
+  dplyr::filter(evento == "Nascimento vivo") %>%
+  dplyr::arrange(grupo, tempo)
+
+# Limite superior comum e escala de tempo (zoom a partir da semana 19)
+max_tempo_cif_esc <- max(
+  cif_df_fd$tempo,
+  cif_df_lv$tempo,
+  na.rm = TRUE
+)
+
+breaks_tempo_cif_esc <- seq(20, max_tempo_cif_esc, by = 5)
 
 p_cif_fd_esc <- ggplot(
   cif_df_fd,
@@ -866,7 +1754,7 @@ p_cif_fd_esc <- ggplot(
       linetype = grupo)
 ) +
   geom_step(
-    color     = "#d62728",
+    color     = "#d62728",  # vermelho para óbito fetal
     linewidth = 0.9
   ) +
   scale_linetype_manual(
@@ -878,23 +1766,101 @@ p_cif_fd_esc <- ggplot(
     ),
     breaks = c("Baixa escolaridade",
                "Média escolaridade",
-               "Alta escolaridade") 
+               "Alta escolaridade")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_esc
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_esc)
   ) +
   labs(
-    title = "CIF apenas dos óbitos fetais (escolaridade)",
+    title = "Óbito fetal (por escolaridade materna)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    legend.position = "top"
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"   # legenda neutra (cinza)
+      )
+    )
   )
 
 print(p_cif_fd_esc)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_escmae2010.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_fd_esc)
+p_cif_lv_esc <- ggplot(
+  cif_df_lv,
+  aes(x = tempo,
+      y = est,
+      linetype = grupo)
+) +
+  geom_step(
+    color     = "#1f77b4",  # azul para nascimento vivo
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Escolaridade materna",
+    values = c(
+      "Baixa escolaridade" = "solid",
+      "Média escolaridade" = "dashed",
+      "Alta escolaridade"  = "dotted"
+    ),
+    breaks = c("Baixa escolaridade",
+               "Média escolaridade",
+               "Alta escolaridade")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_esc
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_esc)
+  ) +
+  labs(
+    title = "Nascido vivo (por escolaridade materna)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"   # legenda neutra
+      )
+    )
+  )
+
+print(p_cif_lv_esc)
+
+painel_cif_esc <- ggpubr::ggarrange(
+  p_cif_fd_esc,
+  p_cif_lv_esc,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_esc)
+
+#-------------------  SALVA PAINEL LOCALMENTE
+png(
+  "cif_escmae2010_painel_ambos.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res   = 112
+)
+print(painel_cif_esc)
 dev.off()
 
 #------------------------------------------------------------------------------
@@ -912,14 +1878,16 @@ km_fd_filvivo <- survfit(
 grafico_kmglobal_filvivo_fd <- ggsurvplot(
   km_fd_filvivo,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — óbito fetal",
-  title       = "KM — Óbito fetal (censura: nascido vivo)\npor presença de filhos vivos previamente",
+  ylab        = "S(t)",
+  title       = "KM - Óbito fetal (censura: nascido vivo)\npor presença de filhos vivos previamente",
   legend.title = "Filhos vivos previamente",
   legend.labs  = levels(dados_eda_clean$qtdfilvivo_categorico),
-  ylim        = c(0.987, 1.00),   # mesma escala adotada nas demais KM de óbito fetal
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0.987, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_filvivo_fd)
 
@@ -932,17 +1900,18 @@ km_lv_filvivo <- survfit(
 grafico_kmglobal_filvivo_lv <- ggsurvplot(
   km_lv_filvivo,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — nascido vivo",
-  title       = "KM — Nascido vivo (censura: óbito fetal)\npor presença de filhos vivos previamente",
+  ylab        = "S(t)",
+  title       = "KM - Nascido vivo (censura: óbito fetal)\npor presença de filhos vivos previamente",
   legend.title = "Filhos vivos previamente",
   legend.labs  = levels(dados_eda_clean$qtdfilvivo_categorico),
-  ylim        = c(0, 1),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_filvivo_lv)
-
 
 # Painel com os dois KM (óbito fetal e nascido vivo)
 
@@ -964,11 +1933,11 @@ painel_kmglobal_filvivo <- ggarrange(
 print(painel_kmglobal_filvivo)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_filvivo.png", units = "in", width = 10, height = 5, res = 300)
+png("kmglobal_filvivo.png", units = "in", width = 10, height = 5, res = 112)
 print(painel_kmglobal_filvivo)
 dev.off()
 
-#------------------------------- Log-Rank
+#------------------------------- Log-Rank Presença de filhos vivos previamente
 
 # LOG-RANK — óbito fetal como evento de interesse (censura: nascido vivo)
 logrank_fd_filvivo <- survdiff(
@@ -1013,28 +1982,28 @@ ci_filvivo <- cmprsk::cuminc(
 )
 print(ci_filvivo)
 
-# Apenas o teste (sem informações extras)
+# Teste de Gray para qtdfilvivo_categorico
 ci_filvivo$Tests
 
 #------------------------------- CIF
-
-p_cif_filvivo <- ggcompetingrisks(
-  fit             = ci_filvivo,
-  multiple_panels = TRUE,   # um painel para cada categoria ("Não", "Sim")
-  ggtheme         = theme_minimal(base_size = 12),
-  palette         = c("#1f77b4", "#d62728"),   # 1 = óbito fetal, 2 = nascido vivo
-  legend.title    = "Evento",
-  legend.labs     = c("Óbito fetal", "Nascimento vivo"),
-  xlab            = "Semanas de gestação",
-  ylab            = "Incidência acumulada",
-  title           = "Gráfico de Incidência Acumulada (CIF) por presença de filhos vivos previamente"
-)
-print(p_cif_filvivo)
-
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_filvivo.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_filvivo)
-dev.off()
+# 
+# p_cif_filvivo <- ggcompetingrisks(
+#   fit             = ci_filvivo,
+#   multiple_panels = TRUE,   # um painel para cada categoria ("Não", "Sim")
+#   ggtheme         = theme_minimal(base_size = 12),
+#   palette         = c("#1f77b4", "#d62728"),   # 1 = óbito fetal, 2 = nascido vivo
+#   legend.title    = "Evento",
+#   legend.labs     = c("Óbito fetal", "Nascimento vivo"),
+#   xlab            = "Semanas de gestação",
+#   ylab            = "Incidência acumulada",
+#   title           = "Gráfico de Incidência Acumulada (CIF) por presença de filhos vivos previamente"
+# )
+# print(p_cif_filvivo)
+# 
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("cif_filvivo.png", units = "in", width = 10, height = 5, res = 300)
+# print(p_cif_filvivo)
+# dev.off()
 
 # CIF apenas para o evento óbito fetal (1) por presença de filhos vivos previamente
 
@@ -1068,37 +2037,151 @@ df_cif_fd_filvivo <- purrr::map_dfr(
 # Conferir se níveis ficaram corretos
 print(table(df_cif_fd_filvivo$grupo, useNA = "ifany"))
 
-# Construir gráfico CIF apenas dos óbitos fetais
-p_cif_fd_filvivo <- ggplot(df_cif_fd_filvivo,
-                           aes(x = tempo,
-                               y = cif,
-                               linetype = grupo)) +
+# Selecionar apenas as curvas cujo nome termina em "Nascimento vivo"
+ci_filvivo_evento2 <- ci_filvivo[grep("Nascimento vivo$", names(ci_filvivo))]
+
+# Converter para data.frame longo: tempo, CIF, grupo ("Não"/"Sim")
+df_cif_lv_filvivo <- purrr::map_dfr(
+  names(ci_filvivo_evento2),
+  function(nm) {
+    comp <- ci_filvivo_evento2[[nm]]
+    
+    # Extrai o rótulo do grupo removendo o sufixo " Nascimento vivo"
+    grupo <- sub(" Nascimento vivo$", "", nm)
+    
+    data.frame(
+      tempo = comp$time,
+      cif   = comp$est,
+      grupo = grupo,
+      stringsAsFactors = FALSE
+    )
+  }
+) %>%
+  dplyr::mutate(
+    grupo = factor(grupo, levels = c("Não", "Sim"))
+  ) %>%
+  dplyr::arrange(grupo, tempo)
+
+print(table(df_cif_lv_filvivo$grupo, useNA = "ifany"))
+
+# Limite superior comum e escala de tempo (zoom a partir da semana 19)
+max_tempo_cif_filvivo <- max(
+  df_cif_fd_filvivo$tempo,
+  df_cif_lv_filvivo$tempo,
+  na.rm = TRUE
+)
+
+breaks_tempo_cif_filvivo <- seq(20, max_tempo_cif_filvivo, by = 5)
+
+p_cif_fd_filvivo <- ggplot(
+  df_cif_fd_filvivo,
+  aes(x = tempo,
+      y = cif,
+      linetype = grupo)
+) +
   geom_step(
-    color     = "#d62728",  # todas as curvas em vermelho (destacando óbito fetal)
-    linewidth = 0.7
+    color     = "#d62728",  # vermelho para óbito fetal
+    linewidth = 0.9
   ) +
   scale_linetype_manual(
     name   = "Filhos vivos previamente",
     values = c(
       "Não" = "solid",
       "Sim" = "dashed"
-    )
+    ),
+    breaks = c("Não", "Sim")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_filvivo
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_filvivo)
   ) +
   labs(
-    title = "CIF apenas para óbitos fetais por presença de filhos vivos previamente",
+    title = "Óbito fetal (por presença de filhos\nvivos previamente)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    legend.position = "bottom"
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  # Legenda neutra (cor cinza, válida para ambos os gráficos do painel)
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
   )
 
 print(p_cif_fd_filvivo)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_filvivo.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_fd_filvivo)
+p_cif_lv_filvivo <- ggplot(
+  df_cif_lv_filvivo,
+  aes(x = tempo,
+      y = cif,
+      linetype = grupo)
+) +
+  geom_step(
+    color     = "#1f77b4",  # azul para nascimento vivo
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Filhos vivos previamente",
+    values = c(
+      "Não" = "solid",
+      "Sim" = "dashed"
+    ),
+    breaks = c("Não", "Sim")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_filvivo
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_filvivo)
+  ) +
+  labs(
+    title = "Nascido vivo (por presença de filhos\nvivos previamente)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
+  )
+
+print(p_cif_lv_filvivo)
+
+painel_cif_filvivo <- ggpubr::ggarrange(
+  p_cif_fd_filvivo,
+  p_cif_lv_filvivo,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_filvivo)
+
+#-------------------  SALVA PAINEL LOCALMENTE
+png(
+  "cif_filvivo_painel_ambos.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res   = 112
+)
+print(painel_cif_filvivo)
 dev.off()
 
 #------------------------------------------------------------------------------
@@ -1116,14 +2199,16 @@ km_fd_filmort <- survfit(
 grafico_kmglobal_filmort_fd <- ggsurvplot(
   km_fd_filmort,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — óbito fetal",
-  title       = "KM — Óbito fetal (censura: nascido vivo)\npor presença de filhos mortos previamente",
+  ylab        = "S(t)",
+  title       = "KM - Óbito fetal (censura: nascido vivo)\npor presença de filhos mortos previamente",
   legend.title = "Filhos mortos previamente",
   legend.labs  = levels(dados_eda_clean$qtdfilmort_categorico),
-  ylim        = c(0.975, 1.00),   # mesma escala das demais KM de óbito fetal
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0.975, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_filmort_fd)
 
@@ -1136,14 +2221,16 @@ km_lv_filmort <- survfit(
 grafico_kmglobal_filmort_lv <- ggsurvplot(
   km_lv_filmort,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — nascido vivo",
-  title       = "KM — Nascido vivo (censura: óbito fetal)\npor presença de filhos mortos previamente",
+  ylab        = "S(t)",
+  title       = "KM - Nascido vivo (censura: óbito fetal)\npor presença de filhos mortos previamente",
   legend.title = "Filhos mortos previamente",
   legend.labs  = levels(dados_eda_clean$qtdfilmort_categorico),
-  ylim        = c(0, 1),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_filmort_lv)
 
@@ -1167,11 +2254,11 @@ painel_kmglobal_filmort <- ggarrange(
 print(painel_kmglobal_filmort)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_filmort.png", units = "in", width = 10, height = 5, res = 300)
+png("kmglobal_filmort.png", units = "in", width = 10, height = 5, res = 112)
 print(painel_kmglobal_filmort)
 dev.off()
 
-#------------------------------- Log-Rank
+#------------------------------- Log-Rank Presença de filhos mortos previamente
 
 # LOG-RANK — óbito fetal como evento de interesse (censura: nascido vivo)
 logrank_fd_filmort <- survdiff(
@@ -1215,28 +2302,28 @@ ci_filmort <- cmprsk::cuminc(
 )
 print(ci_filmort)
 
-# Apenas o teste (sem informações extras)
+# Teste de Gray para qtdfilmort_categorico
 ci_filmort$Tests
 
 #------------------------------- CIF
-
-p_cif_filmort <- ggcompetingrisks(
-  fit             = ci_filmort,
-  multiple_panels = TRUE,   # painel separado para "Não" e "Sim"
-  ggtheme         = theme_minimal(base_size = 12),
-  palette         = c("#1f77b4", "#d62728"),   # 1 = óbito fetal, 2 = nascido vivo
-  legend.title    = "Evento",
-  legend.labs     = c("Óbito fetal", "Nascimento vivo"),
-  xlab            = "Semanas de gestação",
-  ylab            = "Incidência acumulada",
-  title           = "Gráfico de Incidência Acumulada (CIF) por presença de filhos mortos previamente"
-)
-print(p_cif_filmort)
-
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_filmort.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_filmort)
-dev.off()
+# 
+# p_cif_filmort <- ggcompetingrisks(
+#   fit             = ci_filmort,
+#   multiple_panels = TRUE,   # painel separado para "Não" e "Sim"
+#   ggtheme         = theme_minimal(base_size = 12),
+#   palette         = c("#1f77b4", "#d62728"),   # 1 = óbito fetal, 2 = nascido vivo
+#   legend.title    = "Evento",
+#   legend.labs     = c("Óbito fetal", "Nascimento vivo"),
+#   xlab            = "Semanas de gestação",
+#   ylab            = "Incidência acumulada",
+#   title           = "Gráfico de Incidência Acumulada (CIF) por presença de filhos mortos previamente"
+# )
+# print(p_cif_filmort)
+# 
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("cif_filmort.png", units = "in", width = 10, height = 5, res = 300)
+# print(p_cif_filmort)
+# dev.off()
 
 # CIF apenas para o evento óbito fetal (1) por presença de filhos mortos previamente
 
@@ -1270,37 +2357,151 @@ df_cif_fd_filmort <- purrr::map_dfr(
 # Conferência rápida
 print(table(df_cif_fd_filmort$grupo, useNA = "ifany"))
 
-# Construção do gráfico CIF apenas para óbitos fetais
-p_cif_fd_filmort <- ggplot(df_cif_fd_filmort,
-                           aes(x = tempo,
-                               y = cif,
-                               linetype = grupo)) +
+# Selecionar apenas as curvas cujo nome termina em "Nascimento vivo"
+ci_filmort_evento2 <- ci_filmort[grep("Nascimento vivo$", names(ci_filmort))]
+
+# Converter em data.frame longo: tempo, CIF, grupo ("Não"/"Sim")
+df_cif_lv_filmort <- purrr::map_dfr(
+  names(ci_filmort_evento2),
+  function(nm) {
+    comp <- ci_filmort_evento2[[nm]]
+    
+    # Extrai o rótulo do grupo removendo o sufixo " Nascimento vivo"
+    grupo <- sub(" Nascimento vivo$", "", nm)
+    
+    data.frame(
+      tempo = comp$time,
+      cif   = comp$est,
+      grupo = grupo,
+      stringsAsFactors = FALSE
+    )
+  }
+) %>%
+  dplyr::mutate(
+    grupo = factor(grupo, levels = c("Não", "Sim"))
+  ) %>%
+  dplyr::arrange(grupo, tempo)
+
+print(table(df_cif_lv_filmort$grupo, useNA = "ifany"))
+
+# Limite superior comum e escala de tempo (zoom a partir da semana 19)
+max_tempo_cif_filmort <- max(
+  df_cif_fd_filmort$tempo,
+  df_cif_lv_filmort$tempo,
+  na.rm = TRUE
+)
+
+breaks_tempo_cif_filmort <- seq(20, max_tempo_cif_filmort, by = 5)
+
+p_cif_fd_filmort <- ggplot(
+  df_cif_fd_filmort,
+  aes(x = tempo,
+      y = cif,
+      linetype = grupo)
+) +
   geom_step(
-    color     = "#d62728",  # todas as curvas em vermelho para destacar óbito fetal
-    linewidth = 0.7
+    color     = "#d62728",  # vermelho para óbito fetal
+    linewidth = 0.9
   ) +
   scale_linetype_manual(
     name   = "Filhos mortos previamente",
     values = c(
       "Não" = "solid",
       "Sim" = "dashed"
-    )
+    ),
+    breaks = c("Não", "Sim")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_filmort
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_filmort)
   ) +
   labs(
-    title = "CIF apenas para óbitos fetais por presença de filhos mortos previamente",
+    title = "Óbito fetal (por presença de filhos\nmortos previamente)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    legend.position = "bottom"
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  # Legenda neutra (cinza), compartilhada entre os dois gráficos do painel
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
   )
 
 print(p_cif_fd_filmort)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_filmort.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_fd_filmort)
+p_cif_lv_filmort <- ggplot(
+  df_cif_lv_filmort,
+  aes(x = tempo,
+      y = cif,
+      linetype = grupo)
+) +
+  geom_step(
+    color     = "#1f77b4",  # azul para nascimento vivo
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Filhos mortos previamente",
+    values = c(
+      "Não" = "solid",
+      "Sim" = "dashed"
+    ),
+    breaks = c("Não", "Sim")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_filmort
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_filmort)
+  ) +
+  labs(
+    title = "Nascido vivo (por presença de filhos\nmortos previamente)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
+  )
+
+print(p_cif_lv_filmort)
+
+painel_cif_filmort <- ggpubr::ggarrange(
+  p_cif_fd_filmort,
+  p_cif_lv_filmort,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_filmort)
+
+#-------------------  SALVA PAINEL LOCALMENTE
+png(
+  "cif_filmort_painel_ambos.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res   = 112
+)
+print(painel_cif_filmort)
 dev.off()
 
 #------------------------------------------------------------------------------
@@ -1318,14 +2519,16 @@ km_fd_grav <- survfit(
 grafico_kmglobal_grav_fd <- ggsurvplot(
   km_fd_grav,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — óbito fetal",
-  title       = "KM — Óbito fetal (censura: nascido vivo)\npor tipo de gravidez",
+  ylab        = "S(t)",
+  title       = "KM - Óbito fetal (censura: nascido vivo)\npor tipo de gravidez",
   legend.title = "Tipo de gravidez",
   legend.labs  = levels(dados_eda_clean$gravidez),
-  ylim        = c(0.950, 1.00),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0.950, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_grav_fd)
 
@@ -1338,14 +2541,16 @@ km_lv_grav <- survfit(
 grafico_kmglobal_grav_lv <- ggsurvplot(
   km_lv_grav,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — nascido vivo",
-  title       = "KM — Nascido vivo (censura: óbito fetal)\npor tipo de gravidez",
+  ylab        = "S(t)",
+  title       = "KM - Nascido vivo (censura: óbito fetal)\npor tipo de gravidez",
   legend.title = "Tipo de gravidez",
   legend.labs  = levels(dados_eda_clean$gravidez),
-  ylim        = c(0, 1),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_grav_lv)
 
@@ -1368,11 +2573,11 @@ painel_kmglobal_grav <- ggarrange(
 print(painel_kmglobal_grav)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_gravidez.png", units = "in", width = 10, height = 5, res = 300)
+png("kmglobal_gravidez.png", units = "in", width = 10, height = 5, res = 112)
 print(painel_kmglobal_grav)
 dev.off()
 
-#------------------------------- Log-Rank
+#------------------------------- Log-Rank Tipo de gravidez
 
 # LOG-RANK — óbito fetal como evento de interesse (censura: nascido vivo)
 logrank_fd_grav <- survdiff(
@@ -1417,36 +2622,33 @@ ci_grav <- cmprsk::cuminc(
 )
 print(ci_grav)
 
-# Apenas o teste (sem informações extras)
-ci_filvivo$Tests
+# Teste de Gray e CIF para tipo de gravidez
+ci_grav$Tests
 
 #------------------------------- CIF
-
-p_cif_grav <- ggcompetingrisks(
-  fit             = ci_grav,
-  multiple_panels = TRUE,   # um painel para Única e outro para Múltipla
-  ggtheme         = theme_minimal(base_size = 12),
-  palette         = c("#1f77b4", "#d62728"),   # 1 = Óbito fetal, 2 = Nascido vivo
-  legend.title    = "Evento",
-  legend.labs     = c("Óbito fetal", "Nascimento vivo"),
-  xlab            = "Semanas de gestação",
-  ylab            = "Incidência acumulada",
-  title           = "CIF por tipo de gravidez"
-)
-print(p_cif_grav)
-
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_gravidez.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_grav)
-dev.off()
+# 
+# p_cif_grav <- ggcompetingrisks(
+#   fit             = ci_grav,
+#   multiple_panels = TRUE,   # um painel para Única e outro para Múltipla
+#   ggtheme         = theme_minimal(base_size = 12),
+#   palette         = c("#1f77b4", "#d62728"),   # 1 = Óbito fetal, 2 = Nascido vivo
+#   legend.title    = "Evento",
+#   legend.labs     = c("Óbito fetal", "Nascimento vivo"),
+#   xlab            = "Semanas de gestação",
+#   ylab            = "Incidência acumulada",
+#   title           = "CIF por tipo de gravidez"
+# )
+# print(p_cif_grav)
+# 
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("cif_gravidez.png", units = "in", width = 10, height = 5, res = 300)
+# print(p_cif_grav)
+# dev.off()
 
 # CIF apenas do evento óbito fetal por tipo de gravidez
 
 # Selecionar apenas as curvas cujo nome termina em "Óbito fetal"
 ci_grav_evento1 <- ci_grav[grep("Óbito fetal$", names(ci_grav))]
-
-# Conferir nomes
-print(names(ci_grav_evento1))
 
 # Converter em data.frame longo
 df_cif_fd_grav <- purrr::map_dfr(
@@ -1454,7 +2656,7 @@ df_cif_fd_grav <- purrr::map_dfr(
   function(nm) {
     comp <- ci_grav_evento1[[nm]]
     
-    # Remove o sufixo " Óbito fetal" para obter o nome do grupo
+    # nm vem no formato "Única Óbito fetal" ou "Múltipla Óbito fetal"
     grupo <- sub(" Óbito fetal$", "", nm)
     
     data.frame(
@@ -1472,7 +2674,44 @@ df_cif_fd_grav <- purrr::map_dfr(
 
 print(table(df_cif_fd_grav$grupo, useNA = "ifany"))
 
-# Gráfico: CIF apenas para óbitos fetais por tipo de gravidez
+# Selecionar apenas as curvas cujo nome termina em "Nascimento vivo"
+ci_grav_evento2 <- ci_grav[grep("Nascimento vivo$", names(ci_grav))]
+
+df_cif_lv_grav <- purrr::map_dfr(
+  names(ci_grav_evento2),
+  function(nm) {
+    comp <- ci_grav_evento2[[nm]]
+    
+    # nm vem no formato "Única Nascimento vivo" ou "Múltipla Nascimento vivo"
+    grupo <- sub(" Nascimento vivo$", "", nm)
+    
+    data.frame(
+      tempo = comp$time,
+      cif   = comp$est,
+      grupo = grupo,
+      stringsAsFactors = FALSE
+    )
+  }
+) %>%
+  dplyr::mutate(
+    grupo = factor(grupo, levels = c("Única", "Múltipla"))
+  ) %>%
+  dplyr::arrange(grupo, tempo)
+
+print(table(df_cif_lv_grav$grupo, useNA = "ifany"))
+
+#--------------------------- Limites de tempo e escala (zoom a partir da semana 19)
+
+max_tempo_cif_grav <- max(
+  df_cif_fd_grav$tempo,
+  df_cif_lv_grav$tempo,
+  na.rm = TRUE
+)
+
+breaks_tempo_cif_grav <- seq(20, max_tempo_cif_grav, by = 5)
+
+#--------------------------- CIF – ÓBITO FETAL por tipo de gravidez
+
 p_cif_fd_grav <- ggplot(
   df_cif_fd_grav,
   aes(x = tempo,
@@ -1480,7 +2719,7 @@ p_cif_fd_grav <- ggplot(
       linetype = grupo)
 ) +
   geom_step(
-    color     = "#d62728",  # todas as curvas em vermelho
+    color     = "#d62728",  # vermelho para óbito fetal
     linewidth = 0.9
   ) +
   scale_linetype_manual(
@@ -1488,23 +2727,103 @@ p_cif_fd_grav <- ggplot(
     values = c(
       "Única"    = "solid",
       "Múltipla" = "dashed"
-    )
+    ),
+    breaks = c("Única", "Múltipla")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_grav
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_grav)
   ) +
   labs(
-    title = "CIF apenas dos óbitos fetais por tipo de gravidez",
+    title = "Óbito fetal (por tipo de gravidez)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    legend.position = "top"
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"   # legenda neutra
+      )
+    )
   )
 
 print(p_cif_fd_grav)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_gravidez.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_fd_grav)
+#--------------------------- CIF – NASCIMENTO VIVO por tipo de gravidez
+
+p_cif_lv_grav <- ggplot(
+  df_cif_lv_grav,
+  aes(x = tempo,
+      y = cif,
+      linetype = grupo)
+) +
+  geom_step(
+    color     = "#1f77b4",  # azul para nascimento vivo
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Tipo de gravidez",
+    values = c(
+      "Única"    = "solid",
+      "Múltipla" = "dashed"
+    ),
+    breaks = c("Única", "Múltipla")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_grav
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_grav)
+  ) +
+  labs(
+    title = "Nascido vivo (por tipo de gravidez)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
+  )
+
+print(p_cif_lv_grav)
+
+#--------------------------- Painel: Nascidos vivos (esq.) × Óbitos fetais (dir.)
+
+painel_cif_grav <- ggpubr::ggarrange(
+  p_cif_fd_grav,
+  p_cif_lv_grav,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_grav)
+
+#-------------------  SALVA PAINEL LOCALMENTE
+png(
+  "cif_gravidez_painel_ambos.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res   = 112
+)
+print(painel_cif_grav)
 dev.off()
 
 #------------------------------------------------------------------------------
@@ -1522,14 +2841,16 @@ km_fd_parto <- survfit(
 grafico_kmglobal_parto_fd <- ggsurvplot(
   km_fd_parto,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — óbito fetal",
-  title       = "KM — Óbito fetal (censura: nascido vivo)\npor tipo de parto",
+  ylab        = "S(t)",
+  title       = "KM - Óbito fetal (censura: nascido vivo)\npor tipo de parto",
   legend.title = "Tipo de parto",
   legend.labs  = levels(dados_eda_clean$parto),
-  ylim        = c(0.979, 1.00),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0.979, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_parto_fd)
 
@@ -1542,14 +2863,16 @@ km_lv_parto <- survfit(
 grafico_kmglobal_parto_lv <- ggsurvplot(
   km_lv_parto,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — nascido vivo",
-  title       = "KM — Nascido vivo (censura: óbito fetal)\npor tipo de parto",
+  ylab        = "S(t)",
+  title       = "KM - Nascido vivo (censura: óbito fetal)\npor tipo de parto",
   legend.title = "Tipo de parto",
   legend.labs  = levels(dados_eda_clean$parto),
-  ylim        = c(0, 1),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_parto_lv)
 
@@ -1572,11 +2895,11 @@ painel_kmglobal_parto <- ggarrange(
 print(painel_kmglobal_parto)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_parto.png", units = "in", width = 10, height = 5, res = 300)
+png("kmglobal_parto.png", units = "in", width = 10, height = 5, res = 112)
 print(painel_kmglobal_parto)
 dev.off()
 
-#------------------------------- Log-Rank
+#------------------------------- Log-Rank Tipo de parto
 
 # LOG-RANK — óbito fetal como evento de interesse (censura: nascido vivo)
 logrank_fd_parto <- survdiff(
@@ -1621,28 +2944,28 @@ ci_parto <- cmprsk::cuminc(
 )
 print(ci_parto)
 
-# Apenas o teste (sem informações extras)
-ci_filmort$Tests
+# Teste de Gray e CIF para tipo de parto
+ci_parto$Tests
 
 #------------------------------- CIF
-
-p_cif_parto <- ggcompetingrisks(
-  fit             = ci_parto,
-  multiple_panels = TRUE,   # um painel para Vaginal e outro para Cesáreo
-  ggtheme         = theme_minimal(base_size = 12),
-  palette         = c("#1f77b4", "#d62728"),   # 1 = Óbito fetal, 2 = Nascido vivo
-  legend.title    = "Evento",
-  legend.labs     = c("Óbito fetal", "Nascimento vivo"),
-  xlab            = "Semanas de gestação",
-  ylab            = "Incidência acumulada",
-  title           = "CIF por tipo de parto"
-)
-print(p_cif_parto)
-
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_parto.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_parto)
-dev.off()
+# 
+# p_cif_parto <- ggcompetingrisks(
+#   fit             = ci_parto,
+#   multiple_panels = TRUE,   # um painel para Vaginal e outro para Cesáreo
+#   ggtheme         = theme_minimal(base_size = 12),
+#   palette         = c("#1f77b4", "#d62728"),   # 1 = Óbito fetal, 2 = Nascido vivo
+#   legend.title    = "Evento",
+#   legend.labs     = c("Óbito fetal", "Nascimento vivo"),
+#   xlab            = "Semanas de gestação",
+#   ylab            = "Incidência acumulada",
+#   title           = "CIF por tipo de parto"
+# )
+# print(p_cif_parto)
+# 
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("cif_parto.png", units = "in", width = 10, height = 5, res = 300)
+# print(p_cif_parto)
+# dev.off()
 
 # CIF apenas do evento óbito fetal por tipo de parto
 
@@ -1676,7 +2999,42 @@ df_cif_fd_parto <- purrr::map_dfr(
 
 print(table(df_cif_fd_parto$grupo, useNA = "ifany"))
 
-# Gráfico: CIF apenas para óbitos fetais por tipo de parto
+# Evento 2 = Nascimento vivo
+ci_parto_evento2 <- ci_parto[grep("Nascimento vivo$", names(ci_parto))]
+
+df_cif_lv_parto <- purrr::map_dfr(
+  names(ci_parto_evento2),
+  function(nm) {
+    comp  <- ci_parto_evento2[[nm]]
+    grupo <- sub(" Nascimento vivo$", "", nm)
+    
+    data.frame(
+      tempo = comp$time,
+      cif   = comp$est,
+      grupo = grupo,
+      stringsAsFactors = FALSE
+    )
+  }
+) %>%
+  dplyr::mutate(
+    grupo = factor(grupo, levels = c("Vaginal", "Cesáreo"))
+  ) %>%
+  dplyr::arrange(grupo, tempo)
+
+print(table(df_cif_lv_parto$grupo, useNA = "ifany"))
+
+#--------------------------- Limites de tempo e escala (zoom a partir da semana 19)
+
+max_tempo_cif_parto <- max(
+  df_cif_fd_parto$tempo,
+  df_cif_lv_parto$tempo,
+  na.rm = TRUE
+)
+
+breaks_tempo_cif_parto <- seq(20, max_tempo_cif_parto, by = 5)
+
+#--------------------------- CIF – ÓBITO FETAL por tipo de parto
+
 p_cif_fd_parto <- ggplot(
   df_cif_fd_parto,
   aes(x = tempo,
@@ -1684,7 +3042,7 @@ p_cif_fd_parto <- ggplot(
       linetype = grupo)
 ) +
   geom_step(
-    color     = "#d62728",  # todas as curvas em vermelho
+    color     = "#d62728",   # vermelho para óbito fetal
     linewidth = 0.9
   ) +
   scale_linetype_manual(
@@ -1692,23 +3050,104 @@ p_cif_fd_parto <- ggplot(
     values = c(
       "Vaginal" = "solid",
       "Cesáreo" = "dashed"
-    )
+    ),
+    breaks = c("Vaginal", "Cesáreo")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_parto
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_parto)
   ) +
   labs(
-    title = "CIF apenas dos óbitos fetais por tipo de parto",
+    title = "Óbito fetal (por tipo de parto)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    legend.position = "top"
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  # Legenda neutra (cinza), compartilhada com o painel
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
   )
 
 print(p_cif_fd_parto)
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_parto.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_fd_parto)
+#--------------------------- CIF – NASCIMENTO VIVO por tipo de parto
+
+p_cif_lv_parto <- ggplot(
+  df_cif_lv_parto,
+  aes(x = tempo,
+      y = cif,
+      linetype = grupo)
+) +
+  geom_step(
+    color     = "#1f77b4",   # azul para nascimento vivo
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Tipo de parto",
+    values = c(
+      "Vaginal" = "solid",
+      "Cesáreo" = "dashed"
+    ),
+    breaks = c("Vaginal", "Cesáreo")
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_parto
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_parto)
+  ) +
+  labs(
+    title = "Nascido vivo (por tipo de parto)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
+  )
+
+print(p_cif_lv_parto)
+
+#--------------------------- Painel: Nascidos vivos (esq.) × Óbitos fetais (dir.)
+
+painel_cif_parto <- ggpubr::ggarrange(
+  p_cif_fd_parto,
+  p_cif_lv_parto,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_parto)
+
+#-------------------  SALVA PAINEL LOCALMENTE
+png(
+  "cif_parto_painel_ambos.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res   = 112
+)
+print(painel_cif_parto)
 dev.off()
 
 #------------------------------------------------------------------------------
@@ -1726,14 +3165,16 @@ km_fd_peso <- survfit(
 grafico_kmglobal_peso_fd <- ggsurvplot(
   km_fd_peso,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — óbito fetal",
-  title       = "KM — Óbito fetal (censura: nascido vivo)\npor faixa de peso ao nascer",
+  ylab        = "S(t)",
+  title       = "KM - Óbito fetal (censura: nascido vivo)\npor faixa de peso ao nascer",
   legend.title = "Peso ao nascer",
   legend.labs  = levels(dados_eda_clean$peso_categorico),
-  ylim        = c(0.900, 1.00),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0.900, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_peso_fd)
 
@@ -1746,14 +3187,16 @@ km_lv_peso <- survfit(
 grafico_kmglobal_peso_lv <- ggsurvplot(
   km_lv_peso,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — nascido vivo",
-  title       = "KM — Nascido vivo (censura: óbito fetal)\npor faixa de peso ao nascer",
+  ylab        = "S(t)",
+  title       = "KM - Nascido vivo (censura: óbito fetal)\npor faixa de peso ao nascer",
   legend.title = "Peso ao nascer",
   legend.labs  = levels(dados_eda_clean$peso_categorico),
-  ylim        = c(0, 1),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_peso_lv)
 
@@ -1776,11 +3219,11 @@ painel_kmglobal_peso <- ggarrange(
 print(painel_kmglobal_peso)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_peso_categorico.png", units = "in", width = 10, height = 5, res = 300)
+png("kmglobal_peso_categorico.png", units = "in", width = 10, height = 5, res = 112)
 print(painel_kmglobal_peso)
 dev.off()
 
-#------------------------------- Log-Rank
+#------------------------------- Log-Rank Faixa de peso ao nascer
 
 # LOG-RANK — óbito fetal como evento de interesse (censura: nascido vivo)
 logrank_fd_peso <- survdiff(
@@ -1825,65 +3268,88 @@ ci_peso <- cmprsk::cuminc(
 )
 print(ci_peso)
 
-# Apenas o teste (sem informações extras)
-ci_filvivo$Tests
+# Teste de Gray e CIF para peso_categorico
+ci_peso$Tests
 
 #------------------------------- CIF
-
-p_cif_peso <- ggcompetingrisks(
-  fit             = ci_peso,
-  multiple_panels = TRUE,   # um painel para cada faixa de peso
-  ggtheme         = theme_minimal(base_size = 12),
-  palette         = c("#1f77b4", "#d62728"),   # 1 = Óbito fetal, 2 = Nascido vivo
-  legend.title    = "Evento",
-  legend.labs     = c("Óbito fetal", "Nascimento vivo"),
-  xlab            = "Semanas de gestação",
-  ylab            = "Incidência acumulada",
-  title           = "CIF por faixa de peso ao nascer"
-)
-print(p_cif_peso)
-
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_peso_categorico.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_peso)
-dev.off()
+# 
+# p_cif_peso <- ggcompetingrisks(
+#   fit             = ci_peso,
+#   multiple_panels = TRUE,   # um painel para cada faixa de peso
+#   ggtheme         = theme_minimal(base_size = 12),
+#   palette         = c("#1f77b4", "#d62728"),   # 1 = Óbito fetal, 2 = Nascido vivo
+#   legend.title    = "Evento",
+#   legend.labs     = c("Óbito fetal", "Nascimento vivo"),
+#   xlab            = "Semanas de gestação",
+#   ylab            = "Incidência acumulada",
+#   title           = "CIF por faixa de peso ao nascer"
+# )
+# print(p_cif_peso)
+# 
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("cif_peso_categorico.png", units = "in", width = 10, height = 5, res = 300)
+# print(p_cif_peso)
+# dev.off()
 
 # CIF apenas do evento óbito fetal por faixa de peso ao nascer (sem IC)
 
-# Selecionar apenas as curvas cujo nome termina em "Óbito fetal"
+# Evento 1 (Óbito fetal)
 ci_peso_evento1 <- ci_peso[grep("Óbito fetal$", names(ci_peso))]
+# Evento 2 (Nascimento vivo)
+ci_peso_evento2 <- ci_peso[grep("Nascimento vivo$", names(ci_peso))]
 
-# Conferir nomes
-print(names(ci_peso_evento1))
+# 3. Construir data.frames longos para cada evento
+#    Cada linha terá: tempo, cif, e grupo (faixa de peso)
 
-# Converter em data.frame longo
+# Data frame para óbito fetal (evento 1)
 df_cif_fd_peso <- purrr::map_dfr(
   names(ci_peso_evento1),
   function(nm) {
-    comp <- ci_peso_evento1[[nm]]
-    
-    # Remove o sufixo " Óbito fetal" para obter o nome da faixa
-    grupo <- sub(" Óbito fetal$", "", nm)
-    
-    data.frame(
+    comp  <- ci_peso_evento1[[nm]]
+    grupo <- sub(" Óbito fetal$", "", nm)  # remove sufixo do nome
+    tibble::tibble(
       tempo = comp$time,
       cif   = comp$est,
-      grupo = grupo,
-      stringsAsFactors = FALSE
+      grupo = grupo
     )
   }
 ) %>%
   dplyr::mutate(
-    grupo = factor(
-      grupo,
-      levels = c("<2500g", "2500g-3999g", "4000g+")
-    )
+    # Ajusta a ordem dos níveis das categorias de peso
+    grupo = factor(grupo,
+                   levels = c("<2500g", "2500g-3999g", "4000g+"))
   ) %>%
   dplyr::arrange(grupo, tempo)
 
-print(table(df_cif_fd_peso$grupo, useNA = "ifany"))
+# Data frame para nascimento vivo (evento 2)
+df_cif_lv_peso <- purrr::map_dfr(
+  names(ci_peso_evento2),
+  function(nm) {
+    comp  <- ci_peso_evento2[[nm]]
+    grupo <- sub(" Nascimento vivo$", "", nm)
+    tibble::tibble(
+      tempo = comp$time,
+      cif   = comp$est,
+      grupo = grupo
+    )
+  }
+) %>%
+  dplyr::mutate(
+    grupo = factor(grupo,
+                   levels = c("<2500g", "2500g-3999g", "4000g+"))
+  ) %>%
+  dplyr::arrange(grupo, tempo)
 
-# Gráfico: CIF apenas para óbitos fetais por faixa de peso ao nascer
+# 4. Definir limites e pontos de corte do eixo x
+#    (Zoom a partir da semana 19 e intervalos de 5 em 5 semanas)
+max_tempo_cif_peso <- max(
+  df_cif_fd_peso$tempo,
+  df_cif_lv_peso$tempo,
+  na.rm = TRUE
+)
+breaks_tempo_cif_peso <- seq(20, max_tempo_cif_peso, by = 5)
+
+# 5. Plotar a CIF apenas para ÓBITOS FETAIS (evento 1)
 p_cif_fd_peso <- ggplot(
   df_cif_fd_peso,
   aes(x = tempo,
@@ -1891,32 +3357,106 @@ p_cif_fd_peso <- ggplot(
       linetype = grupo)
 ) +
   geom_step(
-    color     = "#d62728",  # todas as curvas em vermelho
+    color     = "#d62728",      # vermelho para óbito fetal
     linewidth = 0.9
   ) +
   scale_linetype_manual(
     name   = "Peso ao nascer",
     values = c(
-      "<2500g"       = "solid",
-      "2500g-3999g"  = "dashed",
-      "4000g+"       = "dotted"
+      "<2500g"      = "solid",
+      "2500g-3999g" = "dashed",
+      "4000g+"      = "dotted"
     )
   ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_peso
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_peso)
+  ) +
   labs(
-    title = "CIF apenas dos óbitos fetais\npor faixa de peso ao nascer",
+    title = "Óbito fetal (por faixa de peso)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    legend.position = "top"
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  # Legenda neutra (cinza), mas com o padrão de linha preservado
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
   )
 
-print(p_cif_fd_peso)
+# 6. Plotar a CIF apenas para NASCIDOS VIVOS (evento 2)
+p_cif_lv_peso <- ggplot(
+  df_cif_lv_peso,
+  aes(x = tempo,
+      y = cif,
+      linetype = grupo)
+) +
+  geom_step(
+    color     = "#1f77b4",      # azul para nascimento vivo
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Peso ao nascer",
+    values = c(
+      "<2500g"      = "solid",
+      "2500g-3999g" = "dashed",
+      "4000g+"      = "dotted"
+    )
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_peso
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_peso)
+  ) +
+  labs(
+    title = "Nascido vivo (por faixa de peso)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
+  )
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_peso_categorico.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_fd_peso)
+# 7. Montar o painel com os dois gráficos lado a lado
+painel_cif_peso <- ggpubr::ggarrange(
+  p_cif_fd_peso,
+  p_cif_lv_peso,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_peso)
+
+# 8. Opcional: salvar o painel em arquivo PNG
+png(
+  "cif_peso_categorico_painel_ambos.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res   = 112
+)
+print(painel_cif_peso)
 dev.off()
 
 #------------------------------------------------------------------------------
@@ -1934,14 +3474,16 @@ km_fd_loc <- survfit(
 grafico_kmglobal_loc_fd <- ggsurvplot(
   km_fd_loc,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — óbito fetal",
-  title       = "KM — Óbito fetal (censura: nascido vivo)\npor local de ocorrência do parto",
+  ylab        = "S(t)",
+  title       = "KM - Óbito fetal (censura: nascido vivo)\npor local de ocorrência do parto",
   legend.title = "Local de ocorrência",
   legend.labs  = levels(dados_eda_clean$lococornasc),
-  ylim        = c(0.950, 1.00),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0.950, 1.00), # zoom
+  xlim       = c(min_tempo1, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_loc_fd)
 
@@ -1954,14 +3496,16 @@ km_lv_loc <- survfit(
 grafico_kmglobal_loc_lv <- ggsurvplot(
   km_lv_loc,
   data        = dados_eda_clean,
-  conf.int    = TRUE,
+  conf.int    = FALSE,
   xlab        = "Semanas de gestação",
-  ylab        = "S(t) — nascido vivo",
-  title       = "KM — Nascido vivo (censura: óbito fetal)\npor local de ocorrência do parto",
+  ylab        = "S(t)",
+  title       = "KM - Nascido vivo (censura: óbito fetal)\npor local de ocorrência do parto",
   legend.title = "Local de ocorrência",
   legend.labs  = levels(dados_eda_clean$lococornasc),
-  ylim        = c(0, 1),
-  ggtheme     = theme_minimal(base_size = 12)
+  ylim        = c(0, 1), # zoom
+  xlim       = c(min_tempo2, max_tempo), # zoom (comportamento ocorre a partir da semana 20)
+  break.time.by = 5,
+  ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_kmglobal_loc_lv)
 
@@ -1984,11 +3528,11 @@ painel_kmglobal_loc <- ggarrange(
 print(painel_kmglobal_loc)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
-png("kmglobal_lococornasc.png", units = "in", width = 10, height = 5, res = 300)
+png("kmglobal_lococornasc.png", units = "in", width = 10, height = 5, res = 112)
 print(painel_kmglobal_loc)
 dev.off()
 
-#------------------------------- Log-Rank
+#------------------------------- Log-Rank Local de ocorrência do parto
 
 # LOG-RANK — óbito fetal como evento de interesse (censura: nascido vivo)
 logrank_fd_loc <- survdiff(
@@ -2033,51 +3577,67 @@ ci_loc <- cmprsk::cuminc(
 )
 print(ci_loc)
 
-# Apenas o teste (sem informações extras)
-ci_filmort$Tests
+# Teste de Gray e CIF para local de ocorrência
+ci_loc$Tests
 
 #------------------------------- CIF
-
-p_cif_loc <- ggcompetingrisks(
-  fit             = ci_loc,
-  multiple_panels = TRUE,   # um painel para Hospital e outro para Outros
-  ggtheme         = theme_minimal(base_size = 12),
-  palette         = c("#1f77b4", "#d62728"),   # 1 = Óbito fetal, 2 = Nascido vivo
-  legend.title    = "Evento",
-  legend.labs     = c("Óbito fetal", "Nascimento vivo"),
-  xlab            = "Semanas de gestação",
-  ylab            = "Incidência acumulada",
-  title           = "CIF por local de ocorrência do parto"
-)
-print(p_cif_loc)
-
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_lococornasc.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_loc)
-dev.off()
+# 
+# p_cif_loc <- ggcompetingrisks(
+#   fit             = ci_loc,
+#   multiple_panels = TRUE,   # um painel para Hospital e outro para Outros
+#   ggtheme         = theme_minimal(base_size = 12),
+#   palette         = c("#1f77b4", "#d62728"),   # 1 = Óbito fetal, 2 = Nascido vivo
+#   legend.title    = "Evento",
+#   legend.labs     = c("Óbito fetal", "Nascimento vivo"),
+#   xlab            = "Semanas de gestação",
+#   ylab            = "Incidência acumulada",
+#   title           = "CIF por local de ocorrência do parto"
+# )
+# print(p_cif_loc)
+# 
+# #-------------------  SALVA GRÁFICO LOCALMENTE
+# png("cif_lococornasc.png", units = "in", width = 10, height = 5, res = 300)
+# print(p_cif_loc)
+# dev.off()
 
 # CIF apenas do evento óbito fetal por local de ocorrência (sem IC)
 
-# Selecionar apenas as curvas cujo nome termina em "Óbito fetal"
-ci_loc_evento1 <- ci_loc[grep("Óbito fetal$", names(ci_loc))]
+# 2. Separar as curvas por tipo de evento
+#    - Evento 1 = "Óbito fetal"
+#    - Evento 2 = "Nascimento vivo"
+ci_loc_evento1 <- ci_loc[grep("Óbito fetal$",     names(ci_loc))]
+ci_loc_evento2 <- ci_loc[grep("Nascimento vivo$", names(ci_loc))]
 
-# Conferir nomes (opcional)
-print(names(ci_loc_evento1))
-
-# Converter em data.frame longo
+# 3. Construir data.frames longos para cada evento (tempo, cif, grupo)
+# Data frame para óbito fetal (evento 1)
 df_cif_fd_loc <- purrr::map_dfr(
   names(ci_loc_evento1),
   function(nm) {
-    comp <- ci_loc_evento1[[nm]]
-    
-    # Remove o sufixo " Óbito fetal" para obter o nome do grupo
-    grupo <- sub(" Óbito fetal$", "", nm)
-    
-    data.frame(
+    comp  <- ci_loc_evento1[[nm]]
+    grupo <- sub(" Óbito fetal$", "", nm)  # remove o sufixo
+    tibble::tibble(
       tempo = comp$time,
       cif   = comp$est,
-      grupo = grupo,
-      stringsAsFactors = FALSE
+      grupo = grupo
+    )
+  }
+) %>%
+  dplyr::mutate(
+    # Garante que “Hospital” aparece antes de “Outros”
+    grupo = factor(grupo, levels = c("Hospital", "Outros"))
+  ) %>%
+  dplyr::arrange(grupo, tempo)
+
+# Data frame para nascimento vivo (evento 2)
+df_cif_lv_loc <- purrr::map_dfr(
+  names(ci_loc_evento2),
+  function(nm) {
+    comp  <- ci_loc_evento2[[nm]]
+    grupo <- sub(" Nascimento vivo$", "", nm)
+    tibble::tibble(
+      tempo = comp$time,
+      cif   = comp$est,
+      grupo = grupo
     )
   }
 ) %>%
@@ -2086,9 +3646,17 @@ df_cif_fd_loc <- purrr::map_dfr(
   ) %>%
   dplyr::arrange(grupo, tempo)
 
-print(table(df_cif_fd_loc$grupo, useNA = "ifany"))
+# 4. Definir limites e pontos de corte do eixo x
+max_tempo_cif_loc <- max(
+  df_cif_fd_loc$tempo,
+  df_cif_lv_loc$tempo,
+  na.rm = TRUE
+)
+breaks_tempo_cif_loc <- seq(20, max_tempo_cif_loc, by = 5)
 
-# Gráfico: CIF apenas para óbitos fetais por local de ocorrência
+# 5. Plotar a CIF apenas para ÓBITOS FETAIS (evento 1)
+#    - Vermelho (#d62728) para óbitos fetais
+#    - Linhas sólidas/dash para Hospital/Outros
 p_cif_fd_loc <- ggplot(
   df_cif_fd_loc,
   aes(x = tempo,
@@ -2096,7 +3664,7 @@ p_cif_fd_loc <- ggplot(
       linetype = grupo)
 ) +
   geom_step(
-    color     = "#d62728",  # todas as curvas em vermelho
+    color     = "#d62728",
     linewidth = 0.9
   ) +
   scale_linetype_manual(
@@ -2106,19 +3674,93 @@ p_cif_fd_loc <- ggplot(
       "Outros"   = "dashed"
     )
   ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_loc
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo1, max_tempo_cif_loc)
+  ) +
   labs(
-    title = "CIF apenas dos óbitos fetais por local de ocorrência do parto",
+    title = "Óbito fetal (por local de ocorrência)",
     x     = "Semanas de gestação",
     y     = "Incidência acumulada"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    legend.position = "top"
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  # Legenda neutra (cinza) para diferenciar o tipo de linha
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
   )
 
-print(p_cif_fd_loc)
+# 6. Plotar a CIF apenas para NASCIDOS VIVOS (evento 2)
+#    - Azul (#1f77b4) para nascimentos vivos
+p_cif_lv_loc <- ggplot(
+  df_cif_lv_loc,
+  aes(x = tempo,
+      y = cif,
+      linetype = grupo)
+) +
+  geom_step(
+    color     = "#1f77b4",
+    linewidth = 0.9
+  ) +
+  scale_linetype_manual(
+    name   = "Local de ocorrência",
+    values = c(
+      "Hospital" = "solid",
+      "Outros"   = "dashed"
+    )
+  ) +
+  scale_x_continuous(
+    breaks = breaks_tempo_cif_loc
+  ) +
+  coord_cartesian(
+    xlim = c(min_tempo2, max_tempo_cif_loc)
+  ) +
+  labs(
+    title = "Nascido vivo (por local de ocorrência)",
+    x     = "Semanas de gestação",
+    y     = "Incidência acumulada"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(
+        colour = "grey20"
+      )
+    )
+  )
 
-#-------------------  SALVA GRÁFICO LOCALMENTE
-png("cif_fd_lococornasc.png", units = "in", width = 10, height = 5, res = 300)
-print(p_cif_fd_loc)
+# 7. Combinar ambos os gráficos em um painel
+painel_cif_loc <- ggpubr::ggarrange(
+  p_cif_fd_loc,
+  p_cif_lv_loc,
+  ncol          = 2,
+  nrow          = 1,
+  common.legend = TRUE,
+  legend        = "bottom"
+)
+
+print(painel_cif_loc)
+
+# 8. (Opcional) Salvar o painel como PNG
+png(
+  "cif_lococornasc_painel_ambos.png",
+  units = "in",
+  width = 10,
+  height = 5,
+  res   = 112
+)
+print(painel_cif_loc)
 dev.off()
