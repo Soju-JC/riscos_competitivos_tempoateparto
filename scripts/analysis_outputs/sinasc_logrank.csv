@@ -1,0 +1,12 @@
+"variavel","chisq","df","p_valor"
+"consultas",6411.96947070292,3,0
+"idanomal",604.77752818112,1,0
+"racacormae",943.078486104928,4,0
+"sttrabpart",7046.08608050495,1,0
+"stcesparto",5318.65479117621,2,0
+"paridade",1618.08844718922,1,0
+"apgar5_categorico",3780.65290761271,1,0
+"qtdgestant_categorico",1614.33746842009,1,0
+"qtdpartnor_categorico",46.7395824559124,1,8.10751465962767e-12
+"qtdpartces_categorico",3070.74067766869,1,0
+"mesprenat_categorico",70.8966724184164,2,4.44089209850063e-16

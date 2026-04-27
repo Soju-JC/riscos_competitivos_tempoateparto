@@ -3,7 +3,6 @@ library(dplyr)
 library(purrr)
 library(survival)
 library(survminer)
-library(patchwork)
 library(RColorBrewer)
 library(readxl)
 library(stringr)
@@ -587,6 +586,26 @@ min_tempo2 <- 24
 # Limites de tempo para os eixos x dos gráficos
 max_tempo <- max(dados_eda_clean$tempo, na.rm = TRUE)
 
+resumo_tempo_km <- function(df, var, rotulo = var) {
+  # Resumo observado da idade gestacional por grupo usado no grafico de KM.
+  resumo <- df %>%
+    filter(!is.na(tempo), !is.na(.data[[var]])) %>%
+    group_by(grupo = .data[[var]]) %>%
+    summarise(
+      n = dplyr::n(),
+      media = round(mean(tempo, na.rm = TRUE), 2),
+      dp = round(sd(tempo, na.rm = TRUE), 2),
+      mediana = round(median(tempo, na.rm = TRUE), 2),
+      q1 = round(quantile(tempo, 0.25, na.rm = TRUE, names = FALSE), 2),
+      q3 = round(quantile(tempo, 0.75, na.rm = TRUE, names = FALSE), 2),
+      .groups = "drop"
+    )
+
+  cat("\nResumo da idade gestacional - KM por ", rotulo, "\n", sep = "")
+  print(resumo)
+  invisible(resumo)
+}
+
 # #------------------------------------------------------------------------------
 # # 1. Sexo do recém-nascido             ****************************************
 # #------------------------------------------------------------------------------
@@ -787,6 +806,7 @@ grafico_km_consultas <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_consultas)
+resumo_tempo_km(dados_eda_clean, "consultas", "número de consultas pré-natais")
 
 png("km_nascidosvivos_consultas.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_consultas)
@@ -817,6 +837,7 @@ grafico_km_anomalia <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_anomalia)
+resumo_tempo_km(dados_eda_clean, "idanomal", "presença de anomalia congênita")
 
 png("km_nascidosvivos_anomalia.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_anomalia)
@@ -847,6 +868,7 @@ grafico_km_raca <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_raca)
+resumo_tempo_km(dados_eda_clean, "racacormae", "raça/cor da mãe")
 
 png("km_nascidosvivos_racamae.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_raca)
@@ -877,6 +899,7 @@ grafico_km_trabalho <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_trabalho)
+resumo_tempo_km(dados_eda_clean, "sttrabpart", "indução do trabalho de parto")
 
 png("km_nascidosvivos_indtrabalhoparto.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_trabalho)
@@ -907,6 +930,7 @@ grafico_km_cesarea <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_cesarea)
+resumo_tempo_km(dados_eda_clean, "stcesparto", "cesárea antes do trabalho de parto")
 
 png("km_nascidosvivos_stcesparto.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_cesarea)
@@ -937,6 +961,7 @@ grafico_km_paridade <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_paridade)
+resumo_tempo_km(dados_eda_clean, "paridade", "paridade")
 
 png("km_nascidosvivos_paridade.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_paridade)
@@ -1079,6 +1104,7 @@ grafico_km_apgar <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_apgar)
+resumo_tempo_km(dados_eda_clean, "apgar5_categorico", "Apgar no quinto minuto")
 
 png("km_nascidosvivos_apgar.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_apgar)
@@ -1109,6 +1135,7 @@ grafico_km_gestant <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_gestant)
+resumo_tempo_km(dados_eda_clean, "qtdgestant_categorico", "histórico de gestações anteriores")
 
 png("km_nascidosvivos_qtdgestant.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_gestant)
@@ -1139,6 +1166,7 @@ grafico_km_partnor <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_partnor)
+resumo_tempo_km(dados_eda_clean, "qtdpartnor_categorico", "partos vaginais anteriores")
 
 png("km_nascidosvivos_qtdpartnor.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_partnor)
@@ -1169,6 +1197,7 @@ grafico_km_partces <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_partces)
+resumo_tempo_km(dados_eda_clean, "qtdpartces_categorico", "partos cesáreos anteriores")
 
 png("km_nascidosvivos_qtdpartces.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_partces)
@@ -1199,6 +1228,7 @@ grafico_km_mesprenat <- ggsurvplot(
   ggtheme     = theme_minimal(base_size = 12)
 )
 print(grafico_km_mesprenat)
+resumo_tempo_km(dados_eda_clean, "mesprenat_categorico", "trimestre de início do pré-natal")
 
 png("km_nascidosvivos_mesprenat.png", units="in", width=7.5, height=5, res=112)
 print(grafico_km_mesprenat)

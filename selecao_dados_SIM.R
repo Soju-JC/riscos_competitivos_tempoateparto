@@ -13,7 +13,6 @@ library(microdatasus)
 library(purrr)
 library(survival)
 library(survminer)
-library(patchwork)
 library(RColorBrewer)
 library(readxl)
 library(stringr)
@@ -514,6 +513,26 @@ knitr::kable(cat_summary_all,
 dados_eda_clean <- dados_eda_clean %>%
   mutate(status_evento = 1L)
 
+resumo_tempo_km <- function(df, var, rotulo = var) {
+  # Resumo observado da idade gestacional por grupo usado no grafico de KM.
+  resumo <- df %>%
+    filter(!is.na(tempo), !is.na(.data[[var]])) %>%
+    group_by(grupo = .data[[var]]) %>%
+    summarise(
+      n = dplyr::n(),
+      media = round(mean(tempo, na.rm = TRUE), 2),
+      dp = round(sd(tempo, na.rm = TRUE), 2),
+      mediana = round(median(tempo, na.rm = TRUE), 2),
+      q1 = round(quantile(tempo, 0.25, na.rm = TRUE, names = FALSE), 2),
+      q3 = round(quantile(tempo, 0.75, na.rm = TRUE, names = FALSE), 2),
+      .groups = "drop"
+    )
+
+  cat("\nResumo da idade gestacional - KM por ", rotulo, "\n", sep = "")
+  print(resumo)
+  invisible(resumo)
+}
+
 # Ajusta o modelo de sobrevivência estratificado por sexo
 km_sexo <- survfit(Surv(tempo, status_evento) ~ sexo, data = dados_eda_clean)
 
@@ -531,6 +550,7 @@ grafico_km_sexo <- ggsurvplot(
 )
 
 print(grafico_km_sexo)
+resumo_tempo_km(dados_eda_clean, "sexo", "sexo")
 
 # png("km_obitos_sexo.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_sexo)
@@ -559,6 +579,7 @@ grafico_km_esc <- ggsurvplot(
   ggtheme = theme_minimal()
 )
 print(grafico_km_esc)
+resumo_tempo_km(dados_eda_clean, "escmae2010", "escolaridade materna")
 
 # png("km_obitos_escolaridade.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_esc)
@@ -587,6 +608,7 @@ grafico_km_grav <- ggsurvplot(
   ggtheme = theme_minimal()
 )
 print(grafico_km_grav)
+resumo_tempo_km(dados_eda_clean, "gravidez", "tipo de gravidez")
 
 # png("km_obitos_gravidez.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_grav)
@@ -615,6 +637,7 @@ grafico_km_parto <- ggsurvplot(
   ggtheme = theme_minimal()
 )
 print(grafico_km_parto)
+resumo_tempo_km(dados_eda_clean, "parto", "tipo de parto")
 
 # png("km_obitos_parto.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_parto)
@@ -643,6 +666,7 @@ grafico_km_loc <- ggsurvplot(
   ggtheme = theme_minimal()
 )
 print(grafico_km_loc)
+resumo_tempo_km(dados_eda_clean, "lococornasc", "local de ocorrência")
 
 # png("km_obitos_lococor.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_loc)
@@ -673,6 +697,7 @@ grafico_km_obito <- ggsurvplot(
   ggtheme    = theme_minimal(base_size = 12)
 )
 print(grafico_km_obito)
+resumo_tempo_km(dados_eda_clean, "obitoparto", "momento do óbito em relação ao parto")
 
 png("km_obitos_obitoparto.png", units="in", width=7.5, height=4, res=112)
 print(grafico_km_obito)
@@ -701,6 +726,7 @@ grafico_km_idade <- ggsurvplot(
   ggtheme = theme_minimal()
 )
 print(grafico_km_idade)
+resumo_tempo_km(dados_eda_clean, "idademae_categorico", "faixa etária materna")
 
 # png("km_obitos_idademae.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_idade)
@@ -729,6 +755,7 @@ grafico_km_peso <- ggsurvplot(
   ggtheme = theme_minimal()
 )
 print(grafico_km_peso)
+resumo_tempo_km(dados_eda_clean, "peso_categorico", "faixa de peso ao nascer")
 
 # png("km_obitos_peso.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_peso)
@@ -757,6 +784,7 @@ grafico_km_filhos_vivos <- ggsurvplot(
   ggtheme = theme_minimal()
 )
 print(grafico_km_filhos_vivos)
+resumo_tempo_km(dados_eda_clean, "qtdfilvivo_categorico", "presença de filhos vivos previamente")
 
 # png("km_obitos_qtfilhosvivos.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_filhos_vivos)
@@ -785,6 +813,7 @@ grafico_km_filhos_mortos <- ggsurvplot(
   ggtheme = theme_minimal()
 )
 print(grafico_km_filhos_mortos)
+resumo_tempo_km(dados_eda_clean, "qtdfilmort_categorico", "presença de filhos mortos previamente")
 
 # png("km_obitos_qtfilhosmortos.png", units="in", width=6, height=4, res=300)
 # print(grafico_km_filhos_mortos)

@@ -1,0 +1,43 @@
+"variavel","desfecho","nivel","n","percentual"
+"idademae_categorico","Óbito fetal","20–34",2134,65.3398652786283
+"idademae_categorico","Óbito fetal","35+",817,25.0153092467851
+"idademae_categorico","Óbito fetal","<20",315,9.64482547458665
+"idademae_categorico","Nascimento vivo","20–34",342235,70.4300278645544
+"idademae_categorico","Nascimento vivo","35+",103873,21.3764760599438
+"idademae_categorico","Nascimento vivo","<20",39814,8.19349607550183
+"sexo","Óbito fetal","Feminino",1528,46.7850581751378
+"sexo","Óbito fetal","Masculino",1738,53.2149418248622
+"sexo","Nascimento vivo","Feminino",237903,48.9590921999827
+"sexo","Nascimento vivo","Masculino",248019,51.0409078000173
+"escmae2010","Óbito fetal","Alta escolaridade",673,20.6062461726883
+"escmae2010","Óbito fetal","Baixa escolaridade",688,21.0655235762401
+"escmae2010","Óbito fetal","Média escolaridade",1905,58.3282302510716
+"escmae2010","Nascimento vivo","Alta escolaridade",143246,29.4792168290384
+"escmae2010","Nascimento vivo","Baixa escolaridade",55882,11.5001996205152
+"escmae2010","Nascimento vivo","Média escolaridade",286794,59.0205835504464
+"qtdfilvivo_categorico","Óbito fetal","Não",1497,45.8358848744642
+"qtdfilvivo_categorico","Óbito fetal","Sim",1769,54.1641151255358
+"qtdfilvivo_categorico","Nascimento vivo","Não",216635,44.5822580578776
+"qtdfilvivo_categorico","Nascimento vivo","Sim",269287,55.4177419421224
+"qtdfilmort_categorico","Óbito fetal","Não",1929,59.0630740967544
+"qtdfilmort_categorico","Óbito fetal","Sim",1337,40.9369259032456
+"qtdfilmort_categorico","Nascimento vivo","Não",382064,78.6266108552401
+"qtdfilmort_categorico","Nascimento vivo","Sim",103858,21.3733891447599
+"gravidez","Óbito fetal","Múltipla",247,7.56276791181874
+"gravidez","Óbito fetal","Única",3019,92.4372320881813
+"gravidez","Nascimento vivo","Múltipla",12876,2.64980799387556
+"gravidez","Nascimento vivo","Única",473046,97.3501920061244
+"parto","Óbito fetal","Cesáreo",956,29.2712798530312
+"parto","Óbito fetal","Vaginal",2310,70.7287201469688
+"parto","Nascimento vivo","Cesáreo",296562,61.030782718214
+"parto","Nascimento vivo","Vaginal",189360,38.969217281786
+"peso_categorico","Óbito fetal","2500g-3999g",511,15.6460502143295
+"peso_categorico","Óbito fetal","4000g+",35,1.07164727495407
+"peso_categorico","Óbito fetal","<2500g",2720,83.2823025107165
+"peso_categorico","Nascimento vivo","2500g-3999g",420310,86.4974213968497
+"peso_categorico","Nascimento vivo","4000g+",17393,3.57938105292619
+"peso_categorico","Nascimento vivo","<2500g",48219,9.92319755022411
+"lococornasc","Óbito fetal","Hospital",3183,97.4586650336803
+"lococornasc","Óbito fetal","Outros",83,2.54133496631966
+"lococornasc","Nascimento vivo","Hospital",483632,99.5287309485885
+"lococornasc","Nascimento vivo","Outros",2290,0.471269051411543

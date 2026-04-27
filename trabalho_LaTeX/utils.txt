@@ -1,0 +1,8 @@
+Compila e gera PDF LaTeX:
+compilar_e_abrir_dissertacao()
+
+Apenas compila:
+compilar_dissertacao()
+
+Apenas abre:
+abrir_dissertacao_pdf()

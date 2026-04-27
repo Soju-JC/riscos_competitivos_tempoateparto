@@ -1,0 +1,2456 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link  rel="stylesheet" href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/base_style-BxRs1iOp.css" />
+<script type="module" crossorigin="" src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/base_style-D-jH62-1.js"></script>
+
+  <link  rel="stylesheet" href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/article_style-B67IZFds.css" />
+<link  rel="stylesheet" href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/style-D77LS1kY.css" />
+<script type="module" crossorigin="" src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/article_style-CTAd1LmM.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Introduction to the Analysis of Survival Data in the Presence of Competing Risks - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="4F6D7D509EF4BE43117D50002058D44B.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="lwwopen">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4741409/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="Circulation">
+<meta name="citation_title" content="Introduction to the Analysis of Survival Data in the Presence of Competing Risks">
+<meta name="citation_author" content="Peter C Austin">
+<meta name="citation_author_institution" content="From Institute for Clinical Evaluative Sciences, Toronto, Ontario, Canada (P.C.A., D.S.L.); Institute of Health Management, Policy and Evaluation, University of Toronto, Ontario, Canada (P.C.A., D.S.L.); Schulich Heart Research Program, Sunnybrook Research Institute, Toronto, Ontario, Canada (P.C.A.); Department of Medicine, University of Toronto, Ontario, Canada (D.S.L.); Peter Munk Cardiac Center, Department of Medicine, and the Joint Department of Medical Imaging, University Health Network, Toronto, Ontario, Canada (D.S.L.); Department of Biostatistics, University of North Carolina, Chapel Hill, NC (J.P.F.); and Department of Statistics &amp; Operations Research, University of North Carolina, Chapel Hill (J.P.F.).">
+<meta name="citation_author" content="Douglas S Lee">
+<meta name="citation_author_institution" content="From Institute for Clinical Evaluative Sciences, Toronto, Ontario, Canada (P.C.A., D.S.L.); Institute of Health Management, Policy and Evaluation, University of Toronto, Ontario, Canada (P.C.A., D.S.L.); Schulich Heart Research Program, Sunnybrook Research Institute, Toronto, Ontario, Canada (P.C.A.); Department of Medicine, University of Toronto, Ontario, Canada (D.S.L.); Peter Munk Cardiac Center, Department of Medicine, and the Joint Department of Medical Imaging, University Health Network, Toronto, Ontario, Canada (D.S.L.); Department of Biostatistics, University of North Carolina, Chapel Hill, NC (J.P.F.); and Department of Statistics &amp; Operations Research, University of North Carolina, Chapel Hill (J.P.F.).">
+<meta name="citation_author" content="Jason P Fine">
+<meta name="citation_author_institution" content="From Institute for Clinical Evaluative Sciences, Toronto, Ontario, Canada (P.C.A., D.S.L.); Institute of Health Management, Policy and Evaluation, University of Toronto, Ontario, Canada (P.C.A., D.S.L.); Schulich Heart Research Program, Sunnybrook Research Institute, Toronto, Ontario, Canada (P.C.A.); Department of Medicine, University of Toronto, Ontario, Canada (D.S.L.); Peter Munk Cardiac Center, Department of Medicine, and the Joint Department of Medical Imaging, University Health Network, Toronto, Ontario, Canada (D.S.L.); Department of Biostatistics, University of North Carolina, Chapel Hill, NC (J.P.F.); and Department of Statistics &amp; Operations Research, University of North Carolina, Chapel Hill (J.P.F.).">
+<meta name="citation_publication_date" content="2016 Feb 8">
+<meta name="citation_volume" content="133">
+<meta name="citation_issue" content="6">
+<meta name="citation_firstpage" content="601">
+<meta name="citation_doi" content="10.1161/CIRCULATIONAHA.115.017719">
+<meta name="citation_pmid" content="26858290">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC4741409/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC4741409/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC4741409/pdf/cir-133-601.pdf">
+<meta name="description" content="Supplemental Digital Content is available in the text. Keywords: cumulative incidence function; data interpretation, statistical; incidence; models, statistical; proportional hazards models; risk assessment; survival analysis">
+<meta name="og:title" content="Introduction to the Analysis of Survival Data in the Presence of Competing Risks">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="Supplemental Digital Content is available in the text. Keywords: cumulative incidence function; data interpretation, statistical; incidence; models, statistical; proportional hazards models; risk assessment; survival analysis">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC4741409/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <img
+        src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/search.svg"
+        class="usa-icon "
+        aria-hidden="true"
+        
+        
+    />
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <img
+        src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/person.svg"
+        class="usa-icon "
+        aria-hidden="true"
+        
+        
+    />
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <img
+        src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/expand_less.svg"
+        class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden"
+        aria-hidden="true"
+        data-login-dropdown-up-arrow
+        
+    />
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <img
+        src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/expand_more.svg"
+        class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden"
+        aria-hidden="true"
+        data-login-dropdown-down-arrow
+        
+    />
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/search.svg" alt="PMC search open icon" aria-hidden="true" class="usa-icon usa-icon--size-4 pmc-icon__open" />
+                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/close.svg" alt="PMC search close ison" aria-hidden="true" class="usa-icon usa-icon--size-4 pmc-icon__close" />
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="4741409">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/more_vert.svg" alt="Open resources icon" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.1161/CIRCULATIONAHA.115.017719"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/launch.svg" alt="View on publisher site icon" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/cir-133-601.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+
+                                 <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/file_download.svg" alt="Download PDF icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC4741409%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/action-bookmark-full.svg" alt="Collections icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link usa-icon--bookmark-full" />
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/action-bookmark-empty.svg" alt="Collections icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link usa-icon--bookmark-empty" />
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/4741409/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/4741409/export/"
+                        >
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/format_quote.svg" alt="Cite icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/share.svg" alt="Show article permalink icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link" />
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC4741409/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/content_copy.svg" alt="Copy icon" aria-hidden="true" class="usa-icon usa-icon--white" />
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/list.svg" alt="Open article navigation icon" aria-hidden="true" class="usa-icon usa-icon--size-4 usa-icon--link" />
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-lwwopen.png" alt="Lippincott Open Access logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to Lippincott Open Access" title="Link to Lippincott Open Access" shape="default" href="https://doi.org/10.1161/CIRCULATIONAHA.115.017719" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">Circulation</button></div>. 2016 Feb 8;133(6):601–609. doi: <a href="https://doi.org/10.1161/CIRCULATIONAHA.115.017719" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.1161/CIRCULATIONAHA.115.017719</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href='https://pmc.ncbi.nlm.nih.gov/search/?term="Circulation"[jour]' class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href='https://pubmed.ncbi.nlm.nih.gov/?term="Circulation"[jour]' lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href='https://www.ncbi.nlm.nih.gov/nlmcatalog?term="Circulation"[Title%20Abbreviation]' class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href='?term="Circulation"[jour]' class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Introduction to the Analysis of Survival Data in the Presence of Competing Risks</h1></hgroup><div class="cg p">
+<a href='https://pubmed.ncbi.nlm.nih.gov/?term="Austin%20PC"[Author]' class="usa-link" aria-describedby="id1"><span class="name western">Peter C Austin</span></a><div hidden="hidden" id="id1">
+<h3>
+<span class="name western">Peter C Austin</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>1</sup>From Institute for Clinical Evaluative Sciences, Toronto, Ontario, Canada (P.C.A., D.S.L.); Institute of Health Management, Policy and Evaluation, University of Toronto, Ontario, Canada (P.C.A., D.S.L.); Schulich Heart Research Program, Sunnybrook Research Institute, Toronto, Ontario, Canada (P.C.A.); Department of Medicine, University of Toronto, Ontario, Canada (D.S.L.); Peter Munk Cardiac Center, Department of Medicine, and the Joint Department of Medical Imaging, University Health Network, Toronto, Ontario, Canada (D.S.L.); Department of Biostatistics, University of North Carolina, Chapel Hill, NC (J.P.F.); and Department of Statistics &amp; Operations Research, University of North Carolina, Chapel Hill (J.P.F.).</div>
+<div class="p">Find articles by <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Austin%20PC"[Author]' class="usa-link"><span class="name western">Peter C Austin</span></a>
+</div>
+</div>
+<sup>1,</sup><sup>✉</sup>, <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Lee%20DS"[Author]' class="usa-link" aria-describedby="id2"><span class="name western">Douglas S Lee</span></a><div hidden="hidden" id="id2">
+<h3>
+<span class="name western">Douglas S Lee</span>, <span class="degrees">MD, PhD</span>
+</h3>
+<div class="p">
+<sup>1</sup>From Institute for Clinical Evaluative Sciences, Toronto, Ontario, Canada (P.C.A., D.S.L.); Institute of Health Management, Policy and Evaluation, University of Toronto, Ontario, Canada (P.C.A., D.S.L.); Schulich Heart Research Program, Sunnybrook Research Institute, Toronto, Ontario, Canada (P.C.A.); Department of Medicine, University of Toronto, Ontario, Canada (D.S.L.); Peter Munk Cardiac Center, Department of Medicine, and the Joint Department of Medical Imaging, University Health Network, Toronto, Ontario, Canada (D.S.L.); Department of Biostatistics, University of North Carolina, Chapel Hill, NC (J.P.F.); and Department of Statistics &amp; Operations Research, University of North Carolina, Chapel Hill (J.P.F.).</div>
+<div class="p">Find articles by <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Lee%20DS"[Author]' class="usa-link"><span class="name western">Douglas S Lee</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Fine%20JP"[Author]' class="usa-link" aria-describedby="id3"><span class="name western">Jason P Fine</span></a><div hidden="hidden" id="id3">
+<h3>
+<span class="name western">Jason P Fine</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>1</sup>From Institute for Clinical Evaluative Sciences, Toronto, Ontario, Canada (P.C.A., D.S.L.); Institute of Health Management, Policy and Evaluation, University of Toronto, Ontario, Canada (P.C.A., D.S.L.); Schulich Heart Research Program, Sunnybrook Research Institute, Toronto, Ontario, Canada (P.C.A.); Department of Medicine, University of Toronto, Ontario, Canada (D.S.L.); Peter Munk Cardiac Center, Department of Medicine, and the Joint Department of Medical Imaging, University Health Network, Toronto, Ontario, Canada (D.S.L.); Department of Biostatistics, University of North Carolina, Chapel Hill, NC (J.P.F.); and Department of Statistics &amp; Operations Research, University of North Carolina, Chapel Hill (J.P.F.).</div>
+<div class="p">Find articles by <a href='https://pubmed.ncbi.nlm.nih.gov/?term="Fine%20JP"[Author]' class="usa-link"><span class="name western">Jason P Fine</span></a>
+</div>
+</div>
+<sup>1</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="aff1">
+<sup>1</sup>From Institute for Clinical Evaluative Sciences, Toronto, Ontario, Canada (P.C.A., D.S.L.); Institute of Health Management, Policy and Evaluation, University of Toronto, Ontario, Canada (P.C.A., D.S.L.); Schulich Heart Research Program, Sunnybrook Research Institute, Toronto, Ontario, Canada (P.C.A.); Department of Medicine, University of Toronto, Ontario, Canada (D.S.L.); Peter Munk Cardiac Center, Department of Medicine, and the Joint Department of Medical Imaging, University Health Network, Toronto, Ontario, Canada (D.S.L.); Department of Biostatistics, University of North Carolina, Chapel Hill, NC (J.P.F.); and Department of Statistics &amp; Operations Research, University of North Carolina, Chapel Hill (J.P.F.).</div>
+<div class="author-notes p">
+<div class="fn" id="c1">
+<sup>✉</sup><p class="display-inline">Correspondence to Peter Austin, PhD, Institute for Clinical Evaluative Sciences, G106, 2075 Bayview Ave, Toronto, ON, M4N 3M5 Canada. E-mail <span>peter.austin@ices.on.ca</span></p>
+</div>
+<div class="fn" id="_fncrsp93pmc__">
+<sup>✉</sup><p class="display-inline">Corresponding author.</p>
+</div>
+</div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Issue date 2016 Feb 9.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>© 2016 The Authors.</div>
+<p><em>Circulation</em> is published on behalf of the American Heart Association, Inc., by Wolters Kluwer. This is an open access article under the terms of the <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Creative Commons Attribution Non-Commercial-NoDervis</a> License, which permits use, distribution, and reproduction in any medium, provided that the original work is properly cited, the use is noncommercial, and no modifications or adaptations are made.</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC4741409  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/26858290/" class="usa-link">26858290</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abstract1"><hr class="headless">
+<p>Supplemental Digital Content is available in the text.</p>
+<section id="kwd-group1" class="kwd-group"><p><strong>Keywords:</strong> cumulative incidence function; data interpretation, statistical; incidence; models, statistical; proportional hazards models; risk assessment; survival analysis</p></section></section><section class="abstract" id="abstract2"><h2>Abstract</h2>
+<p>Competing risks occur frequently in the analysis of survival data. A competing risk is an event whose occurrence precludes the occurrence of the primary event of interest. In a study examining time to death attributable to cardiovascular causes, death attributable to noncardiovascular causes is a competing risk. When estimating the crude incidence of outcomes, analysts should use the cumulative incidence function, rather than the complement of the Kaplan-Meier survival function. The use of the Kaplan-Meier survival function results in estimates of incidence that are biased upward, regardless of whether the competing events are independent of one another. When fitting regression models in the presence of competing risks, researchers can choose from 2 different families of models: modeling the effect of covariates on the cause-specific hazard of the outcome or modeling the effect of covariates on the cumulative incidence function. The former allows one to estimate the effect of the covariates on the rate of occurrence of the outcome in those subjects who are currently event free. The latter allows one to estimate the effect of covariates on the absolute risk of the outcome over time. The former family of models may be better suited for addressing etiologic questions, whereas the latter model may be better suited for estimating a patient’s clinical prognosis. We illustrate the application of these methods by examining cause-specific mortality in patients hospitalized with heart failure. Statistical software code in both R and SAS is provided.</p></section><hr class="headless">
+<p>Cardiovascular research often focuses on outcomes that are defined as the time to the occurrence of an outcome of interest. Common examples include time to death attributable to any cause, time to cause-specific death (eg, death attributable to cardiovascular causes), and time to the first of any major adverse cardiac event (MACE; eg, cardiovascular death or acute myocardial infarction). Less common examples include time to shock or appropriate therapy in patients undergoing implantable cardiac defibrillator implantation or time to heart transplant in patients on a transplant waiting list. We use the term survival data to refer to data in which the outcome variable denotes the time to the occurrence of the event of interest. Others refer to such data as time-to-event data or event history data. The Kaplan-Meier method for estimating survival functions and the Cox proportional hazards model for estimating the effects of covariates on the hazard of the occurrence of the event are commonly used statistical methods for the analysis of survival data. We refer the interested reader elsewhere for further background on these methods and others for the analysis of survival data.<sup><a href="#R1" class="usa-link" aria-describedby="R1">1</a>–<a href="#R7" class="usa-link" aria-describedby="R7">7</a></sup></p>
+<p>A distinctive feature of survival data is the concept of censoring. If the event of interest is death, then the time of the event is censored for those subjects who are still alive at the end of the study. This means that the statistical analysis must proceed without knowledge of when the subject will die. All that is known about the timing of their death is that it is after the time at which the study ended. More generally, in a follow-up study, subjects who drop out are censored, because they are typically lost to follow-up and the time of the occurrence of their event is unknown. The event time is unobserved for censored subjects: all that is known is that their event time occurred after the time at which they were censored. An implicit concept in the definition of censoring is that, if the study had been prolonged (or if subjects had not dropped out), eventually the outcome of interest would have been observed to occur for all subjects. Conventional statistical methods for the analysis of survival data make the important assumption of independent or noninformative censoring.<sup><a href="#R1" class="usa-link" aria-describedby="R1">1</a>,<a href="#R3" class="usa-link" aria-describedby="R3">3</a>,<a href="#R6" class="usa-link" aria-describedby="R6">6</a></sup> This means that, at a given point in time, subjects who remain under follow-up have the same future risk for the occurrence of the event as those subjects no longer being followed (either because of censoring or study dropout), as if losses to follow-up were random and thus noninformative.</p>
+<p>A competing risk is an event whose occurrence precludes the occurrence of the primary event of interest. For instance, in a study in which the primary outcome was time to death attributable to a cardiovascular cause, death attributable to a noncardiovascular cause serves as a competing event. A subject who dies of cancer is no longer at risk of death attributable to cardiovascular causes. Regardless of how long the duration of follow-up is extended, a subject will not be observed to die of cardiovascular causes once he or she has died of cancer. Competing risks can also be present in studies in which the different event types include nonfatal outcomes when one is interested in which event type occurred first. Thus, one may have a study with 3 types of events: diagnosis of heart disease, diagnosis of cancer, and death. Each type of event serves as a competing risk, because a diagnosis of cancer before a diagnosis of heart disease or of death precludes either of these latter 2 events from happening first.</p>
+<p>Conventional statistical methods for the analysis of survival data assume that competing risks are absent. Two competing risks are said to be independent if information about a subject’s risk of experiencing 1 type of event provides no information about the subject’s risk of experiencing the other type of event. The methods that we describe in this tutorial apply equally to settings in which competing risks are independent of one another and to settings in which competing risks are not independent of one another. In biomedical applications, the biology often suggests at least some dependence between competing risks, which in many cases may be quite strong. Accordingly, independent competing risks may be relatively rare in biomedical applications.</p>
+<p>When analyzing survival data in which competing risks are present, analysts frequently censor subjects when a competing event occurs. Thus, when the outcome is time to death attributable to cardiovascular causes, an analyst may consider a subject as censored once that subject dies of noncardiovascular causes. However, censoring subjects at the time of death attributable to noncardiovascular causes may be problematic. First, it may violate the assumption of noninformative censoring: it may be unreasonable to assume that subjects who died of noncardiovascular causes (and were thus treated as censored) can be represented by those subjects who remained alive and had not yet died of any cause. Second, even when the competing events are independent, censoring subjects at the time of the occurrence of a competing event may lead to incorrect conclusions because the event probability being estimated is interpreted as occurring in a setting where the censoring (eg, the competing events) does not occur. In the cardiovascular example described above, this corresponds to a setting where death from noncardiovascular causes is not a possibility. Although such probabilities may be of theoretical interest, they are of questionable relevance in many practical applications, and generally lead to overestimation of the cumulative incidence of an event in the presence of the competing events.<sup><a href="#R8" class="usa-link" aria-describedby="R8">8</a>–<a href="#R11" class="usa-link" aria-describedby="R11">11</a></sup></p>
+<p>The objective of this tutorial is to introduce readers to statistical methods for the analysis of survival data that account for competing risks. This article is structured as follows. In Statistical Methods for the Analysis of Survival Data in the Presence of Competing Risks, we introduce statistical concepts and methods for the analysis of survival data in the presence of competing events. In Case Study, we illustrate the application and interpretation of these methods by using a data set of subjects hospitalized with heart failure. Finally, in Discussion, we summarize our tutorial and place it in the context of the existing literature.</p>
+<section id="sec1"><h2 class="pmc_sec_title">Statistical Methods for the Analysis of Survival Data in the Presence of Competing Risks</h2>
+<p>In this section we compare and contrast conventional statistical methods for survival analysis with statistical methods that account for competing risks.</p>
+<section id="sec2"><h3 class="pmc_sec_title">Estimating Crude Incidence</h3>
+<p>We assume that there is a well-defined baseline time in the cohort and that <em>T</em> denotes the time from baseline time until the occurrence of the event of interest. In the absence of competing risks, the survival function, <em>S</em>(<em>t</em>), describes the distribution of event times: <em>S</em>(<em>t</em>) = Pr(<em>T</em>
+<em>t</em>). One minus the survival function (ie, the complement of the survival function), <em>F</em>(<em>t</em>) = 1 − <em>S</em>(<em>t</em>) = Pr(<em>T</em> ≤ <em>t</em>) describes the incidence of the event over the duration of follow-up. Two key properties of the survival function are that <em>S</em>(0) = 1 (ie, at the beginning of the study, the event has not yet occurred for any subjects) and <img class="inline" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/04c06240b526/cir-133-601-i001.jpg" loading="lazy" alt="Inline graphic"> (ie, eventually the event of interest occurs for all subjects). In practice, the latter assumption may not be required, because the probability of the event over a restricted follow-up period may be &lt;1.</p>
+<p>Estimating the incidence of an event as a function of follow-up time provides important information on the absolute risk of an event. In the absence of competing risks, the Kaplan-Meier estimate of the survival function is frequently used for estimating the survival function. One minus the Kaplan-Meier estimate of the survival function provides an estimate of the cumulative incidence of events over time. In the case study that follows, we examine the incidence of cardiovascular death in patients hospitalized with heart failure. When the complement of the Kaplan-Meier function was used, the estimated incidence of cardiovascular death within 5 years of hospital admission was 43.0%. However, using the Kaplan-Meier estimate of the survival function to estimate the incidence function in the presence of competing risks generally results in upward biases in the estimation of the incidence function.<sup><a href="#R9" class="usa-link" aria-describedby="R9">9</a>,<a href="#R10" class="usa-link" aria-describedby="R10">10</a>,<a href="#R12" class="usa-link" aria-describedby="R12">12</a></sup> In particular, the sum of the Kaplan-Meier estimates of the incidence of each individual outcome will exceed the Kaplan-Meier estimate of the incidence of the composite outcome defined as any of the event types. Even when the competing events are independent, the Kaplan-Meier estimator yields biases in the probability of the event of interest. The problem here is that the Kaplan-Meier estimator estimates the probability of the event of interest in the absence of competing risks, which is generally larger than that in the presence of competing risks. Furthermore, the hypothetical population in which competing risks do not exist may not be the population of greatest interest for clinical and/or policy making,<sup><a href="#R13" class="usa-link" aria-describedby="R13">13</a></sup> as in the cardiovascular setting where noncardiovascular death may be an important consideration.</p>
+<p>The Cumulative Incidence Function (CIF), as distinct from 1 – <em>S</em>(<em>t</em>), allows for estimation of the incidence of the occurrence of an event while taking competing risk into account. This allows one to estimate incidence in a population where all competing events must be accounted for in clinical decision making. The cumulative incidence function for the <em>k</em>th cause is defined as: CIF<sub>k</sub>(<em>t</em>) = Pr(<em>T</em> ≤ <em>t</em>,<em>D</em> = <em>k</em>), where <em>D</em> is a variable denoting the type of event that occurred. A key point is that, in the competing risks setting, only 1 event type can occur, such that the occurrence of 1 event precludes the subsequent occurrence of other event types. The function CIF<sub>k</sub>(<em>t</em>) denotes the probability of experiencing the <em>k</em>th event before time t and before the occurrence of a different type of event. The CIF has the desirable property that the sum of the CIF estimates of the incidence of each of the individual outcomes will equal the CIF estimates of the incidence of the composite outcome consisting of all of the competing events. Unlike the survival function in the absence of competing risks, CIF<sub>k</sub>(<em>t</em>) will not necessarily approach unity as time becomes large, because of the occurrence of competing events that preclude the occurrence of events of type <em>k</em>. In the case study that follows, when using the CIF, the estimated incidence of cardiovascular death within 5 years of hospital admission was 36.8%. This estimate was 6.2% lower than the estimate obtained using the complement of the Kaplan-Meier function. This illustrates the upward bias that can be observed when naively using Kaplan-Meier estimate in the presence of competing risks.</p></section><section id="sec3"><h3 class="pmc_sec_title">Hazard Function Regression</h3>
+<p>A key concept in survival analysis is that of the hazard function. In the absence of competing risks, the hazard function is defined as</p>
+<table class="disp-formula p" id="M1"><tr><td class="formula"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/3e727decec64/cir-133-601-g001.jpg" loading="lazy" height="62" width="397" alt="graphic file with name cir-133-601-g001.jpg"></td></tr></table>
+<p>The hazard function, which is a function of time, describes the instantaneous rate of occurrence of the event of interest in subjects who are still at risk of the event. In a setting in which the outcome was all-cause mortality, the hazard function at a given point in time would describe the instantaneous rate of death in subjects who were alive at that point in time. The Cox proportional hazards regression model relates the hazard function to a set of covariates.<sup><a href="#R2" class="usa-link" aria-describedby="R2">2</a></sup> In the absence of competing events, the Cox proportional hazards regression model can be written as <img class="inline" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/bd3f9acb640f/cir-133-601-i002.jpg" loading="lazy" alt="Inline graphic">, where <img class="inline" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/e9e16a1046c2/cir-133-601-i003.jpg" loading="lazy" alt="Inline graphic">denotes the baseline hazard function (ie, the hazard function for a subject whose covariates are all set equal to zero), <strong>X</strong> denotes a set of explanatory variables, and <strong>β</strong> denotes the associated regression parameters. The model can also be written in multiplicative format: <img class="inline" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/119849654908/cir-133-601-i004.jpg" loading="lazy" alt="Inline graphic">. The Cox model relates the covariates to the hazard function of the outcome of interest (and not directly to the survival times themselves). The covariates have a relative effect on the hazard function because of the use of the logarithmic transformation. The regression coefficients are interpreted as log-hazard ratios. The hazard ratio is equal to the exponential of the associated regression coefficient. The hazard ratio denotes the relative change in the hazard function associated with a 1-unit increase in the predictor variable. Although the regression coefficients from the Cox model describe the relative effect of the covariates on the hazard of the occurrence of the outcome, the following relationship also holds in the absence of competing risks: <img class="inline" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/2ad30a403682/cir-133-601-i005.jpg" loading="lazy" alt="Inline graphic">, where <em>S</em>(<em>t</em>) denotes the survival function for an individual whose set of covariates is equal to <em>X</em>, and <em>S</em><sub>0</sub>(<em>t</em>)denotes the baseline survival function (ie, the survival function for a subject whose covariates are all equal to zero). Thus, the relative effect of a given covariate on the hazard of the outcome is equal to the relative effect of that covariate on the logarithm of the survival function. Therefore, in the absence of competing risks, making inferences about the effect of a covariate on the hazard function permits one to make equivalent inferences about the effect of that covariate on prognosis or survival. This direct correspondence between the hazard function and incidence in the absence of competing risks has allowed authors to be imprecise in their language when interpreting the fitted Cox regression model. Authors have been able to conclude that a given risk factor or variable increased the risk of an event, without specifying whether risk denoted the hazard of an event (ie, the rate of the occurrence of the event in those still at risk of the event) or the incidence of the event (ie, the probability of the occurrence of the event).</p>
+<p>Competing risks implies that a subject can experience one of a set of different events or outcomes. In this case, 2 different types of hazard functions are of interest: the cause-specific hazard function and the subdistribution hazard function. The former function<sup><a href="#R9" class="usa-link" aria-describedby="R9">9</a>,<a href="#R10" class="usa-link" aria-describedby="R10">10</a></sup> is defined as</p>
+<table class="disp-formula p" id="M2"><tr><td class="formula"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/b71cb9bf3639/cir-133-601-g002.jpg" loading="lazy" height="62" width="481" alt="graphic file with name cir-133-601-g002.jpg"></td></tr></table>
+<p>The cause-specific hazard function denotes the instantaneous rate of occurrence of the <em>k</em>th event in subjects who are currently event free (ie, in subjects who have not yet experienced any of the different types of events). If one were considering 2 types of events, death attributable to cardiovascular causes and death attributable to noncardiovascular causes, then the cause-specific hazard of cardiovascular death denotes the instantaneous rate of cardiovascular death in subjects who have not yet experienced either event (ie, in subjects who are still alive). The subdistribution hazard function, introduced by Fine and Gray,<sup><a href="#R9" class="usa-link" aria-describedby="R9">9</a>,<a href="#R10" class="usa-link" aria-describedby="R10">10</a>,<a href="#R14" class="usa-link" aria-describedby="R14">14</a></sup> is defined as</p>
+<table class="disp-formula p" id="M3"><tr><td class="formula"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/b06c548ccc10/cir-133-601-g003.jpg" loading="lazy" height="59" width="645" alt="graphic file with name cir-133-601-g003.jpg"></td></tr></table>
+<p>It denotes the instantaneous risk of failure from the <em>k</em>th event in subjects who have not yet experienced an event of type <em>k</em>. Note that this risk set includes those who are currently event free as well as those who have previously experienced a competing event. This differs from the risk set for the cause-specific hazard function, which only includes those who are currently event free. Using the same example as above, the subdistribution hazard of cardiovascular death denotes the instantaneous rate of cardiovascular death in subjects who are still alive (ie, who have not yet experienced either event) or who have previously died of noncardiovascular causes. There is a distinct cause-specific hazard function for each of the distinct types of events and a distinct subdistribution hazard function for each of the distinct types of events.</p>
+<p>In settings in which competing risks are present, 2 different hazard regression models are available: modeling the cause-specific hazard and modeling the subdistribution hazard function. Both models account for competing risks, but do so by modeling the effect of covariates on different hazard functions. Consequently, each model has its unique interpretation. We refer to these 2 models as cause-specific hazard models and subdistribution hazard models. The second model has also been described as a CIF regression model. The latter name makes explicit the link between the subdistribution hazard and the effect on the incidence of an event. That is, one may directly predict the cumulative incidence for an event of interest using the usual relationship between the hazard and the incidence function under the proportional hazards model. Thus, the subdistribution hazard model allows one to estimate the effect of covariates on the cumulative incidence function for the event of interest.</p>
+<p>Lau et al suggest that cause-specific hazard models are “better suited for studying the etiology of diseases, where the [subdistribution hazard model] has use in predicting an individual’s risk.”<sup><a href="#R9" class="usa-link" aria-describedby="R9">9</a>(p245)</sup> Similarly, Koller and colleagues<sup><a href="#R15" class="usa-link" aria-describedby="R15">15</a></sup> suggested that subdistribution hazard-based methods are preferable when the focus is on estimating actual risks and prognosis. This echoes the previous distinction made between interpretation of the incidence rate and the hazard rate. Furthermore, the subdistribution hazard may be of greater interest if one is interested in the overall impact of covariates on the incidence of the outcome of interest, even when predictions of incidence are not of direct interest. These arguments suggest that subdistribution hazards models should be used for developing clinical prediction models and risk-scoring systems for survival outcomes, whereas cause-specific hazard models may be more appropriate for addressing epidemiological questions of etiology. The rationale for this suggestion is that the cause-specific hazard function denotes the instantaneous rate of the primary outcome in those subjects who are currently event free. Thus, a regression coefficient from a cause-specific hazard model can be interpreted as the relative effect of the corresponding covariate on the relative increase in the rate of the occurrence of the primary event in subjects who are currently event free. In contrast to this, clinical prediction models and risk-scoring systems are interested in estimating the absolute incidence of the event of interest. As the subdistribution hazard model allows one to model directly the effect of covariates on the incidence of the primary event after accounting for competing events, it lends itself naturally to risk prediction. The need to carefully consider which model is appropriate to address the research question is illustrated in the case study below, in which the effect of cancer is shown to have a different effect on the subdistribution hazard of cardiac death in comparison with its effect on the cause-specific hazard of cardiac death. Cancer was associated with a substantial decrease in the incidence of cardiac death (subdistribution hazard ratio, 0.82), whereas it had no association with the rate of cardiac death in subjects who were still alive (cause-specific hazard ratio, 0.96). An important point to grasp is that in the presence of competing risks, the simple 1-cause Cox model is inadequate. Instead, researchers must be aware of the different hazard functions that are available in the presence of competing risks and decide which one is best suited to their research objectives.</p></section><section id="sec4"><h3 class="pmc_sec_title">Statistical Software for Competing Risks Analyses</h3>
+<p>CIFs can be estimated in R using the cuminc function in the cmprsk package; in SAS, one can use the %CIF macro; Stata permits estimation of the CIF using the stcurve function. Note that in SAS/STAT 13.1, %CIF is an autocall macro, and thus does not need to be loaded manually by the analyst.</p>
+<p>Cause-specific hazard models can be fit in any statistical software package that permits estimation of the conventional Cox proportional hazards model. One simply treats those subjects who experience a competing event as being censored at the time of the occurrence of the competing event. In R, one can use the coxph function in the survival package, in SAS, one can use PROC PHREG, and in Stata, one can use the stcox function.</p>
+<p>Subdistribution hazard models can be fit in R by using the crr function in the cmprsk package. In SAS, PROC PHREG permits estimation of subdistribution hazard models through the use of the 'eventcode' option in the model statement (in SAS/STAT version 13.1). In Stata, the stcrreg function permits estimation of subdistribution hazard regression models.</p>
+<p>In the case study below, we used the R (version 3.1.2) statistical programming language and the cmprsk package (version 2.2–6) for all of the statistical analyses. R code for estimating the CIFs, the subdistribution hazard models and the cause-specific hazard models is described in Appendix A in the online-only Data Supplement. SAS code for fitting these functions and models is described in Appendix B in the online-only Data Supplement.</p></section></section><section id="sec5"><h2 class="pmc_sec_title">Case Study</h2>
+<section id="sec6"><h3 class="pmc_sec_title">Data Sources</h3>
+<p>The Enhanced Feedback for Effective Cardiac Treatment (EFFECT) Study was designed to assess the effect of public reporting of hospital performance on the quality of care provided to patients with cardiovascular disease in Ontario, Canada.<sup><a href="#R16" class="usa-link" aria-describedby="R16">16</a></sup> We obtained detailed clinical data by retrospective chart review on patients hospitalized with heart failure (HF) between April 1, 1999 and March 31, 2001 (phase 1) and between April 1, 2004 and March 31, 2005 (phase 2) at 103 hospitals in Ontario, Canada. Trained cardiovascular nurse abstractors collected data on patient demographics, vital signs and physical examination at presentation, medical history, and results of laboratory tests. These data sets were linked by using unique, encoded identifiers and they were analyzed at the Institute for Clinical Evaluative Sciences.</p>
+<p>We considered 11 baseline covariates, which make up the EFFECT-HF mortality prediction model: age, systolic blood pressure on admission, respiratory rate on admission, low sodium serum concentration (&lt;136 mEq/L), low serum hemoglobin (&lt;10.0 g/dL), serum urea nitrogen, presence of cerebrovascular disease, presence of dementia, chronic obstructive pulmonary disease, hepatic cirrhosis, and cancer. The initial sample consisted of 18 284 patients hospitalized with HF. We excluded 255 subjects who were on dialysis for end-stage renal failure, because the EFFECT-HF mortality prediction model was not intended for use in these subjects. We excluded an additional 1792 subjects with missing data on continuous covariates in the EFFECT-HF mortality prediction model. This left 16 237 patients for analysis (8521 patients in phase 1 and 7716 patients in phase 2).</p>
+<p>Subjects were linked by using an encoded version of the patient’s Ontario health insurance number to the Vital Statistics database maintained by the Ontario Office of the Registrar General. This database contains information on date of death and cause of death for residents of Ontario. Each subject was followed for 5 years from the date of hospital admission for the occurrence of death. For those subjects who died within 5 years of discharge, the cause of death was noted in the Vital Statistics database. We categorized cause of death as cardiovascular versus noncardiovascular: 10 215 (63%) patients died during the 5 years of follow-up. Of these, 5970 (58%) died of cardiovascular causes, and 4245 (42%) died of noncardiovascular causes.</p></section><section id="sec7"><h3 class="pmc_sec_title">Descriptive Statistical Analyses</h3>
+<p>Descriptive statistics for patients in the study sample are reported in Table <a href="#T1" class="usa-link">1</a>. We summarized continuous variables by using medians and the 25th and 75th percentiles, whereas dichotomous variables were summarized by using frequencies and percentages. Patients who died of cardiovascular causes tended to be older and to have lower systolic blood pressure, increased serum urea nitrogen, a higher prevalence of cerebrovascular diseases, a lower prevalence of cancer, chronic obstructive pulmonary disease, and low serum hemoglobin in comparison with patients who died of noncardiovascular causes.</p>
+<section class="tw xbox font-sm" id="T1"><h4 class="obj_head">Table 1.</h4>
+<div class="caption p"><p>Baseline Characteristics of Patients in the EFFECT-HF Sample</p></div>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/e8448443f03d/cir-133-601-g004.jpg" loading="lazy" height="620" width="1000" alt="graphic file with name cir-133-601-g004.jpg"></p>
+<div class="p text-right font-secondary"><a href="table/T1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section></section><section id="sec8"><h3 class="pmc_sec_title">Crude Incidence of Cardiovascular and Noncardiovascular Death</h3>
+<p>Cumulative incidences of cardiovascular and noncardiovascular death in the overall sample are described in Figure <a href="#F1" class="usa-link">1</a>, along with the incidence of the composite outcome of all-cause mortality. The cumulative incidence of all-cause mortality is equal to the sum of the cumulative incidences of the 2 cause-specific mortalities. Although the cumulative incidence of cardiovascular death exceeded that of noncardiovascular death at each point in time, the incidence of noncardiovascular death was not negligible in this population. A figure similar to Figure <a href="#F1" class="usa-link">1</a> should be presented to estimate cumulative incidence in the presence of competing risk.<sup><a href="#R13" class="usa-link" aria-describedby="R13">13</a></sup></p>
+<figure class="fig xbox font-sm" id="F1"><h4 class="obj_head">Figure 1.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/2089930e0103/cir-133-601-g005.jpg" loading="lazy" height="556" width="800" alt="Figure 1."></p>
+<div class="p text-right font-secondary"><a href="figure/F1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Cumulative incidence functions. CIF indicates cumulative incidence function; and KM, Kaplan–Meier.</p></figcaption></figure><p>In Figure <a href="#F2" class="usa-link">2</a>, 3 additional curves have been added to the cumulative incidence functions described in Figure <a href="#F1" class="usa-link">1</a>: estimates of the incidence of each of the 2 outcomes derived from the complement of the Kaplan-Meier estimate of the survival function, along with the sum of the incidence of each outcome derived from the 2 Kaplan-Meier survival functions. Two observations warrant merit. First, as anticipated, the Kaplan-Meier estimate of incidence of each of the 2 outcomes is larger than the corresponding estimate derived from the CIF. The overestimates of incidence when using the Kaplan-Meier estimates are moderately large for both cardiovascular death and noncardiovascular death. Second, the sum of the 2 Kaplan-Meier estimates of incidence is greater than the estimate of incidence of the composite outcome of all-cause mortality. The estimates described in Figure <a href="#F2" class="usa-link">2</a> illustrate the incorrect estimates of cumulative incidence that can arise when an analyst naïvely uses the Kaplan-Meier survival function to estimate cumulative incidence.</p>
+<figure class="fig xbox font-sm" id="F2"><h4 class="obj_head">Figure 2.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/501e9d43b116/cir-133-601-g006.jpg" loading="lazy" height="556" width="800" alt="Figure 2."></p>
+<div class="p text-right font-secondary"><a href="figure/F2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Cumulative incidence functions and Kaplan–Meier estimates. CIF indicates cumulative incidence function; and KM, Kaplan–Meier.</p></figcaption></figure></section><section id="sec9"><h3 class="pmc_sec_title">Hazard Models for Cardiovascular Death</h3>
+<p>We fit cause-specific and subdistribution hazard models for both cardiovascular death and noncardiovascular death. For each of the 2 causes of death, we regressed the hazard of death on the 11 covariates described above. The estimated hazard ratios, along with their associated confidence intervals, are reported in Table <a href="#T2" class="usa-link">2</a>. It is important to remember that the 2 models have different interpretations when interpreting the regression coefficients from the cause-specific hazard models and the subdistribution hazard models.</p>
+<section class="tw xbox font-sm" id="T2"><h4 class="obj_head">Table 2.</h4>
+<div class="caption p"><p>Hazard Ratios (and 95% Confidence Intervals) From Cause-Specific and Subdistribution Hazard Models for Cardiac and Noncardiac Death</p></div>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/b08205d06062/cir-133-601-g007.jpg" loading="lazy" height="584" width="1200" alt="graphic file with name cir-133-601-g007.jpg"></p>
+<div class="p text-right font-secondary"><a href="table/T2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section><p>A 10-year increase in age increased the relative incidence of cardiac death by 42%, whereas it increased the relative incidence of noncardiac death by 14%. Similarly, a 10-year increase in age increased the cause-specific hazard of cardiac death by 52%, whereas it increased the cause-specific hazard of noncardiac death by 31%. Thus, age had a more pronounced effect on both the incidence and cause-specific hazard of cardiac mortality than on noncardiac mortality. Furthermore, age had a more pronounced effect on the cause-specific hazard of a given outcome than it did on the incidence of the same outcome.</p>
+<p>The presence of cancer had a small and nonsignificant effect on the cause-specific hazard of cardiac death, whereas it increased the cause-specific hazard of noncardiac death by 85%. This illustrates how the apparent reduction in the absolute risk of cardiac death from cancer may be explained via the effect of cancer on noncardiac death.<sup><a href="#R17" class="usa-link" aria-describedby="R17">17</a></sup></p>
+<p>In examining the estimated hazard ratios for the different outcomes and different types of hazard models, one notes that some variables have a qualitatively similar effect on the incidence of cardiac death as on the incidence of noncardiac death. However, other variables have a qualitatively different effect on the incidence of cardiac death in comparison with the effect on the incidence of noncardiac death. Furthermore, some variables have a qualitatively similar effect on the incidence of a given type of death as on the cause-specific hazard for the same type of death. As described elsewhere, the interpretation of these results requires careful consideration of the effects of variables on competing causes of death.<sup><a href="#R17" class="usa-link" aria-describedby="R17">17</a></sup> As an example, a strong and opposing effect of a variable on the cause-specific hazard of a competing event may lead to an indirect effect on the cumulative incidence of the event of interest. To be concrete, a strong prognostic factor for the cause-specific hazard for cardiovascular death might lead to an apparent decrease in the cumulative incidence for noncardiovascular death when such factor has no effect on the cause-specific hazard for noncardiovascular death. This indirect effect of the prognostic factor for cardiovascular death occurs because noncardiovascular death cannot occur in those who die of cardiovascular causes and hence have a decreased risk for that event.</p></section></section><section id="sec10"><h2 class="pmc_sec_title">Discussion</h2>
+<p>The analysis of survival data plays a key role in cardiovascular research. Competing risks are prevalent in much of cardiovascular research. Failure to account correctly for competing events can result in adverse consequences, including overestimation of the probability of the occurrence of the event and mis-estimation of the magnitude of relative effects of covariates on the incidence of the outcome. Koller et al<sup><a href="#R15" class="usa-link" aria-describedby="R15">15</a></sup> found that competing risks were present in a large majority of studies published in a sample of high-impact journals. This suggests that it is crucial that investigators be aware of appropriate methods to account for competing risks when analyzing survival data. We have provided a brief, nontechnical, introduction to statistical methods to account for the presence of competing risks. We refer the interested reader to introductions and reviews of differing levels of statistical depth.<sup><a href="#R8" class="usa-link" aria-describedby="R8">8</a>–<a href="#R13" class="usa-link" aria-describedby="R13">13</a>,<a href="#R15" class="usa-link" aria-describedby="R15">15</a>,17–21</sup> We summarize our recommendations in Table <a href="#T3" class="usa-link">3</a>.</p>
+<section class="tw xbox font-sm" id="T3"><h3 class="obj_head">Table 3.</h3>
+<div class="caption p"><p>Recommendations for Analyzing Competing Risk Survival Data</p></div>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/80c8/4741409/b528ed2526e8/cir-133-601-g008.jpg" loading="lazy" height="510" width="800" alt="graphic file with name cir-133-601-g008.jpg"></p>
+<div class="p text-right font-secondary"><a href="table/T3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section><p>When estimating crude incidence of the outcome of interest, it is inappropriate to use the complement of the Kaplan-Meier survival function, because this will result in an overestimate of the incidence of the outcome of interest when competing risks are present. Instead, authors and analysts are encouraged to use the CIF. Our analyses illustrated the overestimates of the incidence of both cardiac death and noncardiac death that occurred when using the complement of the Kaplan-Meier survival curves to estimate incidence.</p>
+<p>It is important to present results for all causes and for both cause-specific hazard functions and subdistribution hazard functions.<sup><a href="#R17" class="usa-link" aria-describedby="R17">17</a></sup> Such a practice enables a more complete understanding not only of the effects of prognostic factors, but also of the absolute risks of the different outcomes in the study sample. This is critical for decision makers, who may need to consider the risks of all events when making clinical decisions. Someone with high risk of noncardiovascular mortality, but with a low risk of cardiovascular mortality may be treated differently than someone with low risk of noncardiovascular mortality and high risk of cardiovascular mortality. For instance, the latter patient may be an excellent candidate for early cardiovascular revascularization procedures, whereas the former patient may not be a suitable candidate for early revascularization.</p>
+<p>There is a growing awareness of the impact of competing risks when developing prognostic models. Wolbers et al<sup><a href="#R20" class="usa-link" aria-describedby="R20">20</a></sup> compared the performance of a standard Cox survival model with that of a Fine-Gray model for predicting the incidence of coronary heart disease in older women. They found that the standard Cox model overestimated the 10-year risk of coronary heart disease in comparison with the estimate from the Fine-Gray model. They classified 18% of subjects as being high risk based on the conventional Cox model, whereas they classified only 8% of subjects as being high risk when using the Fine-Gray model. They attributed this discrepancy to the increased risk of death attributable to competing risks in this elderly population. This example serves as a constructive warning about the use of inappropriate statistical methods when estimating patient prognosis. We recommend that analysts use the Fine-Gray subdistribution hazard model when the focus is on estimating incidence or predicting prognosis in the presence of competing risks.</p>
+<p>Given the availability of software, analyses of the cumulative incidence function have become increasingly popular and widely reported in recent years. Biases may occur in naïvely estimating the cumulative incidence of the event of interest using the Kaplan-Meier estimator, as well as in naïvely estimating the effects of covariates on the cumulative incidence function via a proportional hazards model for the cause-specific hazard function. The impact of incorrectly treating competing events as censoring events in these analyses has practical importance. In general, the greater the percentage of competing events, the greater the potential for bias in treating competing events as censoring events. Absolute percentages of competing events of &gt;10% merit serious consideration, demanding careful attention to the scientific objectives of the analysis and the appropriate choice of end point and method of analysis.</p>
+<p>In our case study, we showed that a variable can have an effect on the incidence of an outcome that differs from its effect on the cause-specific hazard of the outcome. Such an observation has been made by Lau et al<sup><a href="#R9" class="usa-link" aria-describedby="R9">9</a></sup> previously. This highlights the need to examine the effect of covariates on both the incidences and the cause-specific hazard functions of all event types to develop a complete understanding of the relationships between the covariates and the different competing events. Competing risks entail events that preclude the occurrence of the outcome of interest. In some cases, further clarity may be required when deciding on what constitutes a competing risk before embarking on the analysis. For example, if a subject develops 1 form of heart disease, can he or she subsequently develop a second form of heart disease, or are the 2 conditions mutually exclusive, thus precluding the later second disease? Such clinical questions require resolution in the design phase before conducting the statistical analysis.</p>
+<p>In summary, competing risks are prevalent in cardiovascular research. We encourage analysts to take full advantage of the range of statistical methods for the analysis of survival data that have been developed in the statistical literature. Investigators need to be cognizant of the presence of competing risks and their potential effect on statistical analyses. Researchers should select the appropriate method to address the study objectives and ensure that the analysis results are interpreted correctly.</p></section><section id="sec11"><h2 class="pmc_sec_title">Sources of Funding</h2>
+<p>This study was supported by the Institute for Clinical Evaluative Sciences (ICES), which is funded by an annual grant from the Ontario Ministry of Health and Long-Term Care (MOHLTC). The opinions, results, and conclusions reported in this article are those of the authors and are independent from the funding sources. No endorsement by ICES or the Ontario MOHLTC is intended or should be inferred. This research was supported by an operating grant from the Canadian Institutes of Health Research (CIHR; MOP 86508). Dr Austin was supported by Career Investigator awards from the Heart and Stroke Foundation. Dr Lee is supported by a clinician-scientist award from the Canadian Institutes of Health Research. The Enhanced Feedback for Effective Cardiac Treatment (EFFECT) data used in the study was funded by a CIHR Team Grant in Cardiovascular Outcomes Research.</p></section><section id="sec12"><h2 class="pmc_sec_title">Disclosures</h2>
+<p>None.</p></section><section id="sec13"><h2 class="pmc_sec_title">Supplementary Material</h2>
+<figure class="fig xbox font-sm" id="s1"><div class="media p"><div class="caption">
+<a href="/articles/instance/4741409/bin/cir-133-601-s001.pdf" data-ga-action="click_feat_suppl" class="usa-link">cir-133-601-s001.pdf</a><sup> (31.1KB, pdf) </sup>
+</div></div>
+<div class="p text-right font-secondary"><a href="figure/s1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></figure></section><section id="fn-group1" class="fn-group"><h2 class="pmc_sec_title">Footnotes</h2>
+<div class="fn-group p font-secondary-light font-sm"><div class="fn p" id="fn1"><p>The online-only Data Supplement is available with this article at <a href="http://circ.ahajournals.org/lookup/suppl/doi:10.1161/CIRCULATIONAHA.115.017719/-/DC1" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://circ.ahajournals.org/lookup/suppl/doi:10.1161/CIRCULATIONAHA.115.017719/-/DC1</a>.</p></div></div></section><section id="ref-list1" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="ref-list1_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="R1">
+<span class="label">1.</span><cite>Kalbfleisch JD, Prentice RL.  The Statistical Analysis of Failure Time Data. 2nd ed. New York, NY: John Wiley and Sons; 2002. </cite> [<a href="https://scholar.google.com/scholar_lookup?title=The%20Statistical%20Analysis%20of%20Failure%20Time%20Data&amp;author=JD%20Kalbfleisch&amp;author=RL.%20Prentice&amp;publication_year=2002&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R2">
+<span class="label">2.</span><cite>Cox D. Regression models and life tables (with discussion). J Roy Stat Soc - Series B. 1972;34:187–220.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Roy%20Stat%20Soc%20-%20Series%20B&amp;title=Regression%20models%20and%20life%20tables%20(with%20discussion).&amp;author=D.%20Cox&amp;volume=34&amp;publication_year=1972&amp;pages=187-220&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R3">
+<span class="label">3.</span><cite>Cox D, Oakes D.  Analysis of Survival Data. London, UK: Chapman &amp; Hall; 1984. </cite> [<a href="https://scholar.google.com/scholar_lookup?title=Analysis%20of%20Survival%20Data&amp;author=D%20Cox&amp;author=D.%20Oakes&amp;publication_year=1984&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R4">
+<span class="label">4.</span><cite>Therneau TM, Grambsch PM.  Modeling Survival Data: Extending the Cox Model. New York, NY: Springer-Verlag; 2000. </cite> [<a href="https://scholar.google.com/scholar_lookup?title=Modeling%20Survival%20Data:%20Extending%20the%20Cox%20Model&amp;author=TM%20Therneau&amp;author=PM.%20Grambsch&amp;publication_year=2000&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R5">
+<span class="label">5.</span><cite>Klein JP, Moeschberger ML.  Survival Analysis: Techniques for Censored and Truncated Data. New York, NY: Springer-Verlag; 1997. </cite> [<a href="https://scholar.google.com/scholar_lookup?title=Survival%20Analysis:%20Techniques%20for%20Censored%20and%20Truncated%20Data&amp;author=JP%20Klein&amp;author=ML.%20Moeschberger&amp;publication_year=1997&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R6">
+<span class="label">6.</span><cite>Lawless JF.  Statistical Models and Methods for Lifetime Data. New York, NY: John Wiley &amp; Sons; 1982. </cite> [<a href="https://scholar.google.com/scholar_lookup?title=Statistical%20Models%20and%20Methods%20for%20Lifetime%20Data&amp;author=JF.%20Lawless&amp;publication_year=1982&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R7">
+<span class="label">7.</span><cite>Rao SR, Schoenfeld DA. Survival methods. Circulation. 2007;115:109–113. doi: 10.1161/CIRCULATIONAHA.106.614859. doi: 10.1161/CIRCULATIONAHA.106.614859.</cite> [<a href="https://doi.org/10.1161/CIRCULATIONAHA.106.614859" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/17200454/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Survival%20methods.&amp;author=SR%20Rao&amp;author=DA.%20Schoenfeld&amp;volume=115&amp;publication_year=2007&amp;pages=109-113&amp;pmid=17200454&amp;doi=10.1161/CIRCULATIONAHA.106.614859&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R8">
+<span class="label">8.</span><cite>Berry SD, Ngo L, Samelson EJ, Kiel DP. Competing risk of death: an important consideration in studies of older adults. J Am Geriatr Soc. 2010;58:783–787. doi: 10.1111/j.1532-5415.2010.02767.x. doi: 10.1111/j.1532-5415.2010.02767.x.</cite> [<a href="https://doi.org/10.1111/j.1532-5415.2010.02767.x" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2873048/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/20345862/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Geriatr%20Soc&amp;title=Competing%20risk%20of%20death:%20an%20important%20consideration%20in%20studies%20of%20older%20adults.&amp;author=SD%20Berry&amp;author=L%20Ngo&amp;author=EJ%20Samelson&amp;author=DP.%20Kiel&amp;volume=58&amp;publication_year=2010&amp;pages=783-787&amp;pmid=20345862&amp;doi=10.1111/j.1532-5415.2010.02767.x&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R9">
+<span class="label">9.</span><cite>Lau B, Cole SR, Gange SJ. Competing risk regression models for epidemiologic data. Am J Epidemiol. 2009;170:244–256. doi: 10.1093/aje/kwp107. doi: 10.1093/aje/kwp107.</cite> [<a href="https://doi.org/10.1093/aje/kwp107" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2732996/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/19494242/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Am%20J%20Epidemiol&amp;title=Competing%20risk%20regression%20models%20for%20epidemiologic%20data.&amp;author=B%20Lau&amp;author=SR%20Cole&amp;author=SJ.%20Gange&amp;volume=170&amp;publication_year=2009&amp;pages=244-256&amp;pmid=19494242&amp;doi=10.1093/aje/kwp107&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R10">
+<span class="label">10.</span><cite>Putter H, Fiocco M, Geskus RB. Tutorial in biostatistics: competing risks and multi-state models. Stat Med. 2007;26:2389–2430. doi: 10.1002/sim.2712. doi: 10.1002/sim.2712.</cite> [<a href="https://doi.org/10.1002/sim.2712" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/17031868/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Stat%20Med&amp;title=Tutorial%20in%20biostatistics:%20competing%20risks%20and%20multi-state%20models.&amp;author=H%20Putter&amp;author=M%20Fiocco&amp;author=RB.%20Geskus&amp;volume=26&amp;publication_year=2007&amp;pages=2389-2430&amp;pmid=17031868&amp;doi=10.1002/sim.2712&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R11">
+<span class="label">11.</span><cite>Satagopan JM, Ben-Porat L, Berwick M, Robson M, Kutler D, Auerbach AD. A note on competing risks in survival data analysis. Br J Cancer. 2004;91:1229–1235. doi: 10.1038/sj.bjc.6602102. doi: 10.1038/sj.bjc.6602102.</cite> [<a href="https://doi.org/10.1038/sj.bjc.6602102" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2410013/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/15305188/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Br%20J%20Cancer&amp;title=A%20note%20on%20competing%20risks%20in%20survival%20data%20analysis.&amp;author=JM%20Satagopan&amp;author=L%20Ben-Porat&amp;author=M%20Berwick&amp;author=M%20Robson&amp;author=D%20Kutler&amp;volume=91&amp;publication_year=2004&amp;pages=1229-1235&amp;pmid=15305188&amp;doi=10.1038/sj.bjc.6602102&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R12">
+<span class="label">12.</span><cite>Varadhan R, Weiss CO, Segal JB, Wu AW, Scharfstein D, Boyd C. Evaluating health outcomes in the presence of competing risks: a review of statistical methods and clinical applications. Med Care. 2010;48(6 suppl):S96–S105. doi: 10.1097/MLR.0b013e3181d99107. doi: 10.1097/MLR.0b013e3181d99107.</cite> [<a href="https://doi.org/10.1097/MLR.0b013e3181d99107" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/20473207/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Med%20Care&amp;title=Evaluating%20health%20outcomes%20in%20the%20presence%20of%20competing%20risks:%20a%20review%20of%20statistical%20methods%20and%20clinical%20applications.&amp;author=R%20Varadhan&amp;author=CO%20Weiss&amp;author=JB%20Segal&amp;author=AW%20Wu&amp;author=D%20Scharfstein&amp;volume=48&amp;issue=6%20suppl&amp;publication_year=2010&amp;pages=S96-S105&amp;pmid=20473207&amp;doi=10.1097/MLR.0b013e3181d99107&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R13">
+<span class="label">13.</span><cite>Pepe MS, Mori M. Kaplan-Meier, marginal or conditional probability curves in summarizing competing risks failure time data? Stat Med. 1993;12:737–751. doi: 10.1002/sim.4780120803.</cite> [<a href="https://doi.org/10.1002/sim.4780120803" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/8516591/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Stat%20Med&amp;title=Kaplan-Meier,%20marginal%20or%20conditional%20probability%20curves%20in%20summarizing%20competing%20risks%20failure%20time%20data?&amp;author=MS%20Pepe&amp;author=M.%20Mori&amp;volume=12&amp;publication_year=1993&amp;pages=737-751&amp;pmid=8516591&amp;doi=10.1002/sim.4780120803&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R14">
+<span class="label">14.</span><cite>Fine JP, Gray RJ. A proportional hazards model for the subdistribution of a competing risk. J Am Stat Assoc. 1999;94:496–509.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Stat%20Assoc&amp;title=A%20proportional%20hazards%20model%20for%20the%20subdistribution%20of%20a%20competing%20risk.&amp;author=JP%20Fine&amp;author=RJ.%20Gray&amp;volume=94&amp;publication_year=1999&amp;pages=496-509&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R15">
+<span class="label">15.</span><cite>Koller MT, Raatz H, Steyerberg EW, Wolbers M. Competing risks and the clinical community: irrelevance or ignorance? Stat Med. 2012;31:1089–1097. doi: 10.1002/sim.4384. doi: 10.1002/sim.4384.</cite> [<a href="https://doi.org/10.1002/sim.4384" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3575691/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/21953401/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Stat%20Med&amp;title=Competing%20risks%20and%20the%20clinical%20community:%20irrelevance%20or%20ignorance?&amp;author=MT%20Koller&amp;author=H%20Raatz&amp;author=EW%20Steyerberg&amp;author=M.%20Wolbers&amp;volume=31&amp;publication_year=2012&amp;pages=1089-1097&amp;pmid=21953401&amp;doi=10.1002/sim.4384&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R16">
+<span class="label">16.</span><cite>Tu JV, Donovan LR, Lee DS, Wang JT, Austin PC, Alter DA, Ko DT. Effectiveness of public report cards for improving the quality of cardiac care: the EFFECT study: a randomized trial. JAMA. 2009;302:2330–2337. doi: 10.1001/jama.2009.1731. doi: 10.1001/jama.2009.1731.</cite> [<a href="https://doi.org/10.1001/jama.2009.1731" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/19923205/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JAMA&amp;title=Effectiveness%20of%20public%20report%20cards%20for%20improving%20the%20quality%20of%20cardiac%20care:%20the%20EFFECT%20study:%20a%20randomized%20trial.&amp;author=JV%20Tu&amp;author=LR%20Donovan&amp;author=DS%20Lee&amp;author=JT%20Wang&amp;author=PC%20Austin&amp;volume=302&amp;publication_year=2009&amp;pages=2330-2337&amp;pmid=19923205&amp;doi=10.1001/jama.2009.1731&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R17">
+<span class="label">17.</span><cite>Latouche A, Allignol A, Beyersmann J, Labopin M, Fine JP. A competing risks analysis should report results on all cause-specific hazards and cumulative incidence functions. J Clin Epidemiol. 2013;66:648–653. doi: 10.1016/j.jclinepi.2012.09.017. doi: 10.1016/j.jclinepi.2012.09.017.</cite> [<a href="https://doi.org/10.1016/j.jclinepi.2012.09.017" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/23415868/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Clin%20Epidemiol&amp;title=A%20competing%20risks%20analysis%20should%20report%20results%20on%20all%20cause-specific%20hazards%20and%20cumulative%20incidence%20functions.&amp;author=A%20Latouche&amp;author=A%20Allignol&amp;author=J%20Beyersmann&amp;author=M%20Labopin&amp;author=JP.%20Fine&amp;volume=66&amp;publication_year=2013&amp;pages=648-653&amp;pmid=23415868&amp;doi=10.1016/j.jclinepi.2012.09.017&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R18">
+<span class="label">18.</span><cite>Pintilie M.  Competing Risks: A Practical Perspective. West Sussex: John Wiley &amp; Sons Ltd; 2006. </cite> [<a href="https://scholar.google.com/scholar_lookup?title=Competing%20Risks:%20A%20Practical%20Perspective&amp;author=M.%20Pintilie&amp;publication_year=2006&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R19">
+<span class="label">19.</span><cite>Szychowski JM, Roth DL, Clay OJ, Mittelman MS. Patient death as a censoring event or competing risk event in models of nursing home placement. Stat Med. 2010;29:371–381. doi: 10.1002/sim.3797. doi: 10.1002/sim.3797.</cite> [<a href="https://doi.org/10.1002/sim.3797" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2811964/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/20014354/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Stat%20Med&amp;title=Patient%20death%20as%20a%20censoring%20event%20or%20competing%20risk%20event%20in%20models%20of%20nursing%20home%20placement.&amp;author=JM%20Szychowski&amp;author=DL%20Roth&amp;author=OJ%20Clay&amp;author=MS.%20Mittelman&amp;volume=29&amp;publication_year=2010&amp;pages=371-381&amp;pmid=20014354&amp;doi=10.1002/sim.3797&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R20">
+<span class="label">20.</span><cite>Wolbers M, Koller MT, Witteman JC, Steyerberg EW. Prognostic models with competing risks: methods and application to coronary risk prediction. Epidemiology. 2009;20:555–561. doi: 10.1097/EDE.0b013e3181a39056. doi: 10.1097/EDE.0b013e3181a39056.</cite> [<a href="https://doi.org/10.1097/EDE.0b013e3181a39056" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/19367167/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Epidemiology&amp;title=Prognostic%20models%20with%20competing%20risks:%20methods%20and%20application%20to%20coronary%20risk%20prediction.&amp;author=M%20Wolbers&amp;author=MT%20Koller&amp;author=JC%20Witteman&amp;author=EW.%20Steyerberg&amp;volume=20&amp;publication_year=2009&amp;pages=555-561&amp;pmid=19367167&amp;doi=10.1097/EDE.0b013e3181a39056&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="R21">
+<span class="label">21.</span><cite>Wolbers M, Koller MT, Stel VS, Schaer B, Jager KJ, Leffondré K, Heinze G. Competing risks analyses: objectives and approaches. Eur Heart J. 2014;35:2936–2941. doi: 10.1093/eurheartj/ehu131. doi: 10.1093/eurheartj/ehu131.</cite> [<a href="https://doi.org/10.1093/eurheartj/ehu131" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4223609/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24711436/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Eur%20Heart%20J&amp;title=Competing%20risks%20analyses:%20objectives%20and%20approaches.&amp;author=M%20Wolbers&amp;author=MT%20Koller&amp;author=VS%20Stel&amp;author=B%20Schaer&amp;author=KJ%20Jager&amp;volume=35&amp;publication_year=2014&amp;pages=2936-2941&amp;pmid=24711436&amp;doi=10.1093/eurheartj/ehu131&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from Circulation are provided here courtesy of <strong>Wolters Kluwer Health</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="pmc-sidenav__container__close">
+            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.1161/CIRCULATIONAHA.115.017719"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/launch.svg" alt="View on publisher site icon" class="usa-icon usa-icon--size-3 usa-icon--link"/>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/cir-133-601.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/file_download.svg" alt="Download PDF icon" class="usa-icon usa-icon--size-3 usa-icon--link"/>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (473.9 KB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/4741409/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/4741409/export/"
+                    >
+                       <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/format_quote.svg" alt="Cite icon" class="usa-icon usa-icon--size-3 usa-icon--white"/>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC4741409%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/action-bookmark-full.svg" alt="Collections icon" class="usa-icon usa-icon--size-3 usa-icon--white usa-icon--bookmark-full" hidden />
+                            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/action-bookmark-empty.svg" alt="Collections icon" class="usa-icon usa-icon--size-3 usa-icon--white usa-icon--bookmark-empty" hidden />
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                        <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/share.svg" alt="Permalink icon" class="usa-icon usa-icon--size-3 usa-icon--white"/>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC4741409/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/content_copy.svg" alt="Copy icon" aria-hidden="true" class="usa-icon usa-icon--white" />
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC4741409/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC4741409/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/26858290/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC4741409/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/26858290/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC4741409/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/4741409/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                 <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/close.svg" alt="Close icon" class="usa-icon usa-icon--size-3 usa-icon--button" />
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/content_copy.svg" alt="Copy icon" class="usa-icon usa-icon--size-3 usa-icon--link" />
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/file_download.svg" alt="Download icon" aria-hidden="true" class="usa-icon usa-icon--size-3 usa-icon--link" />
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="eBKGJn69eOoUSjBs8pCzDvur5OXDoTShKJ06ZGEK3lLcwguYv3P7Rl77LPjV0mcn">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <img src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/img/arrow_upward.svg" alt="back to top icon" class="usa-icon usa-icon--size-3 order-0 usa-icon--white" />
+</button>
+    
+
+
+        
+    
+    <div id="icon-container" style="display: none;"></div>
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: 'https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/base-Cp_Il6gk.js"></script>
+<link href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/vendor-Co8Vdmw2.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/CACHE/js/output.4e25b6297b38.js"></script>
+
+    <script type="module" crossorigin="" src="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/article-BxyWTbsj.js"></script>
+<link href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/vendor-Co8Vdmw2.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+<link href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/index-DXSA0fsx.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+<link href="https://cdn.ncbi.nlm.nih.gov/pmc/pd-medc-pmc-cloudpmc-viewer/production/a2b04810/var/data/static/assets/secure-cookie-Br6x5jtB.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+    
+    
+
+    </body>
+</html>

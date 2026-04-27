@@ -1,0 +1,1548 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{ministerioSaudeDO2022}{report}{}{}
+      \name{author}{1}{}{%
+        {{hash=03cd123deb248ddc10a23a476d6f0975}{%
+           family={{Brasil. Ministério da Saúde}},
+           familyi={B\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Ministério da Saúde}%
+      }
+      \list{location}{1}{%
+        {Brasília}%
+      }
+      \strng{namehash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{fullhash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{fullhashraw}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{bibnamehash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{authorbibnamehash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{authornamehash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{authorfullhash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{authorfullhashraw}{03cd123deb248ddc10a23a476d6f0975}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Dados públicos do SIM-DOFET referentes ao ano de 2023}
+      \field{title}{Declaração de Óbito: manual de instruções para preenchimento}
+      \field{type}{techreport}
+      \field{year}{2022}
+      \verb{urlraw}
+      \verb https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/declaracao-de-obito-manual-de-instrucoes-para-preenchimento.pdf/view
+      \endverb
+      \verb{url}
+      \verb https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/declaracao-de-obito-manual-de-instrucoes-para-preenchimento.pdf/view
+      \endverb
+    \endentry
+    \entry{Andrade2005}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=0769375c349d4ff8d1b5a8e6ce0c2d91}{%
+           family={Andrade},
+           familyi={A\bibinitperiod},
+           given={E.\bibnamedelimi O.},
+           giveni={E\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=71c92e264ed388dc65b07e689003c1d2}{%
+           family={Garção},
+           familyi={G\bibinitperiod},
+           given={L.\bibnamedelimi B.},
+           giveni={L\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Conselho Federal de Medicina}%
+      }
+      \strng{namehash}{749abfce865c3543a0f60b981e503b86}
+      \strng{fullhash}{749abfce865c3543a0f60b981e503b86}
+      \strng{fullhashraw}{749abfce865c3543a0f60b981e503b86}
+      \strng{bibnamehash}{749abfce865c3543a0f60b981e503b86}
+      \strng{authorbibnamehash}{749abfce865c3543a0f60b981e503b86}
+      \strng{authornamehash}{749abfce865c3543a0f60b981e503b86}
+      \strng{authorfullhash}{749abfce865c3543a0f60b981e503b86}
+      \strng{authorfullhashraw}{749abfce865c3543a0f60b981e503b86}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Revista Bioética}
+      \field{note}{Art. 2º, item 2}
+      \field{number}{1}
+      \field{title}{Resolução CFM nº 1.779/05}
+      \field{volume}{13}
+      \field{year}{2005}
+      \field{pages}{147\bibrangedash 149}
+      \range{pages}{3}
+    \endentry
+    \entry{DATASUSSIM2023}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=6c475fd8a7408eba6f76876457c20de2}{%
+           family={{Brasil. Ministério da Saúde. DATASUS}},
+           familyi={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{6c475fd8a7408eba6f76876457c20de2}
+      \strng{fullhash}{6c475fd8a7408eba6f76876457c20de2}
+      \strng{fullhashraw}{6c475fd8a7408eba6f76876457c20de2}
+      \strng{bibnamehash}{6c475fd8a7408eba6f76876457c20de2}
+      \strng{authorbibnamehash}{6c475fd8a7408eba6f76876457c20de2}
+      \strng{authornamehash}{6c475fd8a7408eba6f76876457c20de2}
+      \strng{authorfullhash}{6c475fd8a7408eba6f76876457c20de2}
+      \strng{authorfullhashraw}{6c475fd8a7408eba6f76876457c20de2}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Dados públicos do SIM-DOFET referentes ao ano de 2023}
+      \field{title}{Sistema de Informações sobre Mortalidade (SIM): declarações de óbito fetal, 2023}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://opendatasus.saude.gov.br/dataset/sim
+      \endverb
+      \verb{url}
+      \verb https://opendatasus.saude.gov.br/dataset/sim
+      \endverb
+    \endentry
+    \entry{ministerioSaudeDNV2022}{report}{}{}
+      \name{author}{1}{}{%
+        {{hash=03cd123deb248ddc10a23a476d6f0975}{%
+           family={{Brasil. Ministério da Saúde}},
+           familyi={B\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Ministério da Saúde}%
+      }
+      \list{location}{1}{%
+        {Brasília}%
+      }
+      \strng{namehash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{fullhash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{fullhashraw}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{bibnamehash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{authorbibnamehash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{authornamehash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{authorfullhash}{03cd123deb248ddc10a23a476d6f0975}
+      \strng{authorfullhashraw}{03cd123deb248ddc10a23a476d6f0975}
+      \field{extraname}{2}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{4}
+      \field{note}{Página institucional atualizada em 2023}
+      \field{title}{Declaração de Nascido Vivo: manual de instruções para preenchimento}
+      \field{type}{techreport}
+      \field{year}{2022}
+      \verb{urlraw}
+      \verb https://bvsms.saude.gov.br/bvs/publicacoes/declaracao_nascido_vivo_manual_4ed.pdf
+      \endverb
+      \verb{url}
+      \verb https://bvsms.saude.gov.br/bvs/publicacoes/declaracao_nascido_vivo_manual_4ed.pdf
+      \endverb
+    \endentry
+    \entry{WHO2023Preterm}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=531217507bec092b6ec36c0f78f46736}{%
+           family={{World Health Organization}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{531217507bec092b6ec36c0f78f46736}
+      \strng{fullhash}{531217507bec092b6ec36c0f78f46736}
+      \strng{fullhashraw}{531217507bec092b6ec36c0f78f46736}
+      \strng{bibnamehash}{531217507bec092b6ec36c0f78f46736}
+      \strng{authorbibnamehash}{531217507bec092b6ec36c0f78f46736}
+      \strng{authornamehash}{531217507bec092b6ec36c0f78f46736}
+      \strng{authorfullhash}{531217507bec092b6ec36c0f78f46736}
+      \strng{authorfullhashraw}{531217507bec092b6ec36c0f78f46736}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Fact sheet, 10 May 2023}
+      \field{title}{Preterm birth}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://www.who.int/news-room/fact-sheets/detail/preterm-birth
+      \endverb
+      \verb{url}
+      \verb https://www.who.int/news-room/fact-sheets/detail/preterm-birth
+      \endverb
+    \endentry
+    \entry{Ohuma2023PretermEstimates}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{10}{}{%
+        {{hash=d9ccee91ec909cd6986d01905797c54c}{%
+           family={Ohuma},
+           familyi={O\bibinitperiod},
+           given={Eric\bibnamedelima O.},
+           giveni={E\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=a70df038fa2e52e325dff8db44f24d2a}{%
+           family={Moller},
+           familyi={M\bibinitperiod},
+           given={Ann-Beth},
+           giveni={A\bibinithyphendelim B\bibinitperiod}}}%
+        {{hash=f0f17cdc7b88574714b7fa4868c45522}{%
+           family={Bradley},
+           familyi={B\bibinitperiod},
+           given={Ellen},
+           giveni={E\bibinitperiod}}}%
+        {{hash=2e63b31eeeaae8a4ef3344d0add26dd7}{%
+           family={Chakwera},
+           familyi={C\bibinitperiod},
+           given={Samuel},
+           giveni={S\bibinitperiod}}}%
+        {{hash=66ec897be06f18b477627b412b90a12c}{%
+           family={Hussain-Alkhateeb},
+           familyi={H\bibinithyphendelim A\bibinitperiod},
+           given={Laith},
+           giveni={L\bibinitperiod}}}%
+        {{hash=33667bff6c6cf9defe7a474d14a7026d}{%
+           family={Lewin},
+           familyi={L\bibinitperiod},
+           given={Alexandra},
+           giveni={A\bibinitperiod}}}%
+        {{hash=98ff8a838b8b6614b105fbe4bff26378}{%
+           family={Okwaraji},
+           familyi={O\bibinitperiod},
+           given={Yemisrach\bibnamedelima B.},
+           giveni={Y\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=d36abfe6b29f8d8884a9a2108905b8e8}{%
+           family={Mahanani},
+           familyi={M\bibinitperiod},
+           given={Wahyu\bibnamedelima Retno},
+           giveni={W\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=b599dbf5e713d83f7813390b1ba0eae8}{%
+           family={Johansson},
+           familyi={J\bibinitperiod},
+           given={Emily\bibnamedelima White},
+           giveni={E\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=0940233bb892648d5dd21d34eea5ba37}{%
+           family={Lavin},
+           familyi={L\bibinitperiod},
+           given={Tina},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{0f979a318963eeddda810cb251b69ec1}
+      \strng{fullhash}{c4c8aa00f5023dd10ead9d618396705f}
+      \strng{fullhashraw}{c4c8aa00f5023dd10ead9d618396705f}
+      \strng{bibnamehash}{c4c8aa00f5023dd10ead9d618396705f}
+      \strng{authorbibnamehash}{c4c8aa00f5023dd10ead9d618396705f}
+      \strng{authornamehash}{0f979a318963eeddda810cb251b69ec1}
+      \strng{authorfullhash}{c4c8aa00f5023dd10ead9d618396705f}
+      \strng{authorfullhashraw}{c4c8aa00f5023dd10ead9d618396705f}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Lancet}
+      \field{number}{10409}
+      \field{title}{National, Regional, and Global Estimates of Preterm Birth in 2020, with Trends from 2010: A Systematic Analysis}
+      \field{volume}{402}
+      \field{year}{2023}
+      \field{pages}{1261\bibrangedash 1271}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1016/S0140-6736(23)00878-4
+      \endverb
+    \endentry
+    \entry{BornTooSoon2023}{report}{}{}
+      \name{author}{1}{}{%
+        {{hash=039c6ab7d8015dd9b4a866b2187530ec}{%
+           family={{World Health Organization and Partnership for Maternal, Newborn and Child Health and United Nations Children's Fund and United Nations Population Fund}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {World Health Organization}%
+      }
+      \list{location}{1}{%
+        {Geneva}%
+      }
+      \strng{namehash}{039c6ab7d8015dd9b4a866b2187530ec}
+      \strng{fullhash}{039c6ab7d8015dd9b4a866b2187530ec}
+      \strng{fullhashraw}{039c6ab7d8015dd9b4a866b2187530ec}
+      \strng{bibnamehash}{039c6ab7d8015dd9b4a866b2187530ec}
+      \strng{authorbibnamehash}{039c6ab7d8015dd9b4a866b2187530ec}
+      \strng{authornamehash}{039c6ab7d8015dd9b4a866b2187530ec}
+      \strng{authorfullhash}{039c6ab7d8015dd9b4a866b2187530ec}
+      \strng{authorfullhashraw}{039c6ab7d8015dd9b4a866b2187530ec}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{ISBN 978-92-4-007389-0}
+      \field{title}{Born Too Soon: Decade of Action on Preterm Birth}
+      \field{type}{techreport}
+      \field{year}{2023}
+      \field{pages}{108}
+      \range{pages}{1}
+      \verb{urlraw}
+      \verb https://www.who.int/publications/i/item/9789240073890
+      \endverb
+      \verb{url}
+      \verb https://www.who.int/publications/i/item/9789240073890
+      \endverb
+    \endentry
+    \entry{rocha2025space}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=6a0f159397bd1c65fa9ad249c6ace02d}{%
+           family={Rocha},
+           familyi={R\bibinitperiod},
+           given={João\bibnamedelimb Batista\bibnamedelimb Francalino\bibnamedelima da},
+           giveni={J\bibinitperiod\bibinitdelim B\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=81cea6edc03bfa1c9b75598ddef535ca}{%
+           family={Bezerra},
+           familyi={B\bibinitperiod},
+           given={Italla\bibnamedelimb Maria\bibnamedelima Pinheiro},
+           giveni={I\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=564d5d1d1a703f3fd9cbbe50edfdb857}{%
+           family={Oliveira},
+           familyi={O\bibinitperiod},
+           given={Elyecleyde\bibnamedelimb Katiane\bibnamedelimb da\bibnamedelima Silva},
+           giveni={E\bibinitperiod\bibinitdelim K\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=31806159ab43a3a58c1f1952ea3a5063}{%
+           family={Sena},
+           familyi={S\bibinitperiod},
+           given={Aline\bibnamedelimb Bergamini\bibnamedelima Effgen},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=a60466ffa70ff3f1fa6dd0d323d6c16a}{%
+           family={Leitão},
+           familyi={L\bibinitperiod},
+           given={Francisco\bibnamedelimb Naildo\bibnamedelima Cardoso},
+           giveni={F\bibinitperiod\bibinitdelim N\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=4485059935429a1f4b9f894469d3b56c}{%
+           family={Abreu},
+           familyi={A\bibinitperiod},
+           given={Luiz\bibnamedelimb Carlos\bibnamedelima de},
+           giveni={L\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {SciELO Public Health}%
+      }
+      \strng{namehash}{587d82d2ea3e6917af99e0dc55a709cc}
+      \strng{fullhash}{455465653fde78b43ae4c4917e8cb7cf}
+      \strng{fullhashraw}{455465653fde78b43ae4c4917e8cb7cf}
+      \strng{bibnamehash}{455465653fde78b43ae4c4917e8cb7cf}
+      \strng{authorbibnamehash}{455465653fde78b43ae4c4917e8cb7cf}
+      \strng{authornamehash}{587d82d2ea3e6917af99e0dc55a709cc}
+      \strng{authorfullhash}{455465653fde78b43ae4c4917e8cb7cf}
+      \strng{authorfullhashraw}{455465653fde78b43ae4c4917e8cb7cf}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Revista de Saúde Pública}
+      \field{title}{Space-time trends in fetal mortality in Brazil, 1996--2021}
+      \field{volume}{59}
+      \field{year}{2025}
+      \field{pages}{e2}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.11606/s1518-8787.2025059006194
+      \endverb
+    \endentry
+    \entry{Victor2025PretermBrazil}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{8}{}{%
+        {{hash=0b1f40d3ccf6c25be0c020b20c5d0671}{%
+           family={Victor},
+           familyi={V\bibinitperiod},
+           given={Audêncio},
+           giveni={A\bibinitperiod}}}%
+        {{hash=81f5895ff85cf4ab104f2a189709a088}{%
+           family={Nhancololo},
+           familyi={N\bibinitperiod},
+           given={Alex\bibnamedelima Monito},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=2a4dbfab1dfc88baa2ff31133057b995}{%
+           family={Bah},
+           familyi={B\bibinitperiod},
+           given={Homègnon\bibnamedelimb Antonin\bibnamedelima Ferréol},
+           giveni={H\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=4186a8d47a3e217548d08ee3da58ead7}{%
+           family={Xavier},
+           familyi={X\bibinitperiod},
+           given={Sancho\bibnamedelima Pedro},
+           giveni={S\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=2bd01e5cd40f77f36471f67588c39192}{%
+           family={Gotine},
+           familyi={G\bibinitperiod},
+           given={Ana\bibnamedelimb Raquel\bibnamedelimb Ernesto\bibnamedelima Manuel},
+           giveni={A\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=fd4142085aa9d2541c8521e49e5493e0}{%
+           family={Moreira},
+           familyi={M\bibinitperiod},
+           given={Vanilda\bibnamedelima Alves},
+           giveni={V\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=fd38fcbe77d109c8694195ae0bc8a036}{%
+           family={Charles},
+           familyi={C\bibinitperiod},
+           given={Charles\bibnamedelima M'poca},
+           giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=5a2f9bb668ce8af46b8417a39934cdbc}{%
+           family={Cerqueira-Silva},
+           familyi={C\bibinithyphendelim S\bibinitperiod},
+           given={Thiago},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{9a845e962d2b196ff3ab37893c718182}
+      \strng{fullhash}{b35d1a6c8394feadff457639018faeec}
+      \strng{fullhashraw}{b35d1a6c8394feadff457639018faeec}
+      \strng{bibnamehash}{b35d1a6c8394feadff457639018faeec}
+      \strng{authorbibnamehash}{b35d1a6c8394feadff457639018faeec}
+      \strng{authornamehash}{9a845e962d2b196ff3ab37893c718182}
+      \strng{authorfullhash}{b35d1a6c8394feadff457639018faeec}
+      \strng{authorfullhashraw}{b35d1a6c8394feadff457639018faeec}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{BMC Pregnancy and Childbirth}
+      \field{note}{Análise baseada em dados observados do SINASC de 2014 a 2023}
+      \field{title}{National and regional temporal trends and forecasting of preterm birth in Brazil: evidence from national birth data (2014--2023) with projections to 2030}
+      \field{volume}{25}
+      \field{year}{2025}
+      \field{pages}{1339}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1186/s12884-025-08536-6
+      \endverb
+    \endentry
+    \entry{BrasilBoletimPrematuridade2024}{report}{}{}
+      \name{author}{1}{}{%
+        {{hash=f63ddc2c0e915913d1c784ba065d6ef3}{%
+           family={{Brasil. Ministério da Saúde. Secretaria de Vigilância em Saúde e Ambiente}},
+           familyi={B\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Ministério da Saúde}%
+      }
+      \list{location}{1}{%
+        {Brasília}%
+      }
+      \strng{namehash}{f63ddc2c0e915913d1c784ba065d6ef3}
+      \strng{fullhash}{f63ddc2c0e915913d1c784ba065d6ef3}
+      \strng{fullhashraw}{f63ddc2c0e915913d1c784ba065d6ef3}
+      \strng{bibnamehash}{f63ddc2c0e915913d1c784ba065d6ef3}
+      \strng{authorbibnamehash}{f63ddc2c0e915913d1c784ba065d6ef3}
+      \strng{authornamehash}{f63ddc2c0e915913d1c784ba065d6ef3}
+      \strng{authorfullhash}{f63ddc2c0e915913d1c784ba065d6ef3}
+      \strng{authorfullhashraw}{f63ddc2c0e915913d1c784ba065d6ef3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{Volume 55, número 13}
+      \field{title}{Perfil epidemiológico dos nascimentos prematuros no Brasil, 2012 a 2022}
+      \field{type}{Boletim Epidemiológico}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/boletins/epidemiologicos/edicoes/2024/boletim-epidemiologico-volume-55-no-13.pdf/view
+      \endverb
+      \verb{url}
+      \verb https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/boletins/epidemiologicos/edicoes/2024/boletim-epidemiologico-volume-55-no-13.pdf/view
+      \endverb
+    \endentry
+    \entry{Domingues2024PainelVigilancia}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=aaa2846ff5689f8ffab5edcf48caffed}{%
+           family={Domingues},
+           familyi={D\bibinitperiod},
+           given={Rosa\bibnamedelimb Maria\bibnamedelimb Soares\bibnamedelima Madeira},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=7245ae61a4dd4e37f91264ada9d911e9}{%
+           family={Rodrigues},
+           familyi={R\bibinitperiod},
+           given={Agatha\bibnamedelima Sacramento},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=23efc1a73313f64219d03cf4294f36b7}{%
+           family={Dias},
+           familyi={D\bibinitperiod},
+           given={Marcos\bibnamedelimb Augusto\bibnamedelima Bastos},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=c1e3ba185286ba5c2ecafddd1ceb3ded}{%
+           family={Saraceni},
+           familyi={S\bibinitperiod},
+           given={Valeria},
+           giveni={V\bibinitperiod}}}%
+        {{hash=99be6d439216845ddff9bedcf174d2fd}{%
+           family={Francisco},
+           familyi={F\bibinitperiod},
+           given={Rossana\bibnamedelimb Pulcineli\bibnamedelima Vieira},
+           giveni={R\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=ba15d932bdddfad041657125277ab006}{%
+           family={Pinheiro},
+           familyi={P\bibinitperiod},
+           given={Rejane\bibnamedelima Sobrinho},
+           giveni={R\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=c5acf1bd38edd6c1c96ffd9b278d484e}{%
+           family={Coeli},
+           familyi={C\bibinitperiod},
+           given={Claudia\bibnamedelima Medina},
+           giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{0f308a9252ba16ae574cf0b5e12d8e2c}
+      \strng{fullhash}{d889528c30ae99ba4b494d0cec305cef}
+      \strng{fullhashraw}{d889528c30ae99ba4b494d0cec305cef}
+      \strng{bibnamehash}{d889528c30ae99ba4b494d0cec305cef}
+      \strng{authorbibnamehash}{d889528c30ae99ba4b494d0cec305cef}
+      \strng{authornamehash}{0f308a9252ba16ae574cf0b5e12d8e2c}
+      \strng{authorfullhash}{d889528c30ae99ba4b494d0cec305cef}
+      \strng{authorfullhashraw}{d889528c30ae99ba4b494d0cec305cef}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Revista Brasileira de Epidemiologia}
+      \field{title}{Painel de vigilância da saúde materna: uma ferramenta para ampliação da vigilância epidemiológica da saúde das mulheres e seus determinantes}
+      \field{volume}{27}
+      \field{year}{2024}
+      \field{pages}{e240009}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1590/1980-549720240009
+      \endverb
+    \endentry
+    \entry{OOBrPainelVigilancia}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=08baf552db69b76bb1aeb5c30451f588}{%
+           family={{Observatório Obstétrico Brasileiro}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{08baf552db69b76bb1aeb5c30451f588}
+      \strng{fullhash}{08baf552db69b76bb1aeb5c30451f588}
+      \strng{fullhashraw}{08baf552db69b76bb1aeb5c30451f588}
+      \strng{bibnamehash}{08baf552db69b76bb1aeb5c30451f588}
+      \strng{authorbibnamehash}{08baf552db69b76bb1aeb5c30451f588}
+      \strng{authornamehash}{08baf552db69b76bb1aeb5c30451f588}
+      \strng{authorfullhash}{08baf552db69b76bb1aeb5c30451f588}
+      \strng{authorfullhashraw}{08baf552db69b76bb1aeb5c30451f588}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Indicadores de 2023 consultados na página institucional do painel em 22 abr. 2026}
+      \field{title}{Painel de Vigilância da Saúde Materna e Perinatal}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://observatorioobstetrico.shinyapps.io/painel-vigilancia-saude-materna-v2/
+      \endverb
+      \verb{url}
+      \verb https://observatorioobstetrico.shinyapps.io/painel-vigilancia-saude-materna-v2/
+      \endverb
+    \endentry
+    \entry{SESSPRegionalizacao2026}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=822c94a5dfb63cba09d662c6f3ee402c}{%
+           family={{São Paulo. Secretaria de Estado da Saúde}},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{822c94a5dfb63cba09d662c6f3ee402c}
+      \strng{fullhash}{822c94a5dfb63cba09d662c6f3ee402c}
+      \strng{fullhashraw}{822c94a5dfb63cba09d662c6f3ee402c}
+      \strng{bibnamehash}{822c94a5dfb63cba09d662c6f3ee402c}
+      \strng{authorbibnamehash}{822c94a5dfb63cba09d662c6f3ee402c}
+      \strng{authornamehash}{822c94a5dfb63cba09d662c6f3ee402c}
+      \strng{authorfullhash}{822c94a5dfb63cba09d662c6f3ee402c}
+      \strng{authorfullhashraw}{822c94a5dfb63cba09d662c6f3ee402c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Página institucional consultada em 22 abr. 2026; utilizada apenas para contextualização da estrutura de RRAS, sem uso de indicadores posteriores a 2023}
+      \field{title}{Regionalização}
+      \field{year}{2026}
+      \verb{urlraw}
+      \verb https://www.saude.sp.gov.br/ses/perfil/gestor/homepage/destaques/regionalizacao/leia-mais-regionalizacao
+      \endverb
+      \verb{url}
+      \verb https://www.saude.sp.gov.br/ses/perfil/gestor/homepage/destaques/regionalizacao/leia-mais-regionalizacao
+      \endverb
+    \endentry
+    \entry{Marques2021FetalSocialVulnerabilitySP}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=7af46bf1330ce4fc35202cad731237c1}{%
+           family={Marques},
+           familyi={M\bibinitperiod},
+           given={Lays\bibnamedelimb Janaina\bibnamedelima Prazeres},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=eb0ed60adb944cec9a89cf35525b8e86}{%
+           family={Silva},
+           familyi={S\bibinitperiod},
+           given={Zilda\bibnamedelimb Pereira\bibnamedelima da},
+           giveni={Z\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=b61b43d0ad7cad2ef86c2eac272d51aa}{%
+           family={Moura},
+           familyi={M\bibinitperiod},
+           given={Bárbara\bibnamedelimb Laisa\bibnamedelima Alves},
+           giveni={B\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=99be6d439216845ddff9bedcf174d2fd}{%
+           family={Francisco},
+           familyi={F\bibinitperiod},
+           given={Rossana\bibnamedelimb Pulcineli\bibnamedelima Vieira},
+           giveni={R\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=90eeb23c63ad3d1c576c2befc2adbcf4}{%
+           family={Alencar},
+           familyi={A\bibinitperiod},
+           given={Gizelton\bibnamedelima Pereira},
+           giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=2c44d5b2f754e37f7618bfef80010fa4}{%
+           family={Almeida},
+           familyi={A\bibinitperiod},
+           given={Marcia\bibnamedelimb Furquim\bibnamedelima de},
+           giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+      }
+      \strng{namehash}{bf5cb574f660cb77bc687328add4d7df}
+      \strng{fullhash}{f2282d6c98b212470236e66db747df08}
+      \strng{fullhashraw}{f2282d6c98b212470236e66db747df08}
+      \strng{bibnamehash}{f2282d6c98b212470236e66db747df08}
+      \strng{authorbibnamehash}{f2282d6c98b212470236e66db747df08}
+      \strng{authornamehash}{bf5cb574f660cb77bc687328add4d7df}
+      \strng{authorfullhash}{f2282d6c98b212470236e66db747df08}
+      \strng{authorfullhashraw}{f2282d6c98b212470236e66db747df08}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{title}{Intra-urban Differentials of Fetal Mortality in Clusters of Social Vulnerability in São Paulo Municipality, Brazil}
+      \field{volume}{11}
+      \field{year}{2021}
+      \field{pages}{24256}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-021-03646-5
+      \endverb
+    \endentry
+    \entry{Marques2026FetRiskS}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{10}{}{%
+        {{hash=7af46bf1330ce4fc35202cad731237c1}{%
+           family={Marques},
+           familyi={M\bibinitperiod},
+           given={Lays\bibnamedelimb Janaina\bibnamedelima Prazeres},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=90eeb23c63ad3d1c576c2befc2adbcf4}{%
+           family={Alencar},
+           familyi={A\bibinitperiod},
+           given={Gizelton\bibnamedelima Pereira},
+           giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=342cad96f7d603e381262b5092672c34}{%
+           family={Elias},
+           familyi={E\bibinitperiod},
+           given={Dario\bibnamedelima Ezequiel},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=eb0ed60adb944cec9a89cf35525b8e86}{%
+           family={Silva},
+           familyi={S\bibinitperiod},
+           given={Zilda\bibnamedelimb Pereira\bibnamedelima da},
+           giveni={Z\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=d5f762c1cf797b96b1dad6763310abdf}{%
+           family={Demarque},
+           familyi={D\bibinitperiod},
+           given={Gabriella\bibnamedelima Ferreira},
+           giveni={G\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=89e75ff21bfdd44b8cc90d54f987c070}{%
+           family={Figueiredo},
+           familyi={F\bibinitperiod},
+           given={Gerusa\bibnamedelima Maria},
+           giveni={G\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=d118061093b193e4c9e883c26614a394}{%
+           family={Hoshida},
+           familyi={H\bibinitperiod},
+           given={Mara\bibnamedelima Sandra},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=4bde188fd2343624d03d1a70aafaa5a4}{%
+           family={Santos},
+           familyi={S\bibinitperiod},
+           given={Osmara\bibnamedelimb Alves\bibnamedelima dos},
+           giveni={O\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=964f3a7abc73f31e91dc236a9c29f6fe}{%
+           family={Pastro},
+           familyi={P\bibinitperiod},
+           given={Luciana\bibnamedelimb Duzolina\bibnamedelima Manfré},
+           giveni={L\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=98eb9773290fbd963bf5a9d6f2e0c053}{%
+           family={Buralli},
+           familyi={B\bibinitperiod},
+           given={Rafael\bibnamedelima Junqueira},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{bf5cb574f660cb77bc687328add4d7df}
+      \strng{fullhash}{a27b987b3687bebc8676ae3af5fa6e0b}
+      \strng{fullhashraw}{a27b987b3687bebc8676ae3af5fa6e0b}
+      \strng{bibnamehash}{a27b987b3687bebc8676ae3af5fa6e0b}
+      \strng{authorbibnamehash}{a27b987b3687bebc8676ae3af5fa6e0b}
+      \strng{authornamehash}{bf5cb574f660cb77bc687328add4d7df}
+      \strng{authorfullhash}{a27b987b3687bebc8676ae3af5fa6e0b}
+      \strng{authorfullhashraw}{a27b987b3687bebc8676ae3af5fa6e0b}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{BMC Pregnancy and Childbirth}
+      \field{note}{Estudo com dados coletados entre dezembro de 2019 e dezembro de 2023 no município de São Paulo}
+      \field{title}{Factors Associated with Stillbirth in São Paulo, Brazil: FetRiskS, a Multidisciplinary Case-Control Study}
+      \field{volume}{26}
+      \field{year}{2026}
+      \field{pages}{103}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1186/s12884-025-08427-w
+      \endverb
+    \endentry
+    \entry{ACOG2020Stillbirth}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=84ce0041300d5f157a0900c456f97c0a}{%
+           family={{American College of Obstetricians and Gynecologists and Society for Maternal-Fetal Medicine}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{84ce0041300d5f157a0900c456f97c0a}
+      \strng{fullhash}{84ce0041300d5f157a0900c456f97c0a}
+      \strng{fullhashraw}{84ce0041300d5f157a0900c456f97c0a}
+      \strng{bibnamehash}{84ce0041300d5f157a0900c456f97c0a}
+      \strng{authorbibnamehash}{84ce0041300d5f157a0900c456f97c0a}
+      \strng{authornamehash}{84ce0041300d5f157a0900c456f97c0a}
+      \strng{authorfullhash}{84ce0041300d5f157a0900c456f97c0a}
+      \strng{authorfullhashraw}{84ce0041300d5f157a0900c456f97c0a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Obstetrics \& Gynecology}
+      \field{note}{Replaces Practice Bulletin Number 102, March 2009}
+      \field{number}{3}
+      \field{title}{Management of Stillbirth: Obstetric Care Consensus No. 10}
+      \field{volume}{135}
+      \field{year}{2020}
+      \field{pages}{e110\bibrangedash e132}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1097/AOG.0000000000003719
+      \endverb
+    \endentry
+    \entry{Sun2018}{report}{}{}
+      \name{author}{4}{}{%
+        {{hash=4c097d0d0966faa71d0b3f620989d026}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={S.\bibnamedelimi Y.},
+           giveni={S\bibinitperiod\bibinitdelim Y\bibinitperiod}}}%
+        {{hash=95703211e7846b83e70bdff118a98116}{%
+           family={Mattar},
+           familyi={M\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=c9cd60b950cef5587b0482d8611f9106}{%
+           family={Carvalho},
+           familyi={C\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=fde5981dd7c86b64ce6d3715aed5645e}{%
+           family={Braga\bibnamedelima Neto},
+           familyi={B\bibinitperiod\bibinitdelim N\bibinitperiod},
+           given={A.\bibnamedelimi R.},
+           giveni={A\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Federação Brasileira das Associações de Ginecologia e Obstetrícia (Febrasgo)}%
+      }
+      \list{location}{1}{%
+        {São Paulo}%
+      }
+      \strng{namehash}{d00dc278ab3a1ad3682a4c0dabf12147}
+      \strng{fullhash}{c47271dce5a34ec8fdf4f48e229b9aa2}
+      \strng{fullhashraw}{c47271dce5a34ec8fdf4f48e229b9aa2}
+      \strng{bibnamehash}{c47271dce5a34ec8fdf4f48e229b9aa2}
+      \strng{authorbibnamehash}{c47271dce5a34ec8fdf4f48e229b9aa2}
+      \strng{authornamehash}{d00dc278ab3a1ad3682a4c0dabf12147}
+      \strng{authorfullhash}{c47271dce5a34ec8fdf4f48e229b9aa2}
+      \strng{authorfullhashraw}{c47271dce5a34ec8fdf4f48e229b9aa2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Óbito Fetal}
+      \field{type}{Protocolo Febrasgo – Obstetrícia, nº 39/Comissão Nacional Especializada em Gestação de Alto Risco}
+      \field{year}{2018}
+    \endentry
+    \entry{Lawn2016}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{6}{}{%
+        {{hash=ea738db396a0b36ff9dc2eac8c86f82f}{%
+           family={Lawn},
+           familyi={L\bibinitperiod},
+           given={J.\bibnamedelimi E.},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=d061dde764f59d627423ae949bc687c3}{%
+           family={Blencowe},
+           familyi={B\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=b190b097f1e2a17552479d956c743208}{%
+           family={Waiswa},
+           familyi={W\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=8a7f9855f7ff85ac37a0cfa87ce6e52a}{%
+           family={Amouzou},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=47f21e37feb749dbcadedd44f37a4bc0}{%
+           family={Mathers},
+           familyi={M\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=78161e0888fbb0db755a2e930d926c0f}{%
+           family={Hogan},
+           familyi={H\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{90a203dcaae60922b81f958d065fc0bb}
+      \strng{fullhash}{4e78ef98deb26ceb3d7bf847c0756284}
+      \strng{fullhashraw}{4e78ef98deb26ceb3d7bf847c0756284}
+      \strng{bibnamehash}{4e78ef98deb26ceb3d7bf847c0756284}
+      \strng{authorbibnamehash}{4e78ef98deb26ceb3d7bf847c0756284}
+      \strng{authornamehash}{90a203dcaae60922b81f958d065fc0bb}
+      \strng{authorfullhash}{4e78ef98deb26ceb3d7bf847c0756284}
+      \strng{authorfullhashraw}{4e78ef98deb26ceb3d7bf847c0756284}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Lancet}
+      \field{note}{Lancet Ending Preventable Stillbirths Series study group; Lancet Stillbirth Epidemiology investigator group}
+      \field{number}{10018}
+      \field{title}{Stillbirths: Rates, Risk Factors, and Acceleration Towards 2030}
+      \field{volume}{387}
+      \field{year}{2016}
+      \field{pages}{587\bibrangedash 603}
+      \range{pages}{17}
+    \endentry
+    \entry{Silva2026PrenatalInequities}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{6}{}{%
+        {{hash=5f66908689ad1b1d61c10da2fde8b879}{%
+           family={Silva},
+           familyi={S\bibinitperiod},
+           given={Luiza\bibnamedelimb Eunice\bibnamedelimb Sá\bibnamedelima da},
+           giveni={L\bibinitperiod\bibinitdelim E\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=1d8bde955904cb3c3cbdcd916e9160c8}{%
+           family={Costa},
+           familyi={C\bibinitperiod},
+           given={Janaína\bibnamedelima Calu},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=0740aad63d91b497092fa172599fd42b}{%
+           family={Ruas},
+           familyi={R\bibinitperiod},
+           given={Luis\bibnamedelimb Paulo\bibnamedelima Vidaletti},
+           giveni={L\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=7443c5b2408d33758d96023efee7b2cb}{%
+           family={Blumenberg},
+           familyi={B\bibinitperiod},
+           given={Cauane},
+           giveni={C\bibinitperiod}}}%
+        {{hash=7be6113f928390c027900d2fd72117f1}{%
+           family={Barros},
+           familyi={B\bibinitperiod},
+           given={Aluísio\bibnamedelimb J.\bibnamedelimi D.},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=6fe9f06e84cf100206f0124cff21ca63}{%
+           family={Victora},
+           familyi={V\bibinitperiod},
+           given={Cesar\bibnamedelima G.},
+           giveni={C\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \strng{namehash}{d143fc53dd92544262cddcce6d7751fc}
+      \strng{fullhash}{020c315b9acf9549bb90cf286992dd6b}
+      \strng{fullhashraw}{020c315b9acf9549bb90cf286992dd6b}
+      \strng{bibnamehash}{020c315b9acf9549bb90cf286992dd6b}
+      \strng{authorbibnamehash}{020c315b9acf9549bb90cf286992dd6b}
+      \strng{authornamehash}{d143fc53dd92544262cddcce6d7751fc}
+      \strng{authorfullhash}{020c315b9acf9549bb90cf286992dd6b}
+      \strng{authorfullhashraw}{020c315b9acf9549bb90cf286992dd6b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal for Equity in Health}
+      \field{note}{Análise baseada em dados do SINASC de 2023}
+      \field{title}{Exacerbation of Antenatal Care Inequities as Coverage Recommendations Rise in Brazil: Evidence for the Inverse Equity Hypothesis from National Health Information System Data (SINASC) in 2023}
+      \field{volume}{25}
+      \field{year}{2026}
+      \field{pages}{75}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1186/s12939-026-02811-4
+      \endverb
+    \endentry
+    \entry{gardosi2013maternal}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=0ec215850daa46b30f8e329cf6ac899d}{%
+           family={Gardosi},
+           familyi={G\bibinitperiod},
+           given={Jason},
+           giveni={J\bibinitperiod}}}%
+        {{hash=46e49f267b70adcc83835bd2a3c69a39}{%
+           family={Madurasinghe},
+           familyi={M\bibinitperiod},
+           given={Vichithranie},
+           giveni={V\bibinitperiod}}}%
+        {{hash=a7114b2e23f5f03b867c2e5a56c7c894}{%
+           family={Williams},
+           familyi={W\bibinitperiod},
+           given={Mandy},
+           giveni={M\bibinitperiod}}}%
+        {{hash=57c8dd02b2517c32c24f550cd3d77751}{%
+           family={Malik},
+           familyi={M\bibinitperiod},
+           given={Asad},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e1f0b04c315704db908656fdda681bcb}{%
+           family={Francis},
+           familyi={F\bibinitperiod},
+           given={André},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {British Medical Journal Publishing Group}%
+      }
+      \strng{namehash}{14a4bcfc4386556f51376921325372b8}
+      \strng{fullhash}{29914475ae9cd5422f6d1e4a3080d7a3}
+      \strng{fullhashraw}{29914475ae9cd5422f6d1e4a3080d7a3}
+      \strng{bibnamehash}{29914475ae9cd5422f6d1e4a3080d7a3}
+      \strng{authorbibnamehash}{29914475ae9cd5422f6d1e4a3080d7a3}
+      \strng{authornamehash}{14a4bcfc4386556f51376921325372b8}
+      \strng{authorfullhash}{29914475ae9cd5422f6d1e4a3080d7a3}
+      \strng{authorfullhashraw}{29914475ae9cd5422f6d1e4a3080d7a3}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Bmj}
+      \field{title}{Maternal and fetal risk factors for stillbirth: population based study}
+      \field{volume}{346}
+      \field{year}{2013}
+    \endentry
+    \entry{smith2007stillbirth}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=a8c1e98dc840587cfcd176cdd5b07691}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Gordon\bibnamedelima CS},
+           giveni={G\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=6c52bd0d92cca2490a40effdcbbf37f9}{%
+           family={Fretts},
+           familyi={F\bibinitperiod},
+           given={Ruth\bibnamedelima C},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{6986a462310dc8c56ff13bcd7aa706ca}
+      \strng{fullhash}{6986a462310dc8c56ff13bcd7aa706ca}
+      \strng{fullhashraw}{6986a462310dc8c56ff13bcd7aa706ca}
+      \strng{bibnamehash}{6986a462310dc8c56ff13bcd7aa706ca}
+      \strng{authorbibnamehash}{6986a462310dc8c56ff13bcd7aa706ca}
+      \strng{authornamehash}{6986a462310dc8c56ff13bcd7aa706ca}
+      \strng{authorfullhash}{6986a462310dc8c56ff13bcd7aa706ca}
+      \strng{authorfullhashraw}{6986a462310dc8c56ff13bcd7aa706ca}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Lancet}
+      \field{number}{9600}
+      \field{title}{Stillbirth}
+      \field{volume}{370}
+      \field{year}{2007}
+      \field{pages}{1715\bibrangedash 1725}
+      \range{pages}{11}
+    \endentry
+    \entry{pinar2014placental}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{10}{}{%
+        {{hash=29f8159bd9a87e27d2272cb89450d907}{%
+           family={Pinar},
+           familyi={P\bibinitperiod},
+           given={Halit},
+           giveni={H\bibinitperiod}}}%
+        {{hash=5b66eb9f3e9d1b354f8bff60a0f13051}{%
+           family={Goldenberg},
+           familyi={G\bibinitperiod},
+           given={Robert\bibnamedelima L},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=f60811d7ed72635194196dc7a7e32d5a}{%
+           family={Koch},
+           familyi={K\bibinitperiod},
+           given={Matthew\bibnamedelima A},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=e3f60662c4b0f3964b44b711c477d1d6}{%
+           family={Heim-Hall},
+           familyi={H\bibinithyphendelim H\bibinitperiod},
+           given={Josefine},
+           giveni={J\bibinitperiod}}}%
+        {{hash=b6ffb216b4077e896ac1db2c6c9f6748}{%
+           family={Hawkins},
+           familyi={H\bibinitperiod},
+           given={Hal\bibnamedelima K},
+           giveni={H\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=11399f7a32f3a8113cfff6468bdfe988}{%
+           family={Shehata},
+           familyi={S\bibinitperiod},
+           given={Bahig},
+           giveni={B\bibinitperiod}}}%
+        {{hash=8a37dcdc19647fbf46bd16307ab71bed}{%
+           family={Abramowsky},
+           familyi={A\bibinitperiod},
+           given={Carlos},
+           giveni={C\bibinitperiod}}}%
+        {{hash=f8395a14175e936fdedc97d8d80c7520}{%
+           family={Parker},
+           familyi={P\bibinitperiod},
+           given={Corette\bibnamedelima B},
+           giveni={C\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=f92ffeb191857e52f2d632db0fa47f0a}{%
+           family={Dudley},
+           familyi={D\bibinitperiod},
+           given={Donald\bibnamedelima J},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=3d86b1914c54616396685a127fd3e8cf}{%
+           family={Silver},
+           familyi={S\bibinitperiod},
+           given={Robert\bibnamedelima M},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {LWW}%
+      }
+      \strng{namehash}{16739e9d75fcd616562014a5026c3b79}
+      \strng{fullhash}{be15ab2da544a3620110541a8e158e67}
+      \strng{fullhashraw}{be15ab2da544a3620110541a8e158e67}
+      \strng{bibnamehash}{be15ab2da544a3620110541a8e158e67}
+      \strng{authorbibnamehash}{be15ab2da544a3620110541a8e158e67}
+      \strng{authornamehash}{16739e9d75fcd616562014a5026c3b79}
+      \strng{authorfullhash}{be15ab2da544a3620110541a8e158e67}
+      \strng{authorfullhashraw}{be15ab2da544a3620110541a8e158e67}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Obstetrics \& Gynecology}
+      \field{note}{Table 4.2}
+      \field{number}{2 PART 1}
+      \field{title}{Placental findings in singleton stillbirths}
+      \field{volume}{123}
+      \field{year}{2014}
+      \field{pages}{325\bibrangedash 336}
+      \range{pages}{12}
+    \endentry
+    \entry{Mitrogiannis2023PretermRisk}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=cfff3414a3128f769e5fbdfa50ac2d81}{%
+           family={Mitrogiannis},
+           familyi={M\bibinitperiod},
+           given={Ioannis},
+           giveni={I\bibinitperiod}}}%
+        {{hash=13fbffc6863b67ed2a1646ccd5d5a631}{%
+           family={Evangelou},
+           familyi={E\bibinitperiod},
+           given={Evangelos},
+           giveni={E\bibinitperiod}}}%
+        {{hash=fbae1951190ac47f19b3f9f517e97bde}{%
+           family={Efthymiou},
+           familyi={E\bibinitperiod},
+           given={Athina},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9af8072c9d62a88f6d5cc566fa966c99}{%
+           family={Kanavos},
+           familyi={K\bibinitperiod},
+           given={Theofilos},
+           giveni={T\bibinitperiod}}}%
+        {{hash=77c60344d29687049ad529e6303812d8}{%
+           family={Birbas},
+           familyi={B\bibinitperiod},
+           given={Effrosyni},
+           giveni={E\bibinitperiod}}}%
+        {{hash=a455a723b41eea96f46039bbb19fabe4}{%
+           family={Makrydimas},
+           familyi={M\bibinitperiod},
+           given={George},
+           giveni={G\bibinitperiod}}}%
+        {{hash=4ad0d6e9659b615d38db97e4e5cc5fa6}{%
+           family={Papatheodorou},
+           familyi={P\bibinitperiod},
+           given={Stefania},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{de202896fc0e46c4ece23aae5c6fb785}
+      \strng{fullhash}{0e9f83aa22daf34f0cd60fac0626e075}
+      \strng{fullhashraw}{0e9f83aa22daf34f0cd60fac0626e075}
+      \strng{bibnamehash}{0e9f83aa22daf34f0cd60fac0626e075}
+      \strng{authorbibnamehash}{0e9f83aa22daf34f0cd60fac0626e075}
+      \strng{authornamehash}{de202896fc0e46c4ece23aae5c6fb785}
+      \strng{authorfullhash}{0e9f83aa22daf34f0cd60fac0626e075}
+      \strng{authorfullhashraw}{0e9f83aa22daf34f0cd60fac0626e075}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{BMC Medicine}
+      \field{title}{Risk Factors for Preterm Birth: An Umbrella Review of Meta-analyses of Observational Studies}
+      \field{volume}{21}
+      \field{year}{2023}
+      \field{pages}{494}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1186/s12916-023-03171-4
+      \endverb
+    \endentry
+    \entry{Szwarcwald2019SINASC}{article}{}{}
+      \name{author}{9}{}{%
+        {{hash=98d5375e5f775e56b9968cc45e1c6271}{%
+           family={Szwarcwald},
+           familyi={S\bibinitperiod},
+           given={Celia\bibnamedelima Landmann},
+           giveni={C\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=31712cbf59b30a1ece5e970d3db42385}{%
+           family={Leal},
+           familyi={L\bibinitperiod},
+           given={Maria\bibnamedelimb do\bibnamedelima Carmo},
+           giveni={M\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=bc75a793d172b23c5ba039ada9d48fe3}{%
+           family={Esteves-Pereira},
+           familyi={E\bibinithyphendelim P\bibinitperiod},
+           given={Ana\bibnamedelima Paula},
+           giveni={A\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=c623baee74b208d39825b0508d306782}{%
+           family={Almeida},
+           familyi={A\bibinitperiod},
+           given={Wanessa\bibnamedelimb da\bibnamedelimb Silva\bibnamedelima de},
+           giveni={W\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=481f9edceff213360113b6b99d975676}{%
+           family={Frias},
+           familyi={F\bibinitperiod},
+           given={Paulo\bibnamedelimb Germano\bibnamedelima de},
+           giveni={P\bibinitperiod\bibinitdelim G\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=d38311129612a87b25a3edd0f3b1cb73}{%
+           family={Damacena},
+           familyi={D\bibinitperiod},
+           given={Giseli\bibnamedelima Nogueira},
+           giveni={G\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=0612ead95b4ddfbb62a5c9d1aa47702f}{%
+           family={Souza\bibnamedelima Junior},
+           familyi={S\bibinitperiod\bibinitdelim J\bibinitperiod},
+           given={Paulo\bibnamedelimb Roberto\bibnamedelimb Borges\bibnamedelima de},
+           giveni={P\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim B\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=7d98818ff76681aabd5613cc6608590e}{%
+           family={Rocha},
+           familyi={R\bibinitperiod},
+           given={Narayani\bibnamedelima Martins},
+           giveni={N\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=ef32b191df3776a6dead0c1aa2cd0ecd}{%
+           family={Mullachery},
+           familyi={M\bibinitperiod},
+           given={Priscila\bibnamedelimb Melissa\bibnamedelima Honorato},
+           giveni={P\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{d598bfb0a57b59d73106bc28593cbf28}
+      \strng{fullhash}{1138d8f799c1aef4037c49c6918c604e}
+      \strng{fullhashraw}{1138d8f799c1aef4037c49c6918c604e}
+      \strng{bibnamehash}{1138d8f799c1aef4037c49c6918c604e}
+      \strng{authorbibnamehash}{1138d8f799c1aef4037c49c6918c604e}
+      \strng{authornamehash}{d598bfb0a57b59d73106bc28593cbf28}
+      \strng{authorfullhash}{1138d8f799c1aef4037c49c6918c604e}
+      \strng{authorfullhashraw}{1138d8f799c1aef4037c49c6918c604e}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Cadernos de Saúde Pública}
+      \field{number}{10}
+      \field{title}{Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil}
+      \field{volume}{35}
+      \field{year}{2019}
+      \field{pages}{e00214918}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1590/0102-311X00214918
+      \endverb
+    \endentry
+    \entry{naimi2016cumulative}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=2772526fd6e58376f7f6be62d859664e}{%
+           family={Naimi},
+           familyi={N\bibinitperiod},
+           given={AI},
+           giveni={A\bibinitperiod}}}%
+        {{hash=cc3cd240cf9be24a62e931fcabb22c86}{%
+           family={Auger},
+           familyi={A\bibinitperiod},
+           given={N},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley Online Library}%
+      }
+      \strng{namehash}{dd084fc1a6eec2ede60170a5fadca2c2}
+      \strng{fullhash}{dd084fc1a6eec2ede60170a5fadca2c2}
+      \strng{fullhashraw}{dd084fc1a6eec2ede60170a5fadca2c2}
+      \strng{bibnamehash}{dd084fc1a6eec2ede60170a5fadca2c2}
+      \strng{authorbibnamehash}{dd084fc1a6eec2ede60170a5fadca2c2}
+      \strng{authornamehash}{dd084fc1a6eec2ede60170a5fadca2c2}
+      \strng{authorfullhash}{dd084fc1a6eec2ede60170a5fadca2c2}
+      \strng{authorfullhashraw}{dd084fc1a6eec2ede60170a5fadca2c2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{BJOG: An International Journal of Obstetrics \& Gynaecology}
+      \field{number}{7}
+      \field{title}{Cumulative risk of stillbirth in the presence of competing events}
+      \field{volume}{123}
+      \field{year}{2016}
+      \field{pages}{1071\bibrangedash 1074}
+      \range{pages}{4}
+    \endentry
+    \entry{smith2016competing}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=1759ad7f76e4cd628a086099baa56e95}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={GCS},
+           giveni={G\bibinitperiod}}}%
+        {{hash=eab7a3fe1bb8129c94a9ed36b6ea4ad3}{%
+           family={White},
+           familyi={W\bibinitperiod},
+           given={IR},
+           giveni={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{44f4670e56fe2fe59dff2efd1293c27a}
+      \strng{fullhash}{44f4670e56fe2fe59dff2efd1293c27a}
+      \strng{fullhashraw}{44f4670e56fe2fe59dff2efd1293c27a}
+      \strng{bibnamehash}{44f4670e56fe2fe59dff2efd1293c27a}
+      \strng{authorbibnamehash}{44f4670e56fe2fe59dff2efd1293c27a}
+      \strng{authornamehash}{44f4670e56fe2fe59dff2efd1293c27a}
+      \strng{authorfullhash}{44f4670e56fe2fe59dff2efd1293c27a}
+      \strng{authorfullhashraw}{44f4670e56fe2fe59dff2efd1293c27a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Bjog}
+      \field{number}{7}
+      \field{title}{Competing risk models of stillbirth inform populations but not individuals}
+      \field{volume}{123}
+      \field{year}{2016}
+      \field{pages}{1075}
+      \range{pages}{1}
+    \endentry
+    \entry{Austin2016CompetingRisks}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=72bb99ace345dcf7ae8b3e877ab1dc2f}{%
+           family={Austin},
+           familyi={A\bibinitperiod},
+           given={Peter\bibnamedelima C.},
+           giveni={P\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=279bf51a90a4763406b568e55e40910e}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Douglas\bibnamedelima S.},
+           giveni={D\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=b1b4ab5b5909c737c6b6ba5ac5fc2722}{%
+           family={Fine},
+           familyi={F\bibinitperiod},
+           given={Jason\bibnamedelima P.},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{1bc45f96d9d8fdf0d4703328c30f3835}
+      \strng{fullhash}{1bc45f96d9d8fdf0d4703328c30f3835}
+      \strng{fullhashraw}{1bc45f96d9d8fdf0d4703328c30f3835}
+      \strng{bibnamehash}{1bc45f96d9d8fdf0d4703328c30f3835}
+      \strng{authorbibnamehash}{1bc45f96d9d8fdf0d4703328c30f3835}
+      \strng{authornamehash}{1bc45f96d9d8fdf0d4703328c30f3835}
+      \strng{authorfullhash}{1bc45f96d9d8fdf0d4703328c30f3835}
+      \strng{authorfullhashraw}{1bc45f96d9d8fdf0d4703328c30f3835}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Circulation}
+      \field{number}{6}
+      \field{title}{Introduction to the Analysis of Survival Data in the Presence of Competing Risks}
+      \field{volume}{133}
+      \field{year}{2016}
+      \field{pages}{601\bibrangedash 609}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1161/CIRCULATIONAHA.115.017719
+      \endverb
+    \endentry
+    \entry{satagopan2004note}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=304e1031c38d84734468b59672b7e3eb}{%
+           family={Satagopan},
+           familyi={S\bibinitperiod},
+           given={JM},
+           giveni={J\bibinitperiod}}}%
+        {{hash=28b867caf7bc80002e60cff0429d5c18}{%
+           family={Ben-Porat},
+           familyi={B\bibinithyphendelim P\bibinitperiod},
+           given={L},
+           giveni={L\bibinitperiod}}}%
+        {{hash=080119448ad076934664249c88c74359}{%
+           family={Berwick},
+           familyi={B\bibinitperiod},
+           given={M},
+           giveni={M\bibinitperiod}}}%
+        {{hash=d127641d1ad8d5c90a0a7c4eeab4eac2}{%
+           family={Robson},
+           familyi={R\bibinitperiod},
+           given={M},
+           giveni={M\bibinitperiod}}}%
+        {{hash=cf43961b025aad717a1586eee9c73092}{%
+           family={Kutler},
+           familyi={K\bibinitperiod},
+           given={D},
+           giveni={D\bibinitperiod}}}%
+        {{hash=dd27f04e0700d67f8e4865e2730c2aa7}{%
+           family={Auerbach},
+           familyi={A\bibinitperiod},
+           given={AD},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Nature Publishing Group}%
+      }
+      \strng{namehash}{49837cbd023774423bce01cdda6d4c1a}
+      \strng{fullhash}{ebf3fbd833e3b957f793e0002968451c}
+      \strng{fullhashraw}{ebf3fbd833e3b957f793e0002968451c}
+      \strng{bibnamehash}{ebf3fbd833e3b957f793e0002968451c}
+      \strng{authorbibnamehash}{ebf3fbd833e3b957f793e0002968451c}
+      \strng{authornamehash}{49837cbd023774423bce01cdda6d4c1a}
+      \strng{authorfullhash}{ebf3fbd833e3b957f793e0002968451c}
+      \strng{authorfullhashraw}{ebf3fbd833e3b957f793e0002968451c}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{British journal of cancer}
+      \field{number}{7}
+      \field{title}{A note on competing risks in survival data analysis}
+      \field{volume}{91}
+      \field{year}{2004}
+      \field{pages}{1229\bibrangedash 1235}
+      \range{pages}{7}
+    \endentry
+    \entry{clayton1978model}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=061fd75d7b1a5c43abcc37412abfe253}{%
+           family={Clayton},
+           familyi={C\bibinitperiod},
+           given={David\bibnamedelima G},
+           giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{061fd75d7b1a5c43abcc37412abfe253}
+      \strng{fullhash}{061fd75d7b1a5c43abcc37412abfe253}
+      \strng{fullhashraw}{061fd75d7b1a5c43abcc37412abfe253}
+      \strng{bibnamehash}{061fd75d7b1a5c43abcc37412abfe253}
+      \strng{authorbibnamehash}{061fd75d7b1a5c43abcc37412abfe253}
+      \strng{authornamehash}{061fd75d7b1a5c43abcc37412abfe253}
+      \strng{authorfullhash}{061fd75d7b1a5c43abcc37412abfe253}
+      \strng{authorfullhashraw}{061fd75d7b1a5c43abcc37412abfe253}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biometrika}
+      \field{number}{1}
+      \field{title}{A model for association in bivariate life tables and its application in epidemiological studies of familial tendency in chronic disease incidence}
+      \field{volume}{65}
+      \field{year}{1978}
+      \field{pages}{141\bibrangedash 151}
+      \range{pages}{11}
+    \endentry
+    \entry{vaupel1979impact}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=c03d6d2f485907303a25d32373176bf1}{%
+           family={Vaupel},
+           familyi={V\bibinitperiod},
+           given={James\bibnamedelima W},
+           giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=9442584d11b4d1c270bee757ea436559}{%
+           family={Manton},
+           familyi={M\bibinitperiod},
+           given={Kenneth\bibnamedelima G},
+           giveni={K\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=da7cbadf239f647d58536a35346f241d}{%
+           family={Stallard},
+           familyi={S\bibinitperiod},
+           given={Eric},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{7a3b4c43d28c441fe4ab847e0d571317}
+      \strng{fullhash}{7a3b4c43d28c441fe4ab847e0d571317}
+      \strng{fullhashraw}{7a3b4c43d28c441fe4ab847e0d571317}
+      \strng{bibnamehash}{7a3b4c43d28c441fe4ab847e0d571317}
+      \strng{authorbibnamehash}{7a3b4c43d28c441fe4ab847e0d571317}
+      \strng{authornamehash}{7a3b4c43d28c441fe4ab847e0d571317}
+      \strng{authorfullhash}{7a3b4c43d28c441fe4ab847e0d571317}
+      \strng{authorfullhashraw}{7a3b4c43d28c441fe4ab847e0d571317}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Demography}
+      \field{number}{3}
+      \field{title}{The impact of heterogeneity in individual frailty on the dynamics of mortality}
+      \field{volume}{16}
+      \field{year}{1979}
+      \field{pages}{439\bibrangedash 454}
+      \range{pages}{16}
+    \endentry
+    \entry{balan2020tutorial}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=76a0371e19453cfba860b9922b166fb2}{%
+           family={Balan},
+           familyi={B\bibinitperiod},
+           given={Theodor\bibnamedelima A},
+           giveni={T\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=209ba3715be4923f373249a14855a168}{%
+           family={Putter},
+           familyi={P\bibinitperiod},
+           given={Hein},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {SAGE Publications Sage UK: London, England}%
+      }
+      \strng{namehash}{fe1e143cd44479971fc549a2727626f0}
+      \strng{fullhash}{fe1e143cd44479971fc549a2727626f0}
+      \strng{fullhashraw}{fe1e143cd44479971fc549a2727626f0}
+      \strng{bibnamehash}{fe1e143cd44479971fc549a2727626f0}
+      \strng{authorbibnamehash}{fe1e143cd44479971fc549a2727626f0}
+      \strng{authornamehash}{fe1e143cd44479971fc549a2727626f0}
+      \strng{authorfullhash}{fe1e143cd44479971fc549a2727626f0}
+      \strng{authorfullhashraw}{fe1e143cd44479971fc549a2727626f0}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Statistical methods in medical research}
+      \field{number}{11}
+      \field{title}{A tutorial on frailty models}
+      \field{volume}{29}
+      \field{year}{2020}
+      \field{pages}{3424\bibrangedash 3454}
+      \range{pages}{31}
+    \endentry
+    \entry{rsoftware}{manual}{}{}
+      \name{author}{1}{}{%
+        {{hash=dcdebb6b35bff7c0568bf8c50ef8626d}{%
+           family={{R Core Team}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vienna, Austria}%
+      }
+      \list{organization}{1}{%
+        {R Foundation for Statistical Computing}%
+      }
+      \strng{namehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{fullhash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{fullhashraw}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{bibnamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authorbibnamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authornamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authorfullhash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authorfullhashraw}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{R: A Language and Environment for Statistical Computing}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://www.R-project.org/
+      \endverb
+      \verb{url}
+      \verb https://www.R-project.org/
+      \endverb
+    \endentry
+    \entry{saldanha2019microdatasus}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=79c73ec05b5a7ea9f23e24d73700b88b}{%
+           family={Saldanha},
+           familyi={S\bibinitperiod},
+           given={Raphael\bibnamedelimb de\bibnamedelima Freitas},
+           giveni={R\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=ecad396ccc37dcf96ade5c3d529dc253}{%
+           family={Bastos},
+           familyi={B\bibinitperiod},
+           given={Ronaldo\bibnamedelima Rocha},
+           giveni={R\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=47ea3da28c6d7d1442c7a3ea2e645d34}{%
+           family={Barcellos},
+           familyi={B\bibinitperiod},
+           given={Christovam},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {SciELO Brasil}%
+      }
+      \strng{namehash}{6f5e8a15e2ccb1c7269e29187eac74e0}
+      \strng{fullhash}{6f5e8a15e2ccb1c7269e29187eac74e0}
+      \strng{fullhashraw}{6f5e8a15e2ccb1c7269e29187eac74e0}
+      \strng{bibnamehash}{6f5e8a15e2ccb1c7269e29187eac74e0}
+      \strng{authorbibnamehash}{6f5e8a15e2ccb1c7269e29187eac74e0}
+      \strng{authornamehash}{6f5e8a15e2ccb1c7269e29187eac74e0}
+      \strng{authorfullhash}{6f5e8a15e2ccb1c7269e29187eac74e0}
+      \strng{authorfullhashraw}{6f5e8a15e2ccb1c7269e29187eac74e0}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Cadernos de saude publica}
+      \field{title}{Microdatasus: a package for downloading and preprocessing microdata from Brazilian Health Informatics Department (DATASUS)}
+      \field{volume}{35}
+      \field{year}{2019}
+      \field{pages}{e00032419}
+      \range{pages}{-1}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

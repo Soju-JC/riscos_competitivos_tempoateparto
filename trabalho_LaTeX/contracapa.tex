@@ -1,0 +1,52 @@
+% ----------------------------------------------------------------------
+% Folha de rosto (contracapa)
+%
+% A folha de rosto contém o nome da instituição, programa de
+% pós‑graduação, título, autor, natureza do trabalho, nome(s) do
+% orientador e coorientador, local e data. Esta folha é contada mas
+% não numerada.
+
+\begin{titlepage}
+  % A folha de rosto é contada mas não numerada. 
+  % estilo `pretext` para suprimir cabeçalho, rodapé e qualquer
+  % espaçamento extra, garantindo que o texto comece imediatamente
+  % após a margem superior.
+  \thispagestyle{pretext}
+  % Todo o texto da folha de rosto (exceto o bloco à direita) deve
+  % aparecer em negrito. 
+  {\bfseries
+    % Nome do autor e título centralizados
+    \begin{center}
+      \vspace*{2cm}
+      {\normalsize \autor}\\[1.5cm]
+      % O título pode ocupar mais de uma linha; \setstretch{1.5} aplicado
+      % para que a entrelinha do título acompanhe o espaçamento do texto
+      % principal.
+      {\normalsize\begingroup\setstretch{1.5}\titulo\par\endgroup}
+      \vspace{2cm}
+      %{\normalsize Versão original}\\[1.5cm]
+    \end{center}
+    % Informações sobre o programa e orientações. De acordo com as
+    % diretrizes USP, esses dados devem ser alinhados a partir da metade
+    % da parte impressa da página para a margem direita.
+    % Para posicionar o bloco no meio da página, inserido um
+    % deslocamento horizontal de metade da largura do texto (\textwidth)
+    % utilizado \parbox com largura igual a metade da largura do
+    % texto. O conteúdo da \parbox permanece à esquerda dentro desse
+    % bloco, de forma que o texto inicie exatamente no meio da página.
+    \noindent\hspace*{0.5\textwidth}%
+    \parbox{0.5\textwidth}{%
+      \normalfont % o bloco à direita não deve estar em negrito
+      Dissertação apresentada à \instituicao\,\
+      para avaliação no exame de qualificação do programa de pós-graduação\\[0.2cm]
+      Programa de Obstetrícia e Ginecologia\\[0.2cm]
+      Orientador(a): \orientador\
+      \ifx\coorientador\undefined\else\\Coorientador(a): \coorientador\fi
+    }
+    \vfill
+    \begin{center}
+      {\normalsize \local}\\[0.2cm]
+      {\normalsize \datadeposit}
+    \end{center}
+  }
+\end{titlepage}

@@ -1,0 +1,6 @@
+Observatório Obstétrico Brasileiro.
+Painel de Vigilância da Saúde Materna e Perinatal.
+
+Referência online citada no arquivo BibTeX como OOBrPainelVigilancia.
+URL: https://observatorioobstetrico.shinyapps.io/painel-vigilancia-saude-materna-v2/
+

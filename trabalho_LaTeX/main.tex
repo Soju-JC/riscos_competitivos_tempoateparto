@@ -1,0 +1,458 @@
+%------------------------------------------------------------------------------------
+% Modelo de Dissertação de Exame de Qualificação – FMUSP
+% Criador do modelo: José Carlos Soares Junior
+% Este modelo segue: 
+% Diretrizes Para Apresentação de Dissertações e Teses da USP Parte IV (Vancouver)
+%-----------------------------------------------------------------------------------
+\documentclass[a4paper,12pt]{report}
+
+% -----------------------------------------------------------------------
+% Pacotes básicos
+%
+% Codificação de caracteres e font encoding para suportar acentuação.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Fonte: família New Times (newtx) para que todo o
+% documento permaneça consistente, tanto no texto quanto nas
+% fórmulas matemáticas. A combinação dos pacotes `newtxtext` e
+% `newtxmath` fornece uma fonte similar à Times New Roman para texto e
+% matemática, atendendo às diretrizes que recomendam a utilização de
+% fontes legíveis e uniformes.
+\usepackage{newtxtext,newtxmath}
+
+% Suporte aos idiomas português e inglês; a opção 'brazilian' ajusta a
+% hifenização e nomes de capítulos/listas para o português.
+\usepackage[provide=*,brazilian,english]{babel}
+
+% Citações tipográficas inteligentes (abre aspas automaticamente).
+\usepackage{csquotes}
+
+% Ajuste das margens de acordo com as diretrizes USP/ABNT. Para manter
+% margens constantes em todas as páginas (sem inversão entre anverso e
+% verso, pois é uma versão digital, avaliar essa necessidade caso versão impressa), % utilizamos valores fixos de 3cm à esquerda e superior e 2cm
+% à direita e inferior. Caso o trabalho seja impresso frente e verso, a
+% diferença de margens não se aplica no formato eletrônico. As dimensões
+% são definidas abaixo via `geometry`.
+\usepackage{float}
+\usepackage{geometry}
+\geometry{
+  left=3cm,
+  right=2cm,
+  top=3cm,
+  bottom=2cm,
+  headheight=12pt,
+  headsep=0.5cm,
+  footskip=1cm,
+  a4paper
+}
+
+% Controle do espaçamento entre linhas. Segundo as diretrizes, o texto
+% principal deve utilizar espaço de 1,5cm. Utilizamos
+% setspace para configurar esse espaçamento de maneira global e
+% posteriormente ajustar trechos específicos (resumos, citações longas,
+% referências) para espaço simples.
+\usepackage{setspace}
+\onehalfspacing
+
+% Garante recuo no primeiro parágrafo após capítulos, seções e subseções
+\usepackage{indentfirst}
+
+% Pacote para gerenciar cabeçalhos e rodapés. fancyhdr usado 
+% para compor um cabeçalho com linha horizontal, o título do capítulo
+% corrente (à esquerda) e a numeração da página (à direita). Todas as
+% páginas numeradas exibem o número no canto superior direito e não
+% alternam entre pares e ímpares. Nas páginas pré‑textuais o
+% cabeçalho permanece em branco.
+\usepackage{fancyhdr}
+% Inicialmente estilo não definido; \pagestyle{fancy} usado
+% somente na parte textual.
+
+% Definições de marcas para capítulos: armazena apenas o título em
+% letras maiúsculas, sem o número. Isso permite que o cabeçalho
+% mostre apenas o nome do capítulo atual.
+% Para exibir o título do capítulo no cabeçalho sem conversão para
+% caixa alta, redefinido \chaptermark para armazenar o texto tal
+% como fornecido. Isso evita que \MakeUppercase seja aplicado ao
+% cabeçalho.
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+% Configuração do estilo fancy: cabeçalho com linha horizontal,
+% título do capítulo à esquerda e número da página à direita.
+\fancypagestyle{fancy}{%
+  \fancyhf{}
+  % Título do capítulo à esquerda, em cinza
+  %\fancyhead[L]{\textcolor{HeaderGray}{\nouppercase{\leftmark}}}
+  % Número da página à direita, em cinza
+  \fancyhead[R]{\textcolor{HeaderGray}{\thepage}}
+  % Linha horizontal sob o cabeçalho
+ % \renewcommand{\headrulewidth}{0.4pt}
+  %\renewcommand{\footrulewidth}{0pt}
+}
+
+% Também redefinido o estilo plain (utilizado nas páginas de abertura
+% de capítulos) para coincidir com o estilo geral, garantindo que o
+% cabeçalho apareça desde a primeira página das seções textuais.
+\fancypagestyle{plain}{
+  \fancyhf{}
+  % Cabeçalho idêntico ao estilo fancy: título à esquerda e página à
+  % direita, ambos em cinza.
+  %\fancyhead[L]{\textcolor{HeaderGray}{\nouppercase{\leftmark}}}
+  \fancyhead[R]{\textcolor{HeaderGray}{\thepage}}
+  %\renewcommand{\headrulewidth}{0.4pt}
+  %\renewcommand{\footrulewidth}{0pt}
+}
+
+% Ajusta a altura do cabeçalho para evitar avisos do fancyhdr
+\setlength{\headheight}{14.5pt}
+
+% -----------------------------------------------------------------------
+% Estilos de página personalizados
+% Para as páginas pré‑textuais (capa, folha de rosto, resumos, listas e
+% sumário) não deve aparecer a linha de cabeçalho nem a numeração. Para
+% isso definido um estilo `pretext` que esvazia cabeçalho e rodapé. A
+% partir da introdução ativaremos o estilo `fancy` definido acima.
+\fancypagestyle{pretext}{%
+  \fancyhf{}% remove cabeçalhos e rodapés
+  \renewcommand{\headrulewidth}{0pt}% sem linha horizontal
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+%-----------------------------------------------------------------------
+% Formatação dos títulos de capítulos e seções
+% Segundo as diretrizes USP, as seções primárias (capítulos) devem
+% apresentar apenas o indicativo numérico seguido do título, sem a
+% palavra "Capítulo". Para isso utilizamos o pacote `titlesec`,
+% redefinindo o formato padrão do \chapter para omitir o rótulo
+% \chaptername. O indicativo numérico é produzido por \thechapter e
+% separado do título por um espaço.
+\usepackage{titlesec}
+% Aumentamos a entrelinha dentro dos títulos de capítulo para coincidir
+% com o espaçamento do texto (1,5 linhas). O comando \setstretch é
+% fornecido pelo pacote setspace e ajusta o \baselineskip localmente.
+% Capítulos: usar mesma fonte (12pt) do corpo do texto
+\titleformat{\chapter}[hang]
+  {\normalfont\large\bfseries\setstretch{1.5}}
+  {\thechapter}{1em}{}
+% Ajustamos o espaçamento vertical dos capítulos para que, após
+% o título, haja um espaço de 1,5 linhas antes do início do texto.
+% Não inserimos espaço antes porque os capítulos iniciam em nova
+% página. Este ajuste segue a recomendação de separar títulos e
+% texto por aproximadamente 1,5cm.
+% As diretrizes recomendam separar o título do texto que o segue por
+% aproximadamente 1,5cm de espaço vertical. Portanto,
+% ajustamos o espaçamento após os títulos de capítulos para 1,5cm. O
+% parâmetro intermédio (antes) permanece zero pois os capítulos já
+% iniciam em página nova.
+\titlespacing*{\chapter}{0pt}{0pt}{1.5cm}
+
+% Configuração de títulos de seções e subseções.
+% As seções (\section) devem ter o mesmo destaque tipográfico das
+% listas (\large\bfseries) e serem separadas do texto por 1,5linha
+% antes e depois.
+\titleformat{\section}[hang]
+  {\normalfont\normalsize\bfseries\setstretch{1.5}}
+  {\thesection}{1em}{}
+% As seções devem ser separadas do texto anterior e posterior por um
+% espaço de 1,5cm, conforme as normas. Substituímos o uso de
+% 1,5 linhas por 1,5cm para obter um espaçamento constante em centímetros.
+\titlespacing*{\section}{0pt}{1.5cm}{1.5cm}
+
+% Para subseções (\subsection), utilizamos fonte normal, negrito e
+% espaçamento de 1,5 linhas antes e depois.
+\titleformat{\subsection}[hang]
+  {\normalfont\normalsize\bfseries\setstretch{1.5}}
+  {\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{1.5cm}{1.5cm}
+
+% Lista de figuras, tabelas e equações. O pacote tocloft permite
+% redefinir títulos e espaçamentos dessas listas. As macros
+% \cftafterloftitle e \cftafterlottitle inserem conteúdo após os títulos
+% das listas e são utilizadas aqui para centralizar os nomes das listas.
+\usepackage{tocloft}
+% Ajustes para centralizar o título da lista de figuras
+\renewcommand{\cftloftitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftafterloftitle}{\hfill}
+% Ajustes para centralizar o título da lista de tabelas
+\renewcommand{\cftlottitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftafterlottitle}{\hfill}
+% Ajustes para centralizar o título do sumário. Utilizamos o mesmo
+% formato das listas para que o texto “Sumário” apareça com
+% tamanho uniforme e centralizado. Esses comandos são fornecidos
+% pelo pacote tocloft.
+\renewcommand{\cfttoctitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+% Ajustes para centralizar o título da lista de equações (lista personalizada).
+% Para novas listas criadas com \newlistof{X}{ext}{...}, os comandos de
+% formatação usam a extensão (neste caso “equ”) e não o nome do
+% contador. Entretanto, essas macros não existem até que \newlistof
+% seja executado. Assim, a redefinição dos comandos \cftequtitlefont e
+% \cftafterequtitle é feita após a criação da lista (ver abaixo).
+% Definição de uma nova lista para equações. Para evitar conflito com
+% definições internas do tocloft, utilizamos o identificador `myequation`.
+\newcommand{\listequationsname}{Lista de Equações}
+\newlistof{myequation}{equ}{\listequationsname}
+% O comando \lequation adiciona entradas à lista de equações. Deve ser
+% chamado imediatamente antes de cada equação com uma breve descrição.
+\newcommand{\lequation}[1]{\addcontentsline{equ}{myequation}{\protect\numberline{\theequation}#1}}
+% A macro \newlistof cria automaticamente o comando \listofmyequation. Para
+% conveniência definimos \listofequations como um atalho para \listofmyequation.
+\newcommand{\listofequations}{\listofmyequation}
+
+% As macros de centralização do título da lista de equações \cftequtitlefont
+% e \cftafterequtitle só são definidas após a chamada acima a \newlistof.
+% Portanto, redefinimo‑las aqui, garantindo que o título "Lista de Equações"
+% seja centralizado, com tamanho \large e negrito, de forma análoga às
+% listas de figuras e tabelas.
+\renewcommand{\cftequtitlefont}{\hfill\large\bfseries}
+\renewcommand{\cftafterequtitle}{\hfill}
+
+% Ajustes de espaçamento antes dos títulos das listas e do sumário.
+% Para evitar espaço extra entre a margem superior e o título nas
+% páginas de Lista de Figuras, Lista de Tabelas, Lista de Equações e
+% Sumário, definimos os comprimentos \cftbefore<...>titleskip como
+% zero. Esses valores removem o salto vertical que o pacote tocloft
+% insere por padrão antes dos títulos.
+\setlength{\cftbeforeloftitleskip}{0pt}
+\setlength{\cftbeforelottitleskip}{0pt}
+\setlength{\cftbeforeequtitleskip}{0pt}
+\setlength{\cftbeforetoctitleskip}{0pt}
+
+% Hiperlinks no documento; utilizamos cor preta para não distrair o leitor.
+\usepackage[hidelinks]{hyperref}
+
+% Pacote para diagramas, figuras e melhor suporte matemático.
+\usepackage{graphicx}
+% O pacote `caption` permite ajustar a formatação das legendas de figuras
+% e tabelas. Em conjunto com `setspace`, as legendas permanecem com
+% espaçamento simples. Configuramos a fonte das legendas
+% para `\small` e mantemos o rótulo (Figura, Tabela) em negrito.
+\usepackage{caption}
+\captionsetup{
+  font=normal,           % tamanho da fonte
+  labelfont=bf,          % "Tabela X", "Figura X" em negrito
+  justification=raggedright,
+  singlelinecheck=false  % garante alinhamento à esquerda mesmo em legendas de uma linha
+}
+% Estilo global da linha de "Fonte:" (para qualquer float)
+\newcommand{\sourcefontsize}{\footnotesize} % ajuste global aqui
+\newcommand{\fonte}[1]{%
+  \caption*{\sourcefontsize#1}%
+}
+
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+% Alinhamento e espaçamento nas colunas e linhas das tabelas
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+% Para células ocupando várias linhas
+
+% Tabelas mais compactas
+\setlength{\tabcolsep}{3pt}    % espaço horizontal entre colunas (padrão ~6pt)
+\renewcommand{\arraystretch}{1.15} % altura das linhas (leve ajuste)
+
+\usepackage{multirow}
+% Ajuste da espessura das linhas do booktabs (tabelas)
+%\setlength{\heavyrulewidth}{0.12em} % linhas mais espessas (usadas nos cabeçalhos de bloco)
+%\setlength{\lightrulewidth}{0.05em} % linhas mais finas (se vier a usar \midrule)
+\usepackage{makecell}
+
+% Pacote para definição de cores. Usado para personalizar a cor do
+% texto no cabeçalho, conforme solicitado para usar uma tonalidade de
+% cinza.
+\usepackage{xcolor}
+% Definição de uma cor cinza para cabeçalhos. O valor 0.4 corresponde a
+% 40\% de preto; ajuste conforme desejado (0=branco, 1=preto).
+\definecolor{HeaderGray}{gray}{0.4}
+
+% Pacote para formatação de bibliografias conforme o estilo Vancouver.
+% O pacote biblatex-vancouver está disponível no CTAN e deve estar
+% instalado no sistema Overleaf. O backend biber é especificado para
+% processar o arquivo .bib.
+\usepackage[backend=biber,style=vancouver,sorting=none]{biblatex}
+% Citações Vancouver em sobrescrito (expoente):
+% Redefine \cite para se comportar como \supercite
+\let\oldcite\cite
+\renewcommand{\cite}{\supercite}
+
+% Defina a cor específica para as citações
+\definecolor{CiteBlue}{RGB}{0,0,255}
+% Apenas o número das citações em sobrescrito azul:
+\renewcommand*{\mkbibsuperscript}[1]{\textsuperscript{\textcolor{CiteBlue}{#1}}}
+% Substitui o formato padrão do número do rótulo para colorir número + colchetes:
+% Com colchetes
+%\DeclareFieldFormat{labelnumber}{\textcolor{CiteBlue}{\mkbibbrackets{#1}}}
+% Sem colchetes
+\DeclareFieldFormat{labelnumber}{\textcolor{CiteBlue}{#1}}
+
+\addbibresource{references.bib}
+
+% O título "Referências" é produzido automaticamente pelo biblatex
+% através da definição abaixo. Redefinimos o cabeçalho da
+% bibliografia para que seja centralizado, em negrito e de tamanho
+% uniforme (\large), compatível com as listas de figuras e tabelas.
+%\defbibheading{bibliography}{\section*{\centering\large\bfseries#1}}
+% Garante que o rótulo localizável "bibliography" em português seja "Referências"
+\DefineBibliographyStrings{brazilian}{bibliography = {Referências}}
+
+%-----------------------------------------------------------------------
+% Definição de macros de metadados
+% Preencha estes campos com os dados da sua dissertação.
+\newcommand{\autor}{JOSÉ CARLOS SOARES JUNIOR}
+\newcommand{\titulo}{Modelos de análise de sobrevivência com riscos competitivos e fragilidade compartilhada aplicados aos dados de saúde pública de óbitos fetais e nascimentos vivos do estado de São Paulo}
+\newcommand{\local}{São Paulo}
+\newcommand{\datadeposit}{2025}
+\newcommand{\orientador}{Profa. Dra. Agatha Sacramento Rodrigues}
+%\newcommand{\coorientador}{Coorientador(a) (se houver)}
+\newcommand{\instituicao}{Faculdade de Medicina da Universidade de São Paulo}
+\newcommand{\programa}{Programa de Pós‑Graduação em Medicina (Ginecologia e Obstetrícia)}
+
+% Largura padrão para a imagem da capa. Ajuste o valor conforme a
+% proporção desejada da figura institucional. O valor é passado como
+% argumento de largura para \includegraphics na capa.  Exemplos:
+% 0.7\textwidth (padrão), 0.5\textwidth, etc.
+\newcommand{\logowidth}{0.9\textwidth}
+
+%-----------------------------------------------------------------------
+\begin{document}
+
+% Use o estilo de páginas pré‑textuais até o início da parte textual.
+% Assim evita‑se que o cabeçalho com linha e numeração apareça nas
+% páginas de capa, folha de rosto, resumos, listas e sumário.
+\pagestyle{pretext}
+% Para as páginas pré‑textuais não exibir cabeçalho nem espaço
+% extra, zeramos os comprimentos de altura e separação do cabeçalho.
+\setlength{\headheight}{14.5pt}
+\setlength{\headsep}{0pt}
+
+%--------------------------- Elementos pré‑textuais
+
+% Capa (a capa é contada mas não numerada)
+\pagenumbering{gobble}
+\input{capa}
+\clearpage
+% Folha de rosto (contra‑capa) – inicia a contagem de páginas em algarismos árabes
+% As folhas pré‑textuais são contadas a partir da folha de rosto.
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\input{contracapa}
+
+% As listas e resumos são elementos não numerados; centralizamos
+% seus títulos conforme as diretrizes. A contagem de páginas segue
+% sequencialmente, porém a numeração visível somente começará na Introdução.
+
+% Resumo em português
+\clearpage
+\phantomsection
+\input{resumo}
+% Evita o cabeçalho na página do resumo
+\thispagestyle{pretext}
+
+% Abstract em inglês
+\clearpage
+\phantomsection
+\input{abstract}
+% Evita o cabeçalho na página do abstract
+\thispagestyle{pretext}
+
+% Listas de figuras, tabelas e equações
+% Segundo as diretrizes, as listas são elementos pré‑textuais opcionais
+% apresentados após os resumos e antes do sumário.
+
+% Renomeia "Lista de Figuras" para "Lista de Ilustrações"
+\renewcommand{\listfigurename}{Lista de Ilustrações}
+
+% Lista de ilustrações (figuras)
+\clearpage
+\phantomsection
+\listoffigures
+% Evita o cabeçalho na página da lista de figuras
+\thispagestyle{pretext}
+
+% Lista de tabelas
+\clearpage
+\phantomsection
+\listoftables
+% Evita o cabeçalho na página da lista de tabelas
+\thispagestyle{pretext}
+
+% Lista de equações
+\clearpage
+\phantomsection
+\listofequations
+% Evita o cabeçalho na página da lista de equações
+\thispagestyle{pretext}
+
+% Sumário (índice) – deve aparecer após os resumos e listas.
+\clearpage
+\phantomsection
+\tableofcontents
+% Evita o cabeçalho na página do sumário
+\thispagestyle{pretext}
+
+
+%------------------------------ Elementos textuais
+
+% Antes da introdução, encerramos os elementos pré‑textuais. A
+% numeração já foi iniciada na folha de rosto (contracapa) e
+% incrementada nas páginas subsequentes. Para retornar os valores de
+% \headheight e \headsep aos originais e ativar o estilo de
+% cabeçalho com linha e numeração, restauramos esses comprimentos e
+% definimos o estilo fancy.
+\clearpage
+\setlength{\headheight}{14.5pt}
+\setlength{\headsep}{0.5cm}
+\pagestyle{fancy}
+
+\input{introducao}
+\input{objetivo}
+\input{materiais_metodos}
+\input{resultados}
+
+%--------------------------- Elementos pós‑textuais
+
+% Referências bibliográficas
+% Elemento pós‑textual obrigatório. Inicia em uma nova página, mas não
+% necessita iniciar em página ímpar; portanto utilizamos \clearpage em
+% vez de \cleardoublepage para evitar folhas em branco. O título
+% "Referências" é incluído no sumário.
+\clearpage
+\phantomsection
+%\addcontentsline{toc}{chapter}{Referências}
+% A lista de referências deve ser apresentada com espaçamento simples.
+% Utilizamos um grupo local com \singlespacing para que somente a
+% bibliografia seja renderizada em espaço simples, sem afetar o restante
+% do documento.
+\begingroup
+\singlespacing
+\printbibliography[
+  heading = bibintoc,        % usa \chapter* + entrada no sumário automaticamente
+  title   = {Referências}    % força o título exato
+]
+\endgroup
+
+% Anexos
+% Elemento opcional. Inicia em uma nova página e apresenta seu título
+% centralizado e sem numeração. Não requer página ímpar, por isso
+% utilizamos \clearpage.
+\begin{comment}
+\clearpage
+\phantomsection
+\input{anexos}
+\end{comment}
+
+% Apêndices
+% Elemento opcional. Inicia em uma nova página e continua a paginação
+% do texto. Utilizamos \clearpage para evitar inserção de páginas em
+% branco.
+
+\begin{comment}
+\clearpage
+\phantomsection
+\input{apendices}
+\end{comment}
+
+\end{document}

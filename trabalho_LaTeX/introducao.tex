@@ -1,0 +1,295 @@
+% ----------------------------------------------------------------------
+% Capítulo: Introdução
+%
+% A introdução é a primeira parte da estrutura textual e deve iniciar na
+% página 1, com numeração em algarismos arábicos. Usar o comando
+% \chapter para produzir o título numerado e siga as diretrizes de
+% espaçamento e formatação. Os títulos de seções subsequentes devem
+% respeitar a numeração progressiva.
+
+\chapter{Introdução}
+
+O estudo do tempo até o parto constitui um problema relevante na pesquisa em saúde 
+perinatal, especialmente quando diferentes desfechos podem ocorrer ao longo da 
+mesma escala temporal. Nesse contexto, nascimento vivo e óbito fetal representam 
+eventos mutuamente excludentes, com implicações clínicas e epidemiológicas distintas, 
+mas observados em função da idade gestacional. Assim, a análise desses desfechos 
+não deve se restringir às frequências finais, pois a semana em que a gestação se 
+encerra fornece informação importante sobre a dinâmica do risco, a assistência 
+prestada e as possibilidades de prevenção. Por esse motivo, compreender como esses 
+desfechos se distribuem ao longo da gestação é importante tanto para a vigilância 
+em saúde quanto para a modelagem estatística.
+
+Nesta dissertação, o interesse central é avaliar o tempo até o parto em
+gestações de residentes no estado de São Paulo, considerando o óbito fetal e o
+nascimento vivo como eventos competitivos. Essa abordagem permite tratar o
+nascimento vivo não apenas como um registro de encerramento da gestação, mas
+como um desfecho que impede a observação posterior do óbito fetal naquela mesma
+gestação. Ao mesmo tempo, a inclusão dos nascidos vivos aproxima o estudo de
+outro tema importante em obstetrícia, sendo este, o problema da prematuridade. Dessa 
+forma, o trabalho não se restringe à mortalidade fetal, ele busca compreender a 
+dinâmica temporal do parto em presença de desfechos competitivos, em um cenário 
+estadual marcado por grande volume de nascimentos, desigualdades regionais e diferentes 
+níveis de organização da rede assistencial.
+
+\section{Definição dos desfechos perinatais}
+
+No Brasil, a Declaração de Óbito deve ser emitida para óbito fetal quando a
+gestação tiver duração igual ou superior a 20 semanas, ou quando o feto
+apresentar peso corporal igual ou superior a $500\,\text{g}$, ou estatura igual
+ou superior a $25\,\text{cm}$ \cite{ministerioSaudeDO2022}. Este é o critério
+que orienta a definição adotada neste estudo e também é compatível com a
+normatização nacional para emissão da Declaração de Óbito \cite{Andrade2005}. Porém, 
+como a base de dados referente à declarações de óbito fetal do Sistema de Informações
+sobre Mortalidade (SIM-DOFET) não dispõe da informação de estatura \cite{DATASUSSIM2023}, 
+a definição adotada permanece alinhada aos critérios apresentados, mas com a ressalva 
+de não permitir identificar os casos que satisfariam exclusivamente esse critério 
+ausente.
+
+O nascimento vivo, por sua vez, é definido como a expulsão ou extração completa
+do produto da concepção que, após a separação do corpo materno, apresenta
+respiração ou qualquer outro sinal de vida, independentemente da duração da
+gestação \cite{ministerioSaudeDNV2022}. Portanto, mesmo nas idades gestacionais
+mais precoces, um recém-nascido com sinais de vida é registrado como nascido
+vivo e passa a compor o Sistema de Informações sobre Nascidos Vivos (SINASC). Assim, 
+antes do parto, a gestação está sob risco de terminar em óbito fetal ou em nascimento 
+vivo; depois da ocorrência de um desses eventos, o outro deixa de poder ocorrer 
+naquela mesma gestação.
+
+A prematuridade entra nesse raciocínio por estar contida no conjunto dos
+nascidos vivos. A Organização Mundial da Saúde (OMS) define nascimento prematuro
+como aquele ocorrido antes de 37 semanas completas de gestação, tendo como subdivisões 
+a prematuridade extrema, muito prematuro e prematuridade moderada a tardia
+\cite{WHO2023Preterm}. Uma estimativa global de 2020 indicou 13,4 milhões de 
+nascimentos prematuros, com importante variação entre países e
+regiões \cite{Ohuma2023PretermEstimates}. O relatório \textit{Born Too Soon},
+publicado pela OMS, Fundo das Nações Unidas para a Infância (UNICEF) e
+parceiros, reforçou que a carga da prematuridade permanece elevada, com pouco
+avanço global na última década e forte relação com desigualdades no acesso e na
+qualidade do cuidado materno e neonatal \cite{BornTooSoon2023}. Esses elementos
+reforçam a importância de analisar a idade gestacional, pois a interpretação clínica 
+de um nascimento vivo é diferente a depender do momento gestacional em que o parto 
+ocorreu.
+
+\section{Panorama brasileiro}
+
+Definidos os desfechos, o panorama brasileiro ajuda a situar por que o tempo até
+o parto deve ser analisado de forma conjunta para óbito fetal e nascimento vivo.
+No Brasil, a mortalidade fetal segue sendo um indicador sensível das condições
+de saúde materna, da qualidade do cuidado pré-natal e da assistência ao parto.
+Em estudo nacional recente com dados do Sistema de Informações sobre Mortalidade
+(SIM), considerando óbitos fetais com idade gestacional igual ou superior a 20
+semanas, Rocha et al. observaram que esses óbitos representaram 1,14\% dos
+nascimentos no período de 1996 a 2021, com taxa global de 11,4 óbitos fetais por
+1.000 nascimentos \cite{rocha2025space}. Entre os óbitos analisados,
+cerca de 93\% ocorreram antes do parto (dos 7\% restantes, 6\% foram intraparto e 1\% após o parto), 
+aspecto que reforça a relevância da vigilância durante a gestação. Apesar de Rocha et al. observarem 
+uma redução de aproximadamente 20\% na taxa de mortalidade fetal nesse período, a 
+queda não foi homogênea no território nacional. As maiores taxas e as reduções mais 
+lentas foram observadas nas regiões Norte, Nordeste e Centro-Oeste, evidenciando 
+desigualdades regionais \cite{rocha2025space}.
+
+Para o panorama de nascidos vivos, em análise de nível nacional baseada no SINASC,
+com mais de 25,5 milhões de nascidos vivos entre 2014 e 2023, Victor et al.
+observaram aumento da prevalência de prematuridade de 11,3\% em 2014 para 11,9\%
+em 2023 \cite{Victor2025PretermBrazil}. As maiores prevalências foram descritas
+entre mães com 35 anos ou mais, mães com menos de 20 anos, mulheres sem
+escolaridade formal e nas regiões Norte e Nordeste
+\cite{Victor2025PretermBrazil}. Esse padrão é coerente com o Boletim
+Epidemiológico do Ministério da Saúde sobre nascimentos prematuros no período de
+2012 a 2022, que descreve a prematuridade como evento associado a fatores
+sociodemográficos, condições maternas, cuidado pré-natal e características da
+gestação \cite{BrasilBoletimPrematuridade2024}.
+
+O Painel de Vigilância da Saúde Materna e Perinatal do Observatório Obstétrico
+Brasileiro (OOBr) complementa esse conjunto de evidências ao disponibilizar
+indicadores derivados de bases públicas, com recortes por ano e localidade, e
+foi desenvolvido para ampliar a vigilância epidemiológica da saúde materna e de
+seus determinantes \cite{Domingues2024PainelVigilancia,OOBrPainelVigilancia}. De 
+acordo com as informações disponibilizadas, o Brasil registrou 2.537.511 nascidos 
+vivos em 2023, dos quais 304.501 foram prematuros, correspondendo a 12\% do total. Esses
+números ajudam a situar o volume populacional relacionado ao nascimento vivo e
+à prematuridade no mesmo ano analisado nesta dissertação
+\cite{Victor2025PretermBrazil,BrasilBoletimPrematuridade2024}.
+
+\section{Contexto do estado de São Paulo e das RRAS}
+
+O recorte do estado de São Paulo, embora sendo parte desse cenário nacional, acrescenta 
+uma dimensão própria. O estado de São Paulo reúne grande volume de
+nascimentos e uma rede assistencial complexa, com diferenças internas de
+organização, capacidade instalada e fluxos regionais de atenção. A
+regionalização da saúde no estado é organizada, dentre outras, por Regiões de Saúde e Redes
+Regionais de Atenção à Saúde (RRAS), estruturas voltadas à integração de ações e
+serviços de diferentes densidades tecnológicas no território
+\cite{SESSPRegionalizacao2026}. Para a análise de dados de 2023, essa
+organização regional é importante porque permite avaliar se o risco
+de óbito fetal e a distribuição do nascimento vivo variam entre agregados
+territoriais que compartilham redes de referência e condições assistenciais
+semelhantes.
+
+No Painel de Vigilância da Saúde Materna e Perinatal, São Paulo
+registrou 503.903 nascidos vivos em 2023, sendo 60.468 prematuros, o que
+corresponde a 12\% dos nascidos vivos \cite{OOBrPainelVigilancia}. Esses
+valores situam o estado dentro do cenário nacional de prematuridade e reforçam a
+importância de estudar o tempo até o parto em uma população numerosa, em linha
+com estudos nacionais que descrevem a prematuridade como evento frequente e
+socialmente distribuído no Brasil
+\cite{Victor2025PretermBrazil,BrasilBoletimPrematuridade2024}. Para os óbitos
+fetais, entretanto, a comparação direta com o painel deve considerar que há diferença
+de definição (Painel de Vigilância da Saúde Materna e Perinatal considera idade 
+gestacional maior ou igual a 22 para classificar óbito fetal). Assim, a magnitude 
+estadual segundo a definição adotada para a dissertação é tratada como parte da 
+análise do estudo, e não como dado introdutório de referência.
+
+A necessidade de considerar heterogeneidade territorial também é sustentada pela
+literatura. No município de São Paulo, um estudo identificou diferenças
+intraurbanas de mortalidade fetal segundo agrupamentos de vulnerabilidade
+social, indicando que a distribuição dos óbitos não se resume ao volume
+populacional das áreas analisadas \cite{Marques2021FetalSocialVulnerabilitySP}.
+Além disso, o estudo FetRiskS, realizado em hospitais públicos do município de
+São Paulo com dados coletados entre 2019 e 2023, descreveu o óbito fetal como
+evento relacionado a fatores socioeconômicos, acesso inadequado ao pré-natal,
+condições maternas, alterações placentárias, restrição de crescimento fetal e
+malformações congênitas \cite{Marques2026FetRiskS}. De certo modo, essas informações 
+ajudam a justificar a ideia de tratar a região de residência como uma possível 
+aproximação para condições de contexto compartilhadas.
+
+Assim, o estado de São Paulo não foi escolhido apenas pelo tamanho da base de 
+dados, mas também por reunir regiões com diferentes formas de organização da 
+rede de saúde, capacidade de atendimento, etc. Por isso, é um cenário adequado
+para investigar se o risco de óbito fetal e o tempo até o nascimento vivo variam
+entre regiões, mesmo após considerar as características maternas, fetais,
+obstétricas e assistenciais disponíveis no SIM-DOFET e no SINASC. Caso a região
+de residência permaneça associada aos riscos estimados após o ajuste, esse
+resultado não deve ser interpretado como prova de que a região, por si só,
+determine o desfecho. Ele indica, de forma mais prudente, que podem existir
+diferenças regionais não captadas pelas variáveis individuais disponíveis,
+possivelmente relacionadas à organização da rede, ao acesso aos serviços e às
+condições de assistência.
+
+\section{Fatores associados aos desfechos gestacionais}
+
+Feito o panorama estadual e de suas regiões, é importante expor quais fatores dão 
+sentido epidemiológico às variáveis consideradas na análise. O óbito
+fetal é um desfecho que envolve a interação de fatores maternos,
+fetais, placentários, assistenciais e sociais. Documentos clínicos e revisões da
+literatura apontam de forma recorrente a associação desse tipo de óbito com condições como
+hipertensão crônica, pré-eclâmpsia, diabetes, obesidade, tabagismo, idade
+materna avançada, gestação múltipla, história obstétrica desfavorável e
+vulnerabilidade social \cite{ACOG2020Stillbirth,Sun2018,Lawn2016}. No contexto
+brasileiro e paulista, evidências recentes também destacam a importância de
+fatores socioeconômicos, acesso ao pré-natal, condições maternas, alterações
+placentárias, restrição de crescimento fetal e malformações congênitas
+\cite{Silva2026PrenatalInequities,Marques2026FetRiskS}. Assim, a baixa
+escolaridade, a vulnerabilidade socioeconômica e o acesso limitado ao pré-natal
+não devem ser considerados apenas como características individuais, mas como 
+marcadores de trajetórias assistenciais e sociais diferentes durante a gestação.
+
+Entre os fatores fetais e placentários, destacam-se restrição de crescimento
+fetal, malformações congênitas, anomalias genéticas, insuficiência placentária e
+descolamento prematuro de placenta
+\cite{gardosi2013maternal,smith2007stillbirth,pinar2014placental}. A restrição
+de crescimento fetal é particularmente importante porque pode permanecer não
+identificada durante o pré-natal e se manifestar apenas no desfecho.
+Além disso, muitos fatores atuam de forma dependente, como a obesidade e diabetes 
+que podem aumentar o risco de distúrbios hipertensivos, os distúrbios hipertensivos 
+podem comprometer a função placentária e a insuficiência placentária, por sua vez, 
+pode antecipar o parto ou resultar em óbito fetal.
+
+A prematuridade compartilha parte desses fatores, embora seja registrada
+entre os nascidos vivos. Uma revisão de meta-análises de estudos
+observacionais mostrou que o nascimento prematuro reúne um conjunto amplo de
+fatores associados, com diferentes níveis de força de evidência e importante
+heterogeneidade entre estudos \cite{Mitrogiannis2023PretermRisk}. No Brasil,
+estudos recentes mostram maior frequência de prematuridade nos extremos de idade
+materna, em contextos de menor escolaridade, em gestações de maior complexidade
+e em grupos com menor acesso a cuidado pré-natal adequado
+\cite{Victor2025PretermBrazil,BrasilBoletimPrematuridade2024}. Isso reforça a 
+importância de analisar simultaneamente óbito fetal e nascimento vivo
+ao longo da idade gestacional, pois algumas características podem alterar tanto o
+risco de morte intrauterina quanto a distribuição do tempo até o nascimento
+vivo.
+
+As variáveis disponíveis no SIM-DOFET e no SINASC permitem representar apenas parte
+desse conjunto de fatores. Idade materna, escolaridade, raça/cor, tipo de gestação,
+história reprodutiva, número de filhos vivos e mortos previamente, consultas de
+pré-natal e momento de início do pré-natal representam características maternas, 
+sociais, obstétricas e assistenciais já discutidas na literatura 
+\cite{ACOG2020Stillbirth,Victor2025PretermBrazil, Silva2026PrenatalInequities,Marques2026FetRiskS}. 
+Peso ao nascer ou peso fetal, sexo, presença de anomalia e Apgar no quinto
+minuto, quando disponível, representam características fetais e neonatais, embora
+algumas delas sejam medidas no momento do desfecho e, portanto, devam ser
+interpretadas como marcadores do processo gestacional ou do estado ao
+nascimento, e não necessariamente como causas antecedentes. Da mesma forma, tipo
+de parto, local de ocorrência, indução do trabalho de parto e cesariana antes do
+início do trabalho de parto refletem decisões e condições assistenciais próximas
+ao encerramento da gestação, o que exige cautela na interpretação.
+
+O cuidado pré-natal é um componente importante desse contexto, mas sua interpretação 
+no SINASC exige cautela, pois a base informa principalmente o número de consultas
+registradas, e não a qualidade clínica do acompanhamento. Em estudo nacional com
+dados de 2023, Silva et al. observaram que a realização de ao menos uma consulta
+de pré-natal tinha cobertura considerável entre os nascidos vivos, mas que apenas 
+67,4\% dos registros indicavam oito ou mais consultas. Esse contraste sugere que a
+cobertura inicial do pré-natal é alta no país, embora o acompanhamento mais
+completo ainda apresente desigualdades por escolaridade materna, raça/cor, idade
+e região \cite{Silva2026PrenatalInequities}.
+
+Além disso, embora o SIM-DOFET e o SINASC registram informações essenciais sobre a mãe,
+a gestação, o feto, o nascimento e o óbito, elas não mostram com o mesmo nível de 
+detalhe tudo o que ocorreu durante a gestação e a assistência ao
+parto. Aspectos como a qualidade do acompanhamento pré-natal, resultados de
+exames, condutas adotadas durante o parto e condições socioeconômicas individuais 
+mais detalhadas não estão disponíveis de forma completa e padronizada, e mesmo variáveis
+chave para este estudo, como a idade gestacional, podem apresentar limitações
+de concordância e diferenças regionais de mensuração, apesar da elevada cobertura
+nacional do SINASC \cite{Szwarcwald2019SINASC}. Por isso, os resultados devem ser
+interpretados como associações observadas em nível populacional, e não como uma
+descrição completa dos mecanismos clínicos que levaram a cada desfecho. Isso também 
+justifica considerar, na modelagem, a possibilidade de diferenças não medidas entre 
+as regiões, especialmente porque gestações de uma mesma região podem compartilhar 
+condições sociais, assistenciais e estruturais semelhantes.
+
+\section{Relevância metodológica}
+
+A análise de sobrevivência é adequada para este problema porque a idade
+gestacional representa o tempo até a ocorrência do desfecho. Entretanto, quando
+o interesse envolve óbito fetal, o nascimento vivo não deve ser tratado como
+censura comum. Ao ocorrer o nascimento vivo, a gestação se encerra e o óbito
+fetal deixa de ser possível. Desconsiderar essa estrutura
+pode distorcer a interpretação do risco acumulado ao longo da gestação,
+especialmente em idades gestacionais nas quais os nascimentos vivos se tornam
+cada vez mais frequentes \cite{naimi2016cumulative,smith2016competing}. Os modelos 
+de riscos competitivos oferecem uma forma mais coerente de lidar com essa estrutura, 
+pois reconhecem que diferentes causas competem pelo encerramento do tempo de 
+seguimento \cite{Austin2016CompetingRisks,satagopan2004note,naimi2016cumulative}. 
+
+Além da presença de riscos competitivos, os dados possuem uma estrutura 
+regional formada pelas RRAS, de forma que gestantes residentes em uma mesma RRAS 
+estão inseridas em um mesmo contexto territorial e assistencial, podendo compartilhar 
+condições semelhantes de acesso aos serviços, disponibilidade de recursos de saúde 
+e características socioambientais não mensuradas pelas variáveis disponíveis. Essa 
+hipótese é coerente com a organização regional da assistência em saúde e com 
+evidências de desigualdades territoriais em desfechos 
+perinatais \cite{SESSPRegionalizacao2026, Marques2021FetalSocialVulnerabilitySP,rocha2025space}. 
+Nesse contexto, modelos com fragilidade compartilhada permitem incorporar a 
+dependência entre observações pertencentes a uma mesma RRAS por meio de efeitos 
+aleatórios associados às unidades regionais. Esses efeitos representam fontes de 
+heterogeneidade não observada e acomodam a correlação intra-regional 
+\cite{clayton1978model,vaupel1979impact,balan2020tutorial}. Assim, após o ajuste 
+pelas covariáveis medidas, a presença de variação residual entre RRAS pode 
+indicar que diferenças regionais não captadas individualmente ainda influenciam 
+o risco dos desfechos analisados.
+
+Essa estrutura metodológica vai de acordo com o principal problema do estudo:
+analisar o tempo até o parto, considerando que óbito fetal e nascimento vivo são
+eventos competitivos e que os dados estão organizados em um território
+regionalizado. A contribuição esperada não é apenas estimar associações
+individuais, mas oferecer uma forma de análise que respeite a natureza dos
+desfechos perinatais e a organização territorial da assistência em saúde.
+
+Os capítulos seguintes desenvolvem essas ideias detalhadas em etapas. O
+Capítulo 2 apresenta os objetivos gerais e específicos do estudo. O Capítulo 3
+descreve as fontes de dados, o processo de construção das bases, as variáveis
+utilizadas e a fundamentação estatística do modelo. O Capítulo 4 reúne os
+resultados das análises descritivas e dos modelos ajustados.

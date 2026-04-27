@@ -1,0 +1,279 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{parskip}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+\setlist[itemize]{leftmargin=*}
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue
+}
+
+\begin{document}
+
+\begin{center}
+{\Large Relatório para atualização da introdução}\\[0.5em]
+{\large Dissertação sobre tempo até o parto, eventos competitivos e estrutura regional em São Paulo}\\[1em]
+23 de abril de 2026
+\end{center}
+
+\section*{Escopo}
+
+Este relatório foi preparado apenas para a \textbf{introdução} e apenas para a etapa que você definiu agora: atualizar dados e referências e manter o texto coerente com a \textbf{mesma definição operacional} usada no trabalho. Portanto, ele não reescreve ainda a introdução inteira, não mexe no arquivo principal da dissertação e não entra, por enquanto, no ajuste fino de fluidez, estilo ou distribuição final dos parágrafos.
+
+Como a base analítica da dissertação utiliza dados de \textbf{2023}, a lógica adotada neste relatório foi priorizar, sempre que possível, \textbf{fontes recentes publicadas em 2024 ou 2025, mas com dados observados até 2023}. Dados posteriores a 2023 podem até aparecer como contexto complementar, mas não devem ser o eixo principal de comparação com os resultados do estudo.
+
+\section*{Ponto de partida que deve guiar a introdução}
+
+No seu trabalho, o óbito fetal é tratado segundo o critério usado no Brasil para emissão da Declaração de Óbito: \textbf{gestação com duração igual ou superior a 20 semanas, ou peso fetal igual ou superior a 500 g, ou estatura igual ou superior a 25 cm}. Como a sua base não traz estatura, a definição operacional adotada no estudo fica, na prática, centrada em \textbf{idade gestacional} e \textbf{peso fetal}. Esse ponto precisa aparecer de forma simples e clara logo no início da introdução, porque é ele que determina quais indicadores externos podem ou não ser comparados com o seu trabalho.
+
+O mesmo raciocínio vale para os nascidos vivos. O Manual da Declaração de Nascido Vivo define nascimento vivo como a expulsão ou extração completa do produto da concepção que, após a separação, apresente algum sinal de vida, independentemente da duração da gestação. Isso ajuda a amarrar a lógica do trabalho: uma gestação pode terminar em óbito fetal ou em nascimento vivo, e a prematuridade entra justamente dentro do conjunto dos nascidos vivos com idade gestacional menor que 37 semanas.
+
+\section*{Fontes mais úteis para esta etapa}
+
+\small
+\begin{longtable}{L{0.20\textwidth} L{0.18\textwidth} L{0.18\textwidth} L{0.16\textwidth} L{0.22\textwidth}}
+\toprule
+\textbf{Fonte} & \textbf{Tema} & \textbf{Recorte} & \textbf{Aderência ao trabalho} & \textbf{Uso mais indicado na introdução} \\
+\midrule
+\endhead
+Manual da Declaração de Óbito, Ministério da Saúde, 2023 & Definição oficial de óbito fetal no Brasil & Brasil & Alta & Sustentar a definição adotada no estudo e retirar a dependência de definições internacionais logo no começo do texto. \\
+
+Manual da Declaração de Nascido Vivo, Ministério da Saúde, 2022/2023 & Definição de nascido vivo e papel da DNV/Sinasc & Brasil & Alta & Amarrar a presença do nascimento vivo como desfecho concorrente e preparar a entrada da prematuridade na introdução. \\
+
+Rocha et al., 2025, \textit{Revista de Saúde Pública} & Mortalidade fetal com idade gestacional maior ou igual a 20 semanas & Brasil, 1996--2021 & Alta & Principal referência recente para o bloco ``Situação no Brasil''. \\
+
+Plano Nacional de Saúde 2024--2027, atualizado em 2025 & Indicadores oficiais recentes do Ministério da Saúde & Brasil e regiões, com dados até 2021 & Média a alta & Corroborar com fonte oficial do Ministério a persistência das desigualdades regionais, sem depender de dados posteriores à base do estudo. \\
+
+Victor et al., 2025, \textit{BMC Pregnancy and Childbirth} & Tendência nacional da prematuridade & Brasil, 2014--2023 & Alta & Principal referência recente para inserir nascidos vivos e prematuridade na introdução. \\
+
+Boletim Epidemiológico do Ministério da Saúde, 2024 & Perfil epidemiológico dos nascimentos prematuros & Brasil, 2012--2022 & Alta & Fonte oficial complementar para prematuridade, útil se você quiser manter uma referência governamental junto do artigo científico. \\
+
+Painel de Vigilância da Saúde Materna e Perinatal do OOBr, arquivos locais do projeto & Nascidos vivos e prematuridade em anos recentes & Brasil e São Paulo, com prioridade para 2023 & Alta para prematuridade; baixa para mortalidade fetal & Melhor uso para atualizar o parágrafo de São Paulo com números de 2023, mantendo alinhamento temporal com a base do estudo. \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section*{Como incorporar na introdução atual}
+
+\subsection*{1. Definições e critérios de classificação do óbito fetal}
+
+\textbf{Trecho atual que precisa ser revisto}
+
+\begin{quote}
+Diferentes organizações internacionais adotam critérios distintos de idade gestacional ou de peso para classificar o óbito fetal.
+\end{quote}
+
+\textbf{Problema principal}
+
+Hoje essa parte gasta espaço demais com definições internacionais e acaba deixando pouco claro qual definição realmente governa o estudo. Como a sua dissertação não pretende comparar estimativas internacionais sob critérios diferentes, o caminho mais forte é encurtar bastante essa seção e concentrá-la na definição \textbf{brasileira}, que é a mesma usada na construção da base.
+
+\textbf{Como incorporar os dados e referências}
+
+\begin{itemize}
+\item Abrir a seção com a definição brasileira do óbito fetal, apoiada no Manual da Declaração de Óbito do Ministério da Saúde.
+\item Explicar em seguida, em uma frase curta, que a base do estudo não contém estatura e, por isso, a operacionalização adotada considera idade gestacional e peso fetal.
+\item Inserir logo depois a definição de nascido vivo a partir do Manual da DNV, para que o leitor entenda desde cedo por que o nascimento vivo aparece no trabalho como evento concorrente.
+\item Reduzir a discussão sobre OMS, CID-10 e definições internacionais a uma observação breve, apenas para dizer que elas existem e que, por isso, comparações externas precisam de cautela.
+\end{itemize}
+
+\textbf{Trecho que pode entrar depois da revisão}
+
+Pode entrar algo nesta linha:
+
+\begin{quote}
+Neste trabalho, o óbito fetal é considerado segundo o critério adotado no Brasil para emissão da Declaração de Óbito, isto é, perdas gestacionais com 20 semanas ou mais, ou peso fetal de 500 g ou mais, ou estatura de 25 cm ou mais. Como a base utilizada não dispõe de informação sobre estatura, a definição operacional adotada considerou a idade gestacional e o peso fetal. Em contraste, o nascimento vivo corresponde à expulsão ou extração completa do produto da concepção que, após a separação do corpo materno, apresenta qualquer sinal de vida, independentemente da duração da gestação. Essa distinção é central para o presente estudo, porque o acompanhamento gestacional pode terminar em óbito fetal ou em nascimento vivo, sendo este último também relevante para o estudo da prematuridade.
+\end{quote}
+
+\textbf{Fontes prioritárias deste bloco}
+
+\begin{itemize}
+\item Manual da Declaração de Óbito, Ministério da Saúde, 2023.
+\item Manual da Declaração de Nascido Vivo, Ministério da Saúde, 2022/2023.
+\end{itemize}
+
+\subsection*{2. Panorama global}
+
+\textbf{Trecho atual que precisa ser revisto}
+
+\begin{quote}
+Estimativas recentes indicam que aproximadamente 1,9 milhão de bebês nasceram mortos em 2023, considerando gestações com 28 semanas ou mais.
+\end{quote}
+
+\textbf{Problema principal}
+
+Esse bloco usa uma definição internacional diferente da sua. Por isso, ele pode continuar existindo, mas só como \textbf{contexto muito breve}, sem ocupar espaço demais e sem dar a impressão de que os valores globais são diretamente comparáveis aos seus resultados ou aos indicadores brasileiros baseados em 20 semanas.
+
+\textbf{Como incorporar os dados e referências}
+
+\begin{itemize}
+\item Manter, no máximo, um parágrafo curto de contexto global.
+\item Deixar explícito que os números globais mais recentes costumam usar corte de 28 semanas para fins de comparabilidade internacional.
+\item Evitar fazer do bloco global o centro da introdução, já que o restante do trabalho está apoiado na definição brasileira.
+\end{itemize}
+
+\textbf{Observação importante}
+
+Se você quiser seguir de forma ainda mais estrita a orientação da sua orientadora, este bloco pode até ser reduzido a duas ou três frases e perder o papel de seção autônoma. Do ponto de vista de coerência conceitual, isso faria sentido.
+
+Além disso, como o foco comparativo do estudo está em dados até 2023, este bloco global deve funcionar apenas como pano de fundo e não como referência principal para confronto dos achados.
+
+\subsection*{3. Situação no Brasil}
+
+\textbf{Trecho atual que precisa ser revisto}
+
+\begin{quote}
+Em 2015, a taxa de natimortalidade brasileira foi estimada em aproximadamente 10,8 óbitos fetais por 1000 nascimentos.
+\end{quote}
+
+\textbf{Problema principal}
+
+O trecho atual depende demais de números antigos e alterna definições sem deixar isso claro. Aqui você já tem, hoje, uma referência muito melhor: o artigo de Rocha et al. de 2025, que trabalha com \textbf{idade gestacional maior ou igual a 20 semanas}, ou seja, dialoga muito melhor com a base do seu estudo.
+
+\textbf{Dados recentes que podem entrar}
+
+\begin{itemize}
+\item Rocha et al. analisaram o Brasil de 1996 a 2021 com corte em 20 semanas e encontraram taxa global de mortalidade fetal de \textbf{11,4 por 1000 nascimentos} nesse período.
+\item No mesmo estudo, o país registrou \textbf{29.325 óbitos fetais em 2021} no estrato de 20 semanas ou mais.
+\item Cerca de \textbf{93\% dos óbitos} ocorreram antes do parto, o que ajuda a contextualizar a relevância obstétrica do problema.
+\item O artigo também mostra persistência de desigualdades regionais, com piores cenários concentrados no Norte, Nordeste e Centro-Oeste.
+\item No Plano Nacional de Saúde 2024--2027, atualizado em 2025, o Ministério da Saúde informa, para 2021, taxa de \textbf{10 óbitos fetais por 1000 nascidos vivos} no Brasil, com valores mais altos no Norte e Nordeste (\textbf{11,5}) e mais baixos no Sul (\textbf{7,5}), o que reforça a leitura de desigualdade regional.
+\end{itemize}
+
+\textbf{Como incorporar os dados de nascidos vivos e prematuridade neste mesmo bloco}
+
+Como a sua introdução hoje está muito centrada em óbito fetal, vale acoplar ainda neste bloco uma passagem curta sobre nascimento vivo e prematuridade, para preparar melhor o leitor para o desenho do estudo.
+
+\begin{itemize}
+\item Victor et al. analisaram mais de \textbf{25,5 milhões de nascidos vivos} no Brasil entre 2014 e 2023.
+\item Nesse estudo, a prevalência nacional de prematuridade subiu de \textbf{11,3\% em 2014} para \textbf{11,9\% em 2023}.
+\item As maiores frequências foram observadas em mães com 35 anos ou mais, em mães com menos de 20 anos e nas regiões Norte e Nordeste.
+\end{itemize}
+
+\textbf{Trecho que pode entrar depois da revisão}
+
+Pode entrar algo nesta linha:
+
+\begin{quote}
+No Brasil, o óbito fetal continua sendo um problema relevante de saúde pública mesmo após a redução observada nas últimas décadas. Em estudo nacional recente com dados do SIM e definição de óbito fetal a partir de 20 semanas de gestação, Rocha et al. observaram taxa global de 11,4 óbitos fetais por 1000 nascimentos entre 1996 e 2021, com 29.325 registros em 2021 e predominância de ocorrências antes do parto. Além da magnitude do problema, persistem desigualdades regionais, com maiores taxas e reduções mais lentas no Norte, Nordeste e Centro-Oeste. Em paralelo, os nascidos vivos também exigem atenção, especialmente pela frequência da prematuridade. Em análise nacional do Sinasc, a prevalência de parto prematuro aumentou de 11,3\% em 2014 para 11,9\% em 2023, mantendo-se mais elevada nos extremos de idade materna e em regiões socialmente mais vulneráveis.
+\end{quote}
+
+\textbf{Fontes prioritárias deste bloco}
+
+\begin{itemize}
+\item Rocha JBF, Bezerra IMP, Oliveira EKS, Sena ABE, Leitão FNC, Abreu LC. \textit{Space-time trends in fetal mortality in Brazil, 1996--2021}. Revista de Saúde Pública, 2025.
+\item Ministério da Saúde. \textit{Plano Nacional de Saúde 2024--2027}. Atualizado em maio de 2025.
+\item Victor A, Nhancololo AM, Bah HAF et al. \textit{National and regional temporal trends and forecasting of preterm birth in Brazil: evidence from national birth data (2014--2023) with projections to 2030}. BMC Pregnancy and Childbirth, 2025.
+\item Ministério da Saúde. \textit{Boletim Epidemiológico, volume 55, número 13: Perfil epidemiológico dos nascimentos prematuros no Brasil, 2012 a 2022}. 2024.
+\end{itemize}
+
+\subsection*{4. Contexto no estado de São Paulo}
+
+\textbf{Trecho atual que precisa ser revisto}
+
+\begin{quote}
+Entre 2010 e 2014, por exemplo, a taxa de mortalidade fetal no estado de São Paulo foi de aproximadamente 7,9 óbitos fetais por 1000 gestações.
+\end{quote}
+
+\textbf{Problema principal}
+
+O problema aqui não é apenas a idade da referência. É também o fato de que o parágrafo paulista ficou preso ao óbito fetal e não conversa com o restante do estudo, que também olha para nascimento vivo e prematuridade. Para este bloco, os dados mais fortes que você já pode usar agora são os do \textbf{Painel de Vigilância da Saúde Materna e Perinatal} disponível na pasta de suporte do projeto, ao menos para \textbf{nascidos vivos} e \textbf{prematuridade}.
+
+\textbf{Dados recalculados a partir do painel local}
+
+Recalculando os arquivos do painel presentes no projeto, obtêm-se os seguintes valores:
+
+\begin{itemize}
+\item \textbf{Brasil, 2023}: 2.537.511 nascidos vivos e prematuridade de 11,96\%.
+\item \textbf{São Paulo, 2023}: 503.903 nascidos vivos e prematuridade de 12,02\%.
+\end{itemize}
+
+Para este relatório, os valores de 2024 foram deixados de fora da proposta principal de incorporação, porque o objetivo aqui é manter o texto da introdução comparável com uma pesquisa cuja base termina em 2023.
+
+\textbf{Como incorporar esses dados}
+
+\begin{itemize}
+\item Substituir o parágrafo centrado em 2010--2014 por um parágrafo que apresente São Paulo como um cenário de alto volume de nascidos vivos e, ao mesmo tempo, com carga relevante de prematuridade.
+\item Usar esses números para aproximar a introdução do problema real do seu estudo, que envolve tanto óbito fetal quanto nascimento vivo e parto prematuro.
+\item Evitar, por enquanto, usar no texto da introdução a taxa de mortalidade fetal do painel do OOBr como se fosse diretamente equivalente ao seu trabalho.
+\item Evitar fazer do ano de 2024 o eixo do argumento descritivo, já que a comparação principal da dissertação deve permanecer ancorada até 2023.
+\end{itemize}
+
+\textbf{Por que ter cautela com a mortalidade fetal do painel}
+
+Na documentação interna do painel, a taxa de mortalidade fetal aparece baseada em \textbf{óbitos fetais com 22 semanas ou mais}, e a fórmula documentada não coincide perfeitamente com a operacionalização do seu estudo. Então, para o texto da dissertação, o uso mais seguro neste momento é:
+
+\begin{itemize}
+\item usar o painel para \textbf{nascidos vivos} e \textbf{prematuridade}; e
+\item deixar a atualização da mortalidade fetal paulista para quando você optar entre uma fonte pública recente com definição explícita compatível ou o cálculo direto a partir da sua própria base SIM-DOFET/SINASC.
+\end{itemize}
+
+\textbf{Trecho que pode entrar depois da revisão}
+
+Pode entrar algo nesta linha:
+
+\begin{quote}
+No estado de São Paulo, a discussão também precisa considerar o grande volume de nascidos vivos e a persistência da prematuridade. A partir dos dados do Painel de Vigilância da Saúde Materna e Perinatal disponíveis no projeto, o estado registrou 503.903 nascidos vivos em 2023, com prematuridade de 12,02\% entre os nascidos vivos. Esses valores mostram que, mesmo em um estado com ampla rede assistencial, a distribuição dos desfechos gestacionais continua exigindo análise conjunta do nascimento vivo, da prematuridade e do óbito fetal, sobretudo quando se considera a heterogeneidade regional interna.
+\end{quote}
+
+\textbf{Fontes prioritárias deste bloco}
+
+\begin{itemize}
+\item Painel de Vigilância da Saúde Materna e Perinatal do Observatório Obstétrico Brasileiro, com recálculo a partir dos arquivos CSV presentes na pasta de suporte do projeto.
+\item Victor et al., 2025, como base científica complementar para o enquadramento da prematuridade.
+\end{itemize}
+
+\section*{Seções da introdução que não precisam ser mexidas agora}
+
+Pelos critérios desta etapa, eu não mexeria ainda de forma pesada em:
+
+\begin{itemize}
+\item \textbf{Fatores associados}, porque a maior necessidade imediata ali não é atualizar definição, e sim ajustar tom, fluidez e seleção bibliográfica.
+\item \textbf{Abordagens analíticas e relevância metodológica}, porque essa parte conversa mais com o desenho estatístico do estudo do que com a atualização de indicadores descritivos.
+\end{itemize}
+
+\section*{Síntese prática para a próxima versão da introdução}
+
+Se a atualização for feita agora apenas com base neste relatório, a introdução já deve ganhar quatro melhorias concretas:
+
+\begin{itemize}
+\item a definição usada no trabalho ficará clara desde o início;
+\item os dados brasileiros deixarão de depender de referências antigas e de critérios misturados;
+\item a introdução passará a incorporar nascidos vivos e prematuridade de forma coerente com o objetivo do estudo;
+\item o trecho sobre São Paulo deixará de depender de números muito antigos e passará a dialogar melhor com a base, sem deslocar a comparação para anos posteriores a 2023.
+\end{itemize}
+
+\section*{Referências citadas neste relatório}
+
+\begin{enumerate}[leftmargin=*]
+\item Brasil. Ministério da Saúde. \textit{Declaração de Óbito: manual de instruções para preenchimento}. Brasília: Ministério da Saúde; 2023. Disponível em: \href{https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/declaracao-de-obito-manual-de-instrucoes-para-preenchimento.pdf/view}{gov.br/saude/.../declaracao-de-obito-manual-de-instrucoes-para-preenchimento}.
+
+\item Brasil. Ministério da Saúde. \textit{Declaração de Nascido Vivo: manual de instruções para preenchimento}. 4.\ ed. Brasília: Ministério da Saúde; 2022. Disponível em: \href{https://bvsms.saude.gov.br/bvs/publicacoes/declaracao_nascido_vivo_manual_4ed.pdf}{bvsms.saude.gov.br/.../declaracao\_nascido\_vivo\_manual\_4ed.pdf}.
+
+\item Rocha JBF, Bezerra IMP, Oliveira EKS, Sena ABE, Leitão FNC, Abreu LC. Space-time trends in fetal mortality in Brazil, 1996--2021. \textit{Revista de Saúde Pública}. 2025;59:e2. DOI: \url{https://doi.org/10.11606/s1518-8787.2025059006194}.
+
+\item Brasil. Ministério da Saúde. \textit{Plano Nacional de Saúde 2024--2027}. Atualizado em maio de 2025. Disponível em: \href{https://bvsms.saude.gov.br/bvs/publicacoes/plano_nacional_saude_pns_2024_2027.pdf}{bvsms.saude.gov.br/.../plano\_nacional\_saude\_pns\_2024\_2027.pdf}.
+
+\item Victor A, Nhancololo AM, Bah HAF, Xavier SP, Gotine AREM, Moreira VA, et al. National and regional temporal trends and forecasting of preterm birth in Brazil: evidence from national birth data (2014--2023) with projections to 2030. \textit{BMC Pregnancy and Childbirth}. 2025;25:1339. DOI: \url{https://doi.org/10.1186/s12884-025-08536-6}.
+
+\item Brasil. Ministério da Saúde. \textit{Boletim Epidemiológico. Volume 55, número 13: Perfil epidemiológico dos nascimentos prematuros no Brasil, 2012 a 2022}. 2024. Disponível em: \href{https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/boletins/epidemiologicos/edicoes/2024/boletim-epidemiologico-volume-55-no-13.pdf/view}{gov.br/saude/.../boletim-epidemiologico-volume-55-no-13}.
+
+\item Observatório Obstétrico Brasileiro. \textit{Painel de Vigilância da Saúde Materna e Perinatal}. Consulta apoiada pelos arquivos do painel presentes na pasta de suporte do projeto, com recálculo próprio dos indicadores de nascidos vivos e prematuridade para Brasil e São Paulo em 2023. Página institucional: \href{https://observatorioobstetricobr.org/paineis/}{observatorioobstetricobr.org/paineis}.
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,30 @@
+"variavel","nivel","n","media","mediana","q1","q3"
+"consultas","7 e mais",406280,38.4572536181944,39,38,39
+"consultas","De 1 a 3",15526,36.9013268066469,38,36,39
+"consultas","De 4 a 6",63648,37.3023190045249,38,37,39
+"consultas","Nenhuma",468,37.3568376068376,38,37,39
+"idanomal","Não",478372,38.2681553268168,39,38,39
+"idanomal","Sim",7550,37.4344370860927,38,37,39
+"racacormae","Amarela",2566,38.2451286048324,39,38,39
+"racacormae","Branca",255439,38.2214188123192,39,38,39
+"racacormae","Indígena",545,38.5100917431193,39,38,40
+"racacormae","Parda",188113,38.2999845837342,39,38,40
+"racacormae","Preta",39259,38.2575460403984,39,38,40
+"sttrabpart","Não",390414,38.1421721557116,39,38,39
+"sttrabpart","Sim",95508,38.7172383465259,39,38,40
+"stcesparto","Não",97723,38.2546892747869,39,38,39
+"stcesparto","Não se aplica",189360,38.4126161808196,39,38,40
+"stcesparto","Sim",198839,38.1055426752297,38,37,39
+"paridade","Multípara",301576,38.2032820914131,39,38,39
+"paridade","Nulípara",184346,38.3401375674004,39,38,40
+"apgar5_categorico","7 ou menos",9128,34.7125328659071,37,32,39
+"apgar5_categorico","7+",476794,38.32302419913,39,38,39
+"qtdgestant_categorico","Não",184858,38.3395308831644,39,38,40
+"qtdgestant_categorico","Sim",301064,38.2034218637898,39,38,39
+"qtdpartnor_categorico","Não",333278,38.2593660547651,39,38,39
+"qtdpartnor_categorico","Sim",152644,38.2461085925421,39,38,39
+"qtdpartces_categorico","Não",338498,38.3025542248403,39,38,40
+"qtdpartces_categorico","Sim",147424,38.1464754721077,38,38,39
+"mesprenat_categorico","Primeiro trimestre",432864,38.2609895948843,39,38,39
+"mesprenat_categorico","Segundo trimestre",46020,38.1916123424598,39,38,40
+"mesprenat_categorico","Terceiro trimestre",7038,38.3150042625746,39,38,40

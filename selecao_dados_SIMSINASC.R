@@ -3,7 +3,6 @@ library(dplyr)
 library(purrr)
 library(survival)
 library(survminer)
-library(patchwork)
 library(RColorBrewer)
 library(scales)
 library(sf)
@@ -12,9 +11,53 @@ library(stringr)
 library(readxl)
 library(ggrepel)
 
+# Padronização de código municipal (6 dígitos)
+padronizar_codmun6 <- function(x) {
+  x <- as.character(x)
+  x <- str_trim(x)
+  x <- str_pad(x, width = 6, pad = "0")
+  x
+}
+
+ler_mapeamento_rras_oficial <- function(caminho_excel) {
+  mapa_raw <- readxl::read_excel(caminho_excel)
+
+  if (ncol(mapa_raw) < 5) {
+    stop("O arquivo RRAS-MUNICIPIO.xlsx não possui as colunas esperadas.", call. = FALSE)
+  }
+
+  names(mapa_raw)[1:5] <- c("cod_ibge", "municipio", "rras", "regiao_de_saude", "drs")
+
+  mapa_raw %>%
+    transmute(
+      cod_mun6 = padronizar_codmun6(cod_ibge),
+      municipio_residencia = str_trim(as.character(municipio)),
+      rras_nome = str_trim(as.character(rras)),
+      regiao_de_saude = str_trim(as.character(regiao_de_saude)),
+      drs = str_trim(as.character(drs)),
+      rras_id = suppressWarnings(as.integer(str_extract(as.character(rras), "\\d+")))
+    ) %>%
+    filter(!is.na(cod_mun6), cod_mun6 != "", !is.na(rras_id), !is.na(rras_nome)) %>%
+    distinct(cod_mun6, .keep_all = TRUE)
+}
+
+anexar_rras_oficial <- function(df, mapa_rras, codmun_col = "codmunres") {
+  stopifnot(codmun_col %in% names(df))
+
+  df %>%
+    mutate(codmunres = padronizar_codmun6(.data[[codmun_col]])) %>%
+    select(-any_of(c("municipio_residencia", "rras_id", "rras_nome", "regiao_de_saude", "drs"))) %>%
+    left_join(mapa_rras, by = c("codmunres" = "cod_mun6"))
+}
+
+caminho_rras_oficial <- "suporte/shinyremap/inst/app/data/RRAS-MUNICIPIO.xlsx"
+mapa_rras_oficial <- ler_mapeamento_rras_oficial(caminho_rras_oficial)
+
 dados_simsp <- readRDS("dataset_sim_df.rds") # selecao_dados_SIM
+dados_simsp <- anexar_rras_oficial(dados_simsp, mapa_rras_oficial)
 
 dados_sinascsp <- readRDS("dataset_sinasc_df.rds") # selecao_dados_SINASC
+dados_sinascsp <- anexar_rras_oficial(dados_sinascsp, mapa_rras_oficial)
 
 # Identificar nomes de variáveis em comum
 vars_comuns <- intersect(names(dados_sinascsp), names(dados_simsp))
@@ -84,22 +127,16 @@ formatar_tabela_rras <- function(tab) {
     )
 }
 
-# Padronização de código municipal (6 dígitos)
-padronizar_codmun6 <- function(x) {
-  x <- as.character(x)
-  x <- str_trim(x)
-  x <- str_pad(x, width = 6, pad = "0")
-  x
-}
-
 # =============================================================================
 # CONFIGURAÇÃO 
 # =============================================================================
 caminho_shape_mun_sp <- "SP_Municipios_2024/SP_Municipios_2024.shp"
 id_mun_shape         <- "CD_MUN"     # coluna de município no shapefile
-id_mun_dados         <- "codmunres"  # coluna de município nos seus dados
-id_rras_dados        <- "rras_id"
-nome_rras_dados      <- "rras_nome"
+dir_saida_analise    <- file.path("scripts", "analysis_outputs")
+dir_saida_figuras    <- file.path("trabalho_LaTeX", "figuras")
+
+dir.create(dir_saida_analise, recursive = TRUE, showWarnings = FALSE)
+dir.create(dir_saida_figuras, recursive = TRUE, showWarnings = FALSE)
 
 # =============================================================================
 # TABELAS SIMPLES POR RRAS
@@ -123,26 +160,16 @@ mun_sp_sf <- mun_sp_sf %>%
   )
 
 # =============================================================================
-# CONSTRUIR TABELA MUNICÍPIO -> RRAS A PARTIR DOS DADOS
+# CONSTRUIR TABELA MUNICÍPIO -> RRAS A PARTIR DA TABELA OFICIAL
 # =============================================================================
-map_mun_rras <- bind_rows(
-  dados_simsp %>%
-    transmute(
-      cod_mun6  = padronizar_codmun6(.data[[id_mun_dados]]),
-      rras_id   = as.integer(.data[[id_rras_dados]]),
-      rras_nome = if (nome_rras_dados %in% names(dados_simsp))
-        as.character(.data[[nome_rras_dados]]) else NA_character_
-    ),
-  dados_sinascsp %>%
-    transmute(
-      cod_mun6  = padronizar_codmun6(.data[[id_mun_dados]]),
-      rras_id   = as.integer(.data[[id_rras_dados]]),
-      rras_nome = if (nome_rras_dados %in% names(dados_sinascsp))
-        as.character(.data[[nome_rras_dados]]) else NA_character_
-    )
-) %>%
-  filter(!is.na(cod_mun6), cod_mun6 != "", !is.na(rras_id)) %>%
-  distinct(cod_mun6, rras_id, rras_nome)
+map_mun_rras <- mapa_rras_oficial %>%
+  select(cod_mun6, municipio_residencia, rras_id, rras_nome, regiao_de_saude, drs)
+
+write.csv(
+  map_mun_rras,
+  file = file.path(dir_saida_analise, "mapa_municipio_rras_oficial.csv"),
+  row.names = FALSE
+)
 
 # =============================================================================
 # VERIFICAR COBERTURA DO MAPEAMENTO
@@ -154,10 +181,10 @@ mun_sem_rras <- mun_sp_sf %>%
   filter(is.na(rras_id))
 
 if (nrow(mun_sem_rras) > 0) {
-  message("ATENÇÃO: Existem municípios no shapefile sem RRAS no mapeamento derivado dos dados.")
+  message("ATENÇÃO: Existem municípios no shapefile sem RRAS no mapeamento oficial.")
   message("Quantidade de municípios sem RRAS no join: ", nrow(mun_sem_rras))
 } else {
-  message("OK: todos os municípios do shapefile receberam RRAS via join.")
+  message("OK: todos os municípios do shapefile receberam RRAS via mapeamento oficial.")
 }
 
 # =============================================================================
@@ -185,8 +212,24 @@ print(rras_sf)
 # =============================================================================
 # CONTAGENS: ÓBITO FETAL (SIM) E NASCIDO VIVO (SINASC)
 # =============================================================================
-obitos_rras   <- dados_simsp_comum    %>% count(rras_id, name = "n_of")
-nascidos_rras <- dados_sinascsp_comum %>% count(rras_id, name = "n_lv")
+obitos_rras <- dados_simsp_comum %>%
+  filter(!is.na(rras_id)) %>%
+  count(rras_id, rras_nome, name = "n_of")
+
+nascidos_rras <- dados_sinascsp_comum %>%
+  filter(!is.na(rras_id)) %>%
+  count(rras_id, rras_nome, name = "n_lv")
+
+prematuridade_rras <- dados_sinascsp_comum %>%
+  filter(!is.na(rras_id)) %>%
+  mutate(semagestac = suppressWarnings(as.numeric(semagestac))) %>%
+  group_by(rras_id, rras_nome) %>%
+  summarise(
+    n_lv_semagestac = sum(!is.na(semagestac)),
+    n_prematuro_lv = sum(semagestac < 37, na.rm = TRUE),
+    perc_prematuridade_lv = 100 * n_prematuro_lv / n_lv_semagestac,
+    .groups = "drop"
+  )
 
 # =============================================================================
 # POPULAÇÃO POR RRAS (CENSO 2022 agregada)
@@ -212,11 +255,11 @@ pop_df <- pop_raw %>%
 
 map_mun_rras_std <- map_mun_rras %>%
   mutate(cod_mun6 = str_pad(as.character(cod_mun6), 6, pad = "0")) %>%
-  select(cod_mun6, rras_id)
+  select(cod_mun6, rras_id, rras_nome)
 
 pop_rras <- pop_df %>%
   left_join(map_mun_rras_std, by = "cod_mun6") %>%
-  group_by(rras_id) %>%
+  group_by(rras_id, rras_nome) %>%
   summarise(pop_rras = sum(pop, na.rm = TRUE), .groups = "drop") %>%
   arrange(rras_id)
 
@@ -224,11 +267,14 @@ pop_rras <- pop_df %>%
 # INDICADORES FINAIS POR RRAS
 # =============================================================================
 rras_indicadores <- pop_rras %>%
-  left_join(obitos_rras,   by = "rras_id") %>%
-  left_join(nascidos_rras, by = "rras_id") %>%
+  left_join(obitos_rras,   by = c("rras_id", "rras_nome")) %>%
+  left_join(nascidos_rras, by = c("rras_id", "rras_nome")) %>%
+  left_join(prematuridade_rras, by = c("rras_id", "rras_nome")) %>%
   mutate(
     n_of = ifelse(is.na(n_of), 0L, n_of),
     n_lv = ifelse(is.na(n_lv), 0L, n_lv),
+    n_lv_semagestac = ifelse(is.na(n_lv_semagestac), 0L, n_lv_semagestac),
+    n_prematuro_lv = ifelse(is.na(n_prematuro_lv), 0L, n_prematuro_lv),
     n_total_nasc = n_of + n_lv
   ) %>%
   mutate(
@@ -236,11 +282,13 @@ rras_indicadores <- pop_rras %>%
     perc_fd_total = 100 * n_of / sum(n_of, na.rm = TRUE),
     perc_lv_total = 100 * n_lv / sum(n_lv, na.rm = TRUE),
     
-    # Taxa obstétrica clássica por 1000 nascimentos
-    taxa_fd_1000_nasc = 1000 * n_of / n_total_nasc,
+    # Taxa adotada na dissertação: obitos fetais por 1000 nascidos vivos.
+    # O denominador fica explicito para evitar confusao com "nascimentos",
+    # que poderia incluir tanto nascidos vivos quanto obitos fetais.
+    taxa_mortalidade_fetal_1000_lv = 1000 * n_of / ifelse(n_lv == 0, NA_real_, n_lv),
     
-    # Razão OF por 1000 NV (útil como medida alternativa)
-    razao_fd_1000_lv  = 1000 * n_of / ifelse(n_lv == 0, NA_real_, n_lv),
+    # Razao classica usando total de nascimentos, mantida apenas para auditoria.
+    taxa_fd_1000_total_nasc = 1000 * n_of / n_total_nasc,
     
     # Taxa demográfica de NV por 1000 habitantes
     taxa_lv_1000_pop  = 1000 * n_lv / pop_rras
@@ -250,7 +298,7 @@ rras_indicadores <- pop_rras %>%
 # UNTAR COM O SHAPE DAS RRAS
 # =============================================================================
 map_rras <- rras_sf %>%
-  left_join(rras_indicadores, by = "rras_id")
+  left_join(rras_indicadores, by = c("rras_id", "rras_nome"))
 
 # =============================================================================
 # RÓTULOS COM REPEL (RESOLVE RRAS 1-6 COM LABEL MUITO PRÓXIMAS)
@@ -296,9 +344,9 @@ tema_mapa <- theme_minimal(base_size = 11) +
 # =============================================================================
 # MAPAS LIMPOS (CORES MAIS OPACAS)
 # =============================================================================
-# Paletas suaves sequenciais do Brewer
-pal_fd <- "Blues"
-pal_lv <- "Greys"
+# Paletas sequenciais com contraste suficiente para leitura impressa e digital.
+pal_fd <- "Reds"
+pal_lv <- "Blues"
 
 # Mapa A
 p_fd <- ggplot() +
@@ -325,9 +373,10 @@ p_fd <- ggplot() +
   ) +
   scale_fill_distiller(
     name = "% do total\nestadual de óbitos fetais",
-    palette = "Reds",
+    palette = pal_fd,
     direction = 1,
-    na.value = "grey90"
+    na.value = "grey90",
+    guide = guide_colorbar(barwidth = 6, barheight = 0.45)
   ) +
   labs(
     title    = "Óbitos fetais por RRAS",
@@ -363,7 +412,8 @@ p_lv <- ggplot() +
     name = "% do total\nestadual de nascidos vivos",
     palette = pal_lv,
     direction = 1,
-    na.value = "grey90"
+    na.value = "grey90",
+    guide = guide_colorbar(barwidth = 6, barheight = 0.45)
   ) +
   labs(
     title    = "Nascidos vivos por RRAS",
@@ -373,16 +423,135 @@ p_lv <- ggplot() +
   tema_mapa
 
 # Painel final
-painel <- p_fd + p_lv +
-  plot_layout(ncol = 2, guides = "collect") &
-  theme(legend.position = "bottom")
+painel <- ggpubr::ggarrange(
+  p_fd + theme(legend.position = "bottom"),
+  p_lv + theme(legend.position = "bottom"),
+  ncol = 2,
+  common.legend = FALSE,
+  legend = "bottom"
+)
 
 print(painel)
 
-# #-------------------  SALVA GRÁFICO LOCALMENTE
-# png("mapas_RRAS.png", units = "in", width = 10, height = 5, res = 300)
-# print(painel)
-# dev.off()
+dir.create(dir_saida_analise, recursive = TRUE, showWarnings = FALSE)
+dir.create(dir_saida_figuras, recursive = TRUE, showWarnings = FALSE)
+
+ggplot2::ggsave(
+  filename = file.path(dir_saida_figuras, "mapas_RRAS.png"),
+  plot = painel,
+  width = 10,
+  height = 5,
+  units = "in",
+  dpi = 300
+)
+
+ggplot2::ggsave(
+  filename = "mapas_RRAS.png",
+  plot = painel,
+  width = 10,
+  height = 5,
+  units = "in",
+  dpi = 300
+)
+
+# Painel complementar: intensidade relativa dos desfechos por RRAS.
+p_taxa_fd <- ggplot() +
+  geom_sf(
+    data = map_rras_proj,
+    aes(fill = taxa_mortalidade_fetal_1000_lv),
+    color = "white",
+    linewidth = 0.2
+  ) +
+  geom_label_repel(
+    data = rotulos_rras_df,
+    aes(x = x, y = y, label = rras_nome_lab),
+    size = 2.5,
+    fontface = "bold",
+    color = "black",
+    fill = "white",
+    alpha = 0.85,
+    label.size = 0.15,
+    min.segment.length = 0,
+    seed = 123,
+    box.padding = 0.35,
+    point.padding = 0.25,
+    max.overlaps = Inf
+  ) +
+  scale_fill_distiller(
+    name = "Taxa de mortalidade fetal\npor 1000 nascidos vivos",
+    palette = "Reds",
+    direction = 1,
+    na.value = "grey90"
+  ) +
+  labs(
+    title = "Taxa de mortalidade fetal por RRAS",
+    subtitle = "Obitos fetais por 1000 nascidos vivos"
+  ) +
+  coord_sf(crs = 31983) +
+  tema_mapa
+
+p_prematuridade <- ggplot() +
+  geom_sf(
+    data = map_rras_proj,
+    aes(fill = perc_prematuridade_lv),
+    color = "white",
+    linewidth = 0.2
+  ) +
+  geom_label_repel(
+    data = rotulos_rras_df,
+    aes(x = x, y = y, label = rras_nome_lab),
+    size = 2.5,
+    fontface = "bold",
+    color = "black",
+    fill = "white",
+    alpha = 0.85,
+    label.size = 0.15,
+    min.segment.length = 0,
+    seed = 123,
+    box.padding = 0.35,
+    point.padding = 0.25,
+    max.overlaps = Inf
+  ) +
+  scale_fill_distiller(
+    name = "% prematuridade\n(<37 semanas)",
+    palette = "YlOrBr",
+    direction = 1,
+    na.value = "grey90"
+  ) +
+  labs(
+    title = "Prematuridade entre nascidos vivos por RRAS",
+    subtitle = "Percentual de nascidos vivos com idade gestacional < 37 semanas"
+  ) +
+  coord_sf(crs = 31983) +
+  tema_mapa
+
+painel_rras_taxas <- ggpubr::ggarrange(
+  p_taxa_fd + theme(legend.position = "bottom"),
+  p_prematuridade + theme(legend.position = "bottom"),
+  ncol = 2,
+  common.legend = FALSE,
+  legend = "bottom"
+)
+
+print(painel_rras_taxas)
+
+ggplot2::ggsave(
+  filename = file.path(dir_saida_figuras, "mapas_RRAS_taxas_prematuridade.png"),
+  plot = painel_rras_taxas,
+  width = 10,
+  height = 5,
+  units = "in",
+  dpi = 300
+)
+
+ggplot2::ggsave(
+  filename = "mapas_RRAS_taxas_prematuridade.png",
+  plot = painel_rras_taxas,
+  width = 10,
+  height = 5,
+  units = "in",
+  dpi = 300
+)
 
 # =============================================================================
 # TABELA COMPLETA
@@ -390,28 +559,35 @@ print(painel)
 tabela_rras_compacta <- map_rras %>%
   st_drop_geometry() %>%
   transmute(
+    rras_id,
     rras_nome,
     pop_rras,
     obitos_fetais = n_of,
     perc_fd_total = round(perc_fd_total, 2),
-    taxa_fd_1000_nasc = round(taxa_fd_1000_nasc, 2),
+    taxa_mortalidade_fetal_1000_lv = round(taxa_mortalidade_fetal_1000_lv, 2),
     nascidos_vivos = n_lv,
     perc_lv_total  = round(perc_lv_total, 2),
-    taxa_lv_1000_pop = round(taxa_lv_1000_pop, 2)  
+    taxa_lv_1000_pop = round(taxa_lv_1000_pop, 2),
+    prematuros_lv = n_prematuro_lv,
+    perc_prematuridade_lv = round(perc_prematuridade_lv, 2)
   ) %>%
-  mutate(
-    rras_num = as.integer(str_extract(rras_nome, "\\d+"))
-  ) %>%
-  arrange(rras_num) %>%
-  select(-rras_num)
+  arrange(rras_id) %>%
+  select(-rras_id)
+
+write.csv(
+  tabela_rras_compacta,
+  file = file.path(dir_saida_analise, "rras_indicadores_oficiais.csv"),
+  row.names = FALSE
+)
 
 knitr::kable(
   tabela_rras_compacta,
   caption = paste0(
     "Indicadores essenciais por RRAS (SP), organizados pela ordem numérica do nome da RRAS. ",
     "População agregada com base no Censo 2022. ",
-    "Óbitos fetais por 1.000 nascimentos = 1.000 × óbitos fetais/(óbitos fetais + nascidos vivos). ",
+    "Óbitos fetais por 1.000 nascidos vivos = 1.000 × óbitos fetais/nascidos vivos. ",
     "Nascidos vivos por 1.000 habitantes = 1.000 × nascidos vivos/população. ",
+    "Prematuridade = percentual de nascidos vivos com idade gestacional inferior a 37 semanas. ",
     "Percentuais referem-se à participação de cada RRAS no total estadual."
   )
 )
@@ -746,6 +922,260 @@ dados_eda_clean$fstatus_cr <- factor(
   labels = c("Censura", "Óbito fetal", "Nascimento vivo")
 )
 
+#-------------------------------------------------------------------------------
+# Saídas auxiliares para auditoria dos resultados apresentados no texto
+#-------------------------------------------------------------------------------
+
+vars_comuns_auditoria <- c(
+  "idademae_categorico",
+  "sexo",
+  "escmae2010",
+  "qtdfilvivo_categorico",
+  "qtdfilmort_categorico",
+  "gravidez",
+  "parto",
+  "peso_categorico",
+  "lococornasc"
+)
+
+vars_comuns_auditoria <- intersect(vars_comuns_auditoria, names(dados_eda_clean))
+
+# Estes resumos não são estimativas da curva de Kaplan-Meier.
+# Eles descrevem diretamente a distribuição observada da idade gestacional
+# (tempo = semagestac) dentro de cada categoria e de cada desfecho.
+# A mediana e o intervalo interquartilico sao as medidas principais porque a
+# idade gestacional pode ser assimetrica em varios grupos, especialmente nos
+# obitos fetais e nos grupos de prematuridade. A media e o desvio padrao ficam
+# como complemento quando ajudam a indicar deslocamentos gerais da distribuicao.
+criterios_resumo_tempo_variaveis_comuns <- tibble::tibble(
+  variavel = vars_comuns_auditoria,
+  medida_principal = "mediana; intervalo_interquartilico",
+  medidas_complementares = "media; desvio_padrao",
+  justificativa = paste(
+    "Mediana e intervalo interquartilico usados como medidas principais por",
+    "serem menos sensiveis a assimetria e valores extremos da idade gestacional;",
+    "media e desvio padrao mantidos como resumos complementares."
+  )
+)
+
+frequencias_variaveis_comuns <- purrr::map_dfr(
+  vars_comuns_auditoria,
+  function(var) {
+    dados_eda_clean %>%
+      filter(!is.na(.data[[var]]), !is.na(tempo), !is.na(evento_lab)) %>%
+      count(
+        variavel = var,
+        desfecho = evento_lab,
+        nivel = as.character(.data[[var]]),
+        name = "n"
+      ) %>%
+      group_by(variavel, desfecho) %>%
+      mutate(percentual = 100 * n / sum(n)) %>%
+      ungroup()
+  }
+)
+
+resumo_tempo_variaveis_comuns <- purrr::map_dfr(
+  vars_comuns_auditoria,
+  function(var) {
+    dados_eda_clean %>%
+      filter(!is.na(.data[[var]]), !is.na(tempo), !is.na(evento_lab)) %>%
+      group_by(
+        variavel = var,
+        desfecho = evento_lab,
+        nivel = as.character(.data[[var]])
+      ) %>%
+      summarise(
+        n = dplyr::n(),
+        media = mean(tempo, na.rm = TRUE),
+        dp = sd(tempo, na.rm = TRUE),
+        mediana = median(tempo, na.rm = TRUE),
+        q1 = quantile(tempo, 0.25, na.rm = TRUE, names = FALSE),
+        q3 = quantile(tempo, 0.75, na.rm = TRUE, names = FALSE),
+        minimo = min(tempo, na.rm = TRUE),
+        maximo = max(tempo, na.rm = TRUE),
+        .groups = "drop"
+      )
+  }
+)
+
+resumo_tempo_km_global <- function(df) {
+  # Resumo observado da idade gestacional por desfecho usado no KM global.
+  resumo <- df %>%
+    filter(!is.na(tempo), !is.na(evento_lab)) %>%
+    group_by(desfecho = evento_lab) %>%
+    summarise(
+      n = dplyr::n(),
+      media = round(mean(tempo, na.rm = TRUE), 2),
+      dp = round(sd(tempo, na.rm = TRUE), 2),
+      mediana = round(median(tempo, na.rm = TRUE), 2),
+      q1 = round(quantile(tempo, 0.25, na.rm = TRUE, names = FALSE), 2),
+      q3 = round(quantile(tempo, 0.75, na.rm = TRUE, names = FALSE), 2),
+      .groups = "drop"
+    )
+
+  cat("\nResumo da idade gestacional - KM global\n")
+  print(resumo)
+  invisible(resumo)
+}
+
+resumo_tempo_km_comum <- function(df, var, rotulo = var) {
+  # Resumo observado por desfecho e grupo usado nos paineis de KM.
+  resumo <- df %>%
+    filter(!is.na(tempo), !is.na(evento_lab), !is.na(.data[[var]])) %>%
+    group_by(desfecho = evento_lab, grupo = .data[[var]]) %>%
+    summarise(
+      n = dplyr::n(),
+      media = round(mean(tempo, na.rm = TRUE), 2),
+      dp = round(sd(tempo, na.rm = TRUE), 2),
+      mediana = round(median(tempo, na.rm = TRUE), 2),
+      q1 = round(quantile(tempo, 0.25, na.rm = TRUE, names = FALSE), 2),
+      q3 = round(quantile(tempo, 0.75, na.rm = TRUE, names = FALSE), 2),
+      .groups = "drop"
+    )
+
+  cat("\nResumo da idade gestacional - KM por ", rotulo, "\n", sep = "")
+  print(resumo)
+  invisible(resumo)
+}
+
+calcular_logrank <- function(var, status_var, desfecho) {
+  dados_teste <- dados_eda_clean %>%
+    filter(!is.na(.data[[var]]), !is.na(tempo), !is.na(.data[[status_var]]))
+
+  ajuste <- survival::survdiff(
+    stats::as.formula(paste0("Surv(tempo, ", status_var, ") ~ ", var)),
+    data = dados_teste
+  )
+
+  tibble::tibble(
+    variavel = var,
+    desfecho = desfecho,
+    teste = "Log-rank",
+    estatistica = unname(ajuste$chisq),
+    gl = length(ajuste$n) - 1L,
+    valor_p = 1 - stats::pchisq(unname(ajuste$chisq), df = length(ajuste$n) - 1L)
+  )
+}
+
+calcular_gray <- function(var) {
+  dados_teste <- dados_eda_clean %>%
+    filter(!is.na(.data[[var]]), !is.na(tempo), !is.na(fstatus))
+
+  ajuste <- cmprsk::cuminc(
+    ftime = dados_teste$tempo,
+    fstatus = dados_teste$fstatus,
+    group = dados_teste[[var]],
+    cencode = 0
+  )
+
+  testes <- as.data.frame(ajuste$Tests)
+  testes$desfecho_codigo <- rownames(testes)
+
+  testes %>%
+    tibble::as_tibble() %>%
+    transmute(
+      variavel = var,
+      desfecho = dplyr::recode(
+        as.character(desfecho_codigo),
+        "1" = "Óbito fetal",
+        "2" = "Nascimento vivo",
+        .default = as.character(desfecho_codigo)
+      ),
+      teste = "Gray",
+      estatistica = stat,
+      gl = df,
+      valor_p = pv
+    )
+}
+
+testes_variaveis_comuns <- dplyr::bind_rows(
+  purrr::map_dfr(
+    vars_comuns_auditoria,
+    ~ dplyr::bind_rows(
+      calcular_logrank(.x, "status_fd", "Óbito fetal"),
+      calcular_logrank(.x, "status_lv", "Nascimento vivo")
+    )
+  ),
+  purrr::map_dfr(vars_comuns_auditoria, calcular_gray)
+)
+
+# As semanas 30, 35 e 40 foram usadas no texto por terem leitura obstétrica
+# direta: 30 semanas representa prematuridade importante, 35 semanas aproxima a
+# faixa de prematuridade tardia e 40 semanas representa o termo. A semana 20 é
+# mantida nesta saída apenas para conferência, pois os valores tendem a ser muito
+# baixos e pouco informativos para a maioria das variáveis.
+semanas_cif_auditoria <- c(20, 30, 35, 40)
+
+extrair_cif_variavel <- function(var) {
+  dados_teste <- dados_eda_clean %>%
+    filter(!is.na(.data[[var]]), !is.na(tempo), !is.na(fstatus))
+
+  ajuste <- cmprsk::cuminc(
+    ftime = dados_teste$tempo,
+    fstatus = dados_teste$fstatus,
+    group = dados_teste[[var]],
+    cencode = 0
+  )
+
+  pontos <- cmprsk::timepoints(ajuste, times = semanas_cif_auditoria)$est
+
+  as.data.frame(as.table(pontos), stringsAsFactors = FALSE) %>%
+    transmute(
+      variavel = var,
+      curva = as.character(Var1),
+      semana = suppressWarnings(as.numeric(as.character(Var2))),
+      cif = Freq,
+      nivel = sub(
+        " 2$", "",
+        sub(
+          " 1$", "",
+          sub(" Nascimento vivo$", "", sub(" Óbito fetal$", "", curva))
+        )
+      ),
+      desfecho = dplyr::case_when(
+        grepl("Óbito fetal$", curva) ~ "Óbito fetal",
+        grepl("Nascimento vivo$", curva) ~ "Nascimento vivo",
+        grepl(" 1$", curva) ~ "Óbito fetal",
+        grepl(" 2$", curva) ~ "Nascimento vivo",
+        TRUE ~ NA_character_
+      )
+    ) %>%
+    select(variavel, desfecho, nivel, semana, cif)
+}
+
+cif_variaveis_comuns <- purrr::map_dfr(vars_comuns_auditoria, extrair_cif_variavel)
+
+write.csv(
+  criterios_resumo_tempo_variaveis_comuns,
+  file = file.path(dir_saida_analise, "criterios_resumo_tempo_variaveis_comuns.csv"),
+  row.names = FALSE
+)
+
+write.csv(
+  resumo_tempo_variaveis_comuns,
+  file = file.path(dir_saida_analise, "resumo_tempo_variaveis_comuns.csv"),
+  row.names = FALSE
+)
+
+write.csv(
+  frequencias_variaveis_comuns,
+  file = file.path(dir_saida_analise, "frequencias_variaveis_comuns.csv"),
+  row.names = FALSE
+)
+
+write.csv(
+  testes_variaveis_comuns,
+  file = file.path(dir_saida_analise, "testes_lr_gray_variaveis_comuns.csv"),
+  row.names = FALSE
+)
+
+write.csv(
+  cif_variaveis_comuns,
+  file = file.path(dir_saida_analise, "cif_variaveis_comuns_semanas.csv"),
+  row.names = FALSE
+)
+
 #-------------------------------- KM global
 
 # Óbito fetal como evento (censura = nascido vivo) 
@@ -804,6 +1234,7 @@ painel_km_global <- ggarrange(
 )
 
 print(painel_km_global)
+resumo_tempo_km_global(dados_eda_clean)
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("0_ambos_km_global.png", units="in", width=10, height=5, res=112)
@@ -984,6 +1415,7 @@ painel_kmglobal_sexo <- ggarrange(
 )
 
 print(painel_kmglobal_sexo)
+resumo_tempo_km_comum(dados_eda_clean, "sexo", "sexo")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_sexo.png", units="in", width=10, height=5, res=112)
@@ -1265,6 +1697,7 @@ painel_kmglobal_idade <- ggarrange(
   legend        = "bottom"
 )
 print(painel_kmglobal_idade)
+resumo_tempo_km_comum(dados_eda_clean, "idademae_categorico", "faixa etária materna")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_idade_mae.png", units = "in", width = 10, height = 5, res = 112)
@@ -1574,6 +2007,7 @@ painel_kmglobal_esc <- ggarrange(
 )
 
 print(painel_kmglobal_esc)
+resumo_tempo_km_comum(dados_eda_clean, "escmae2010", "escolaridade materna")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_escmae2010.png", units = "in", width = 10, height = 5, res = 112)
@@ -1931,6 +2365,7 @@ painel_kmglobal_filvivo <- ggarrange(
 )
 
 print(painel_kmglobal_filvivo)
+resumo_tempo_km_comum(dados_eda_clean, "qtdfilvivo_categorico", "presença de filhos vivos previamente")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_filvivo.png", units = "in", width = 10, height = 5, res = 112)
@@ -2252,6 +2687,7 @@ painel_kmglobal_filmort <- ggarrange(
 )
 
 print(painel_kmglobal_filmort)
+resumo_tempo_km_comum(dados_eda_clean, "qtdfilmort_categorico", "presença de filhos mortos previamente")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_filmort.png", units = "in", width = 10, height = 5, res = 112)
@@ -2571,6 +3007,7 @@ painel_kmglobal_grav <- ggarrange(
 )
 
 print(painel_kmglobal_grav)
+resumo_tempo_km_comum(dados_eda_clean, "gravidez", "tipo de gravidez")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_gravidez.png", units = "in", width = 10, height = 5, res = 112)
@@ -2893,6 +3330,7 @@ painel_kmglobal_parto <- ggarrange(
 )
 
 print(painel_kmglobal_parto)
+resumo_tempo_km_comum(dados_eda_clean, "parto", "tipo de parto")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_parto.png", units = "in", width = 10, height = 5, res = 112)
@@ -3217,6 +3655,7 @@ painel_kmglobal_peso <- ggarrange(
 )
 
 print(painel_kmglobal_peso)
+resumo_tempo_km_comum(dados_eda_clean, "peso_categorico", "faixa de peso ao nascer")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_peso_categorico.png", units = "in", width = 10, height = 5, res = 112)
@@ -3526,6 +3965,7 @@ painel_kmglobal_loc <- ggarrange(
 )
 
 print(painel_kmglobal_loc)
+resumo_tempo_km_comum(dados_eda_clean, "lococornasc", "local de ocorrência")
 
 #-------------------  SALVA GRÁFICO LOCALMENTE
 png("kmglobal_lococornasc.png", units = "in", width = 10, height = 5, res = 112)

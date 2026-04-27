@@ -1,0 +1,493 @@
+% ----------------------------------------------------------------------
+% Capítulo: Materiais e Métodos
+%
+% Neste capítulo descrevem‑se os dados, a metodologia estatística e os
+% procedimentos analíticos utilizados. Segue as normas de numeração
+% progressiva das seções e subseções.
+
+\chapter{Material e métodos}
+\section{Fontes e coleta de dados}
+
+Todo o desenvolvimento computacional deste estudo foi realizado utilizando o software R (versão 4.5.1)\cite{rsoftware}. Além disso, os dados de interesse foram extraídos por meio do pacote \texttt{microdatasus}\cite{saldanha2019microdatasus}. A seguir, são detalhadas as bases de dados utilizadas e os procedimentos metodológicos adotados.
+
+\subsection{Sistema de Informações sobre Mortalidade - Declaração de Óbitos Fetais (SIM-DOFET)}
+
+Os dados públicos de mortalidade no Brasil são disponibilizados pelo Sistema de Informações sobre Mortalidade (SIM). Especificamente, os óbitos fetais são registrados em uma extensão do SIM para declarações de óbitos fetais (SIM-DOFET), no qual os casos são incluídos de acordo com critérios padronizados pelo Ministério da Saúde. De forma geral, óbito fetal é definido como a morte do produto da concepção antes da expulsão ou extração completa do corpo materno, independentemente da duração da gestação, na ausência de qualquer sinal de vida após a separação, como respiração, batimentos cardíacos, pulsações do cordão umbilical ou movimentos musculares voluntários efetivos\cite{Andrade2005,Lawn2016}.
+
+No Brasil, recomenda-se o preenchimento da Declaração de Óbito Fetal para perdas gestacionais com idade gestacional maior ou igual a 20 semanas, peso fetal maior ou igual a 500 gramas ou estatura maior ou igual a 25 centímetros\cite{Andrade2005}. Entretanto, como a base do SIM-DOFET utilizada neste estudo não dispõe de informação sobre a estatura, a definição adotada considera como óbito fetal os registros que atenderam aos critérios para idade gestacional e peso fetal definidos.
+
+A Figura \ref{fig:fluxograma-sim} apresenta o fluxograma do processo de seleção dos registros até a obtenção da base de óbitos fetais no ano de 2023, no estado de São Paulo e sem dados faltantes nas variáveis de interesse, totalizando 3.268 óbitos fetais para análise.
+
+%------------------------ Fluxograma SIM-DOFET
+\begin{figure}[H]
+  \centering
+  \caption{Fluxograma das etapas de filtragem e obtenção dos dados de óbitos fetais utilizados no estudo.}
+  \includegraphics[width=0.8\linewidth]{figuras/flux_obitos_fetais.png}
+  \fonte{Fonte: figura feita pelo autor.}
+  \label{fig:fluxograma-sim}
+\end{figure}
+
+%------------------------ Fluxograma SINASC
+\subsection{Sistema de
+Informações sobre Nascidos Vivos (SINASC)}
+
+No contexto deste estudo, em que o interesse é o tempo até o parto, gestações que resultam em nascimento vivo do feto são caracterizadas como evento competidor \cite{naimi2016cumulative,satagopan2004note}. Isso ocorre porque, uma vez desencadeado o óbito fetal, torna-se impossibilitada a ocorrência de nascimento vivo. De forma análoga, se o desfecho observado primeiro é o nascimento vivo, o óbito fetal passa a ser impossibilitado, independentemente do tempo de observação do caso.
+
+Os dados de nascidos vivos são disponibilizados por meio do Sistema de Informações sobre Nascidos Vivos (SINASC). A Figura \ref{fig:fluxograma-sinasc} apresenta o fluxograma das etapas de processamento da base de dados, considerando os registros de 2023 para o estado de São Paulo e sem dados faltantes nas variáveis de interesse, totalizando 485.922 nascimentos vivos válidos.
+
+\begin{figure}[H]
+  \centering
+  \caption{Fluxograma das etapas de filtragem e obtenção dos dados de nascidos vivos utilizados no estudo.}
+  \includegraphics[width=0.8\linewidth]{figuras/flux_nascidos_vivos.png}
+  \fonte{Fonte: figura feita pelo autor.}
+  \label{fig:fluxograma-sinasc}
+\end{figure}
+
+\subsection{Variáveis abordadas e dados faltantes}
+
+Para os dados utilizados neste estudo, foram escolhidas, a princípio, 23 variáveis, sendo 11 exclusivas do SINASC, 1 exclusiva do SIM-DOFET e 11 variáveis existentes em ambas as bases de dados. Além dessas, foi construída uma variável regional referente à RRAS de residência, obtida a partir do município de residência da mãe. Suas descrições são apresentadas na Tabela \ref{fig:tabela-variaveis}.
+
+\newpage
+%------------------------ Tabela com a lista das variáveis
+\begin{table}[H]
+    \centering
+    \caption{Lista das variáveis abordadas no estudo.}
+    \label{tab:variables}
+    
+    \small
+    \renewcommand{\arraystretch}{1.05}
+    \begin{tabular}{@{} L{3cm} L{7cm} L{3cm} @{}} 
+        % Linha superior mais espessa
+        \specialrule{0.12em}{0pt}{0pt}
+        
+        % CABEÇALHO: VARIÁVEIS NUMÉRICAS
+        \multicolumn{1}{c}{\textbf{Variáveis numéricas}} &
+        \multicolumn{1}{c}{\textbf{Descrição}} &
+        \multicolumn{1}{c}{\textbf{Fonte}} \\
+        \specialrule{0.12em}{0pt}{0pt}
+        
+        % Numéricas 
+        \texttt{semagestac} &
+        Número de semanas de gestação. &
+        Ambos datasets \\
+        
+        \texttt{codmunres} &
+        Código do município de residência da mãe. &
+        Ambos datasets \\
+        
+        \texttt{idademae} &
+        Idade da mãe em anos. &
+        Ambos datasets \\
+        
+        \texttt{qtdfilvivo} &
+        Número de filhos vivos anteriores (nascidos vivos). &
+        Ambos datasets \\
+        
+        \texttt{qtdfilmort} &
+        Número de filhos mortos anteriores (óbito fetal). &
+        Ambos datasets \\
+        
+        \texttt{peso} &
+        Peso ao nascer em gramas. &
+        Ambos datasets \\
+        
+        \texttt{apgar5} &
+        Índice de Apgar no quinto minuto (0 a 10). &
+        SINASC \\
+        
+        \texttt{qtdgestant} &
+        Número total de gestações anteriores. &
+        SINASC \\
+        
+        \texttt{qtdpartnor} &
+        Número de partos vaginais anteriores. &
+        SINASC \\
+        
+        \texttt{qtdpartces} &
+        Número de partos cesáreos anteriores. &
+        SINASC \\
+        
+        \texttt{mesprenat} &
+        Mês de gestação em que se iniciou o pré-natal. &
+        SINASC \\
+        
+        % Separador entre blocos
+        \specialrule{0.12em}{6pt}{0pt}
+        
+        % CABEÇALHO: VARIÁVEIS CATEGÓRICAS
+        \multicolumn{1}{c}{\textbf{Variáveis categóricas}} &
+        \multicolumn{1}{c}{\textbf{Descrição}} &
+        \multicolumn{1}{c}{\textbf{Fonte}} \\
+        \specialrule{0.12em}{0pt}{0pt}
+        
+        %Categóricas
+        \texttt{sexo} &
+        Sexo do feto (masculino ou feminino). &
+        Ambos datasets \\
+        
+        \texttt{escmae2010} &
+        Escolaridade da mãe (sem escolaridade, primeiro fundamental, segundo fundamental, médio, superior incompleto ou superior completo). &
+        Ambos datasets \\
+        
+        \texttt{gravidez} &
+        Tipo de gravidez (única ou múltipla). &
+        Ambos datasets \\
+        
+        \texttt{parto} &
+        Tipo de parto (vaginal ou cesáreo). &
+        Ambos datasets \\
+        
+        \texttt{lococornasc} &
+        Local de ocorrência do nascimento ou óbito (hospital, outros estabelecimentos de saúde, domicílio ou outros). &
+        Ambos datasets \\
+        
+        \texttt{obitoparto} &
+        Momento do óbito em relação ao parto (antes ou durante). &
+        SIM-DOFET \\
+        
+        \texttt{consultas} &
+        Número de consultas pré-natal registradas (nenhuma, 1 a 3, 4 a 6 ou 7 e mais). &
+        SINASC \\
+        
+        \texttt{idanomal} &
+        Anomalia identificada (sim ou não). &
+        SINASC \\
+        
+        \texttt{racacormae} &
+        Raça/cor da mãe (branca, preta, amarela, parda ou indígena). &
+        SINASC \\
+        
+        \texttt{sttrabpart} &
+        Trabalho de parto induzido (sim ou não). &
+        SINASC \\
+        
+        \texttt{stcesparto} &
+        Cesárea ocorreu antes do trabalho de parto iniciar (sim, não ou não se aplica). &
+        SINASC \\
+        
+        \texttt{paridade} &
+        Define se é a primeira gravidez ou se teve mais de uma (nulípara ou multípara). &
+        SINASC \\
+        
+        \texttt{rras\_nome} &
+        RRAS de residência, definida a partir do município de residência da mãe. &
+        -- \\
+        
+        % Linha inferior padrão
+        \bottomrule
+    \end{tabular}
+\fonte{Variáveis organizadas por tipo, com descrição e informação sobre qual é a base de dados de origem. Fonte: tabela feita pelo autor.}
+\label{fig:tabela-variaveis}
+\end{table}
+
+A Tabela \ref{fig:tabela-dados-faltantes} lista a quantidade de dados faltantes nas variáveis de cada base considerada neste estudo. As porcentagens foram calculadas em relação ao total de registros de cada variável. Além disso, ambas as bases de dados possuem variáveis com categorias identificadas como \emph{Ignorado}, as quais também foram consideradas como parte dos dados faltantes.
+
+É possível notar que, em geral, nenhuma variável do SINASC apresenta mais de 2\% de dados faltantes. Por outro lado, a base do SIM-DOFET apresenta a variável \texttt{escmae2010} com 16\% de dados faltantes (406 registros \emph{Ignorado} + 307 faltantes), enquanto as demais variáveis apresentam porcentagens inferiores a 7\%.
+
+%------------------------ Tabela com a porcentagem de dados faltantes
+\begin{table}[H]
+    \centering
+    \caption{Proporção de dados faltantes por variável nas bases SIM-DOFET e SINASC.}
+    \label{tab:missing}
+    
+    \begin{tabular}{@{} L{4cm} C{4cm} C{4cm} @{}} 
+        % Linha superior mais espessa
+        \specialrule{0.16em}{0pt}{0pt}
+        
+        % CABEÇALHO: VARIÁVEIS NUMÉRICAS
+        \multicolumn{1}{c}{\textbf{Variáveis numéricas}} &
+        \multicolumn{1}{c}{\textbf{SIM-DOFET (\% faltante)}} &
+        \multicolumn{1}{c}{\textbf{SINASC (\% faltante)}} \\
+        \specialrule{0.16em}{0pt}{0pt}
+        
+        % Numéricas
+        \texttt{semagestac}  & 2,16\%  & 0,10\%  \\
+        \texttt{codmunres}   & 0,00\%  & 0,00\%  \\
+        \texttt{idademae}    & 4,74\%  & 0,00\%  \\
+        \texttt{qtdfilvivo}  & 4,52\%  & 0,22\%  \\
+        \texttt{qtdfilmort}  & 6,36\%  & 0,33\%  \\
+        \texttt{peso}        & 3,84\%  & 0,00\%  \\
+        \texttt{apgar5}      & --      & 0,36\%  \\
+        \texttt{qtdgestant}  & --      & 0,17\%  \\
+        \texttt{qtdpartnor}  & --      & 0,27\%  \\
+        \texttt{qtdpartces}  & --      & 0,22\%  \\
+        \texttt{mesprenat}   & --      & 1,46\%  \\
+        
+        % Separador entre blocos (linha forte)
+        \specialrule{0.16em}{0pt}{0pt}
+        
+        % CABEÇALHO: VARIÁVEIS CATEGÓRICAS
+        \multicolumn{1}{c}{\textbf{Variáveis categóricas}} &
+        \multicolumn{1}{c}{\textbf{SIM-DOFET (\% faltante)}} &
+        \multicolumn{1}{c}{\textbf{SINASC (\% faltante)}} \\
+        \specialrule{0.16em}{0pt}{0pt}
+        
+        % Categóricas
+        \texttt{sexo}        & 2,59\%  & 0,02\%  \\
+        \texttt{escmae2010}  & 16,00\% & 0,14\%  \\
+        \texttt{gravidez}    & 1,26\%  & 0,02\%  \\
+        \texttt{parto}       & 1,87\%  & 0,01\%  \\
+        \texttt{lococornasc} & 0,07\%  & 0,00\%  \\
+        \texttt{obitoparto}  & 4,18\%  & --      \\
+        \texttt{consultas}   & --      & 0,17\%  \\
+        \texttt{idanomal}    & --      & 0,41\%  \\
+        \texttt{racacormae}  & --      & 0,31\%  \\
+        \texttt{sttrabpart}  & --      & 0,23\%  \\
+        \texttt{stcesparto}  & --      & 0,68\%  \\
+        \texttt{paridade}    & --      & 0,00\%  \\
+        \texttt{rras\_nome}  & --      & --      \\
+        
+        % Linha inferior padrão (mais fina que as de cabeçalho)
+        \bottomrule
+    \end{tabular}
+    
+    \vspace{2pt}
+    \fonte{Porcentagens de dados faltantes calculadas em relação ao total da variável, onde dados de categoria \emph{Ignorado} estão inclusos no cálculo. Fonte: tabela feita pelo autor.}
+    \label{fig:tabela-dados-faltantes}
+\end{table}
+
+Após essas verificações, optou-se por conduzir as análises apenas com os casos válidos, isto é,
+registros com informação disponível para as variáveis sendo utilizadas. Essa
+escolha foi adotada porque as proporções de ausência foram baixas na maior parte
+das variáveis e porque imputar valores em variáveis, como idade
+gestacional e características maternas e obstétricas, exigiria pressupostos
+adicionais que não são o foco deste estudo. A principal
+ressalva é a escolaridade materna no SIM-DOFET, que apresentou maior proporção de
+ausência; por isso, seus resultados devem ser interpretados com cautela.
+
+\section{Análise}
+
+As análises foram conduzidas em etapas, acompanhando a forma como os dados foram
+construídos. Primeiro, as bases SIM-DOFET e SINASC foram preparadas
+separadamente. Depois, as variáveis comuns às duas bases foram padronizadas e
+unidas em uma base única, permitindo analisar o tempo até o parto sob duas
+possíveis causas: óbito fetal e nascimento vivo. Por fim, as variáveis
+exclusivas de cada base e os indicadores regionais por RRAS foram analisados em
+blocos próprios.
+
+A unidade de análise foi a gestação registrada nas bases de dados. O tempo de
+seguimento foi definido pela idade gestacional em semanas, representada por
+$T_i$, correspondente à variável \texttt{semagestac}. Na base conjunta, foi
+definida uma variável de causa do desfecho, $\delta_i$, com $\delta_i=1$ para
+óbito fetal e $\delta_i=2$ para nascimento vivo. Para as análises de
+Kaplan-Meier em perspectiva de causa específica, foram criadas duas variáveis
+indicadoras: uma considerando óbito fetal como evento de interesse e nascimento
+vivo como censura, e outra considerando nascimento vivo como evento de interesse
+e óbito fetal como censura. Para a análise de riscos competitivos, foi usada uma
+codificação com 0 para censura, 1 para óbito fetal e 2 para nascimento vivo.
+
+As variáveis numéricas foram descritas por média, desvio padrão, mediana,
+primeiro quartil e terceiro quartil. Nas variáveis categóricas, além das
+frequências absolutas e percentuais, também foram calculados medidas resumo da idade
+gestacional dentro de cada categoria. Como essa variável pode apresentar
+assimetria, especialmente nos óbitos fetais e nos grupos com maior concentração
+de prematuridade, foi priorizado a mediana acompanhada do intervalo 
+interquartílico (Q1--Q3) para a interpretação do tempo gestacional. A média e o desvio padrão
+foram usados como medidas complementares apenas quando ajudaram a evidenciar
+pequenos deslocamentos entre grupos, principalmente em situações nas quais as
+medianas foram iguais; nesses casos, os valores foram descritos como média
+$\pm$ desvio padrão, com a mediana apresentada entre parênteses quando
+necessário.
+
+Algumas variáveis foram recategorizadas para facilitar a interpretação e
+evitar categorias muito fragmentadas. A idade materna foi agrupada em menores de
+20 anos, 20 a 34 anos e 35 anos ou mais. A escolaridade materna foi agrupada em
+baixa, média e alta escolaridade. O tipo de gestação foi classificado como única
+ou múltipla, e o local de ocorrência foi agrupado em hospital ou outros locais.
+O peso ao nascer foi classificado em menor que 2.500 g, 2.500 a 3.999 g e 4.000
+g ou mais. As variáveis referentes a filhos vivos e filhos mortos previamente
+foram dicotomizadas em ausência ou presença desse antecedente. Nas variáveis
+exclusivas do SINASC, o Apgar no quinto minuto foi categorizado em maior que 7 e
+menor ou igual a 7, o início do pré-natal foi agrupado por trimestre e as
+variáveis de histórico obstétrico foram organizadas em categorias de presença ou
+ausência quando apropriado.
+
+Na análise de sobrevivência, a função de sobrevivência foi definida como
+$S(t)=P(T>t)$, isto é, a probabilidade de a gestação ainda não ter apresentado o
+desfecho de interesse até a idade gestacional $t$. As curvas de Kaplan-Meier
+foram usadas para descrever essa função ao longo das semanas de gestação. Na base
+conjunta, as curvas foram estimadas sob duas perspectivas: óbito fetal como evento de
+interesse, censurando os nascimentos vivos, e nascimento vivo como evento de
+interesse, censurando os óbitos fetais. A comparação global entre curvas foi
+feita pelo teste de Log-rank, cuja estatística foi apresentada como
+$\chi^2$, com graus de liberdade definidos pelo número de categorias menos um.
+
+As variáveis exclusivas de cada base foram avaliadas separadamente. No SIM-DOFET,
+como todos os registros correspondem a óbitos fetais, a análise de Kaplan-Meier
+descreveu a distribuição empírica da idade gestacional até o óbito fetal. No
+SINASC, como todos os registros correspondem a nascimentos vivos, a mesma lógica
+foi usada para descrever a distribuição da idade gestacional até o nascimento
+vivo. Nesses dois casos isoladamente, não há evento competitivo dentro da base em
+análise; portanto, os gráficos e testes descrevem diferenças na distribuição do
+tempo gestacional entre categorias da variável avaliada.
+
+Como o problema principal envolve dois desfechos mutuamente excludentes, também
+foram estimadas funções de incidência acumulada (CIF - do inglês \textit{Cumulative Incidence Function}) no contexto de riscos
+competitivos. Para a causa $k$, a CIF foi interpretada como
+\[
+F_k(t)=P(T\leq t,\delta=k),
+\]
+ou seja, a probabilidade acumulada de ocorrência da causa $k$ até a idade
+gestacional $t$, considerando a presença da causa concorrente. No
+contexto deste estudo, isso significa estimar a probabilidade acumulada de óbito
+fetal levando em conta que o nascimento vivo impede a ocorrência posterior desse
+óbito fetal, e vice-versa. As CIF foram estimadas para as variáveis comuns às
+duas bases e comparadas entre grupos pelo teste de Gray.
+
+Para a apresentação das CIF no texto, foram extraídos valores nas semanas 30, 35
+e 40. Esses pontos foram escolhidos por permitirem uma melhor leitura obstétrica: 30
+semanas representa prematuridade acentuada (muito prematuro), 35 semanas se aproxima da faixa de
+prematuridade tardia e 40 semanas representa o termo. As medianas,
+intervalos interquartílicos, médias e desvios padrão citados junto aos gráficos
+correspondem à distribuição observada da idade gestacional em cada grupo, e não a
+uma estimativa obtida diretamente das curvas de Kaplan-Meier ou das CIF.
+
+Para as análises regionais, os registros foram classificados segundo a divisão
+oficial em 18 Redes Regionais de Atenção à Saúde (RRAS) do estado de São Paulo,
+usando o código do município de residência da mãe. Os mapas foram
+construídos a partir do shapefile municipal do estado de São Paulo, com posterior
+agregação das geometrias municipais para o nível das RRAS. Também foi utilizada a
+população municipal do Censo 2022 para calcular indicadores populacionais por
+RRAS.
+
+Em cada RRAS foram calculados o número de óbitos fetais, o número de nascidos
+vivos, a participação percentual de cada RRAS no total estadual de óbitos fetais
+e nascidos vivos, a taxa de mortalidade fetal por 1000 nascidos vivos, a taxa de
+nascidos vivos por 1000 habitantes e o percentual de prematuridade entre nascidos
+vivos. A taxa de mortalidade fetal foi calculada dividindo o número de óbitos
+fetais pelo número de nascidos vivos da RRAS e multiplicando o resultado por
+1000. A taxa de nascidos vivos foi calculada dividindo o número de nascidos
+vivos pela população residente da RRAS e multiplicando o resultado por 1000. A
+prematuridade foi definida como idade gestacional inferior a 37 semanas entre os
+nascidos vivos com informação válida de idade gestacional.
+
+Foi adotado nível de significância de 5\% para os testes estatísticos. Assim,
+valores de $p<0{,}05$ foram considerados indicativos de evidência estatística de
+diferença entre curvas ou grupos. Nas tabelas, os símbolos foram usados apenas
+para resumir o grau de significância: *** para $p<0{,}001$ e ** para
+$p<0{,}01$. Valores-p sem esses símbolos foram apresentados numericamente quando
+necessário. Em todas as interpretações, os resultados dos testes foram avaliados
+em conjunto com os gráficos, as frequências e a magnitude absoluta das diferenças,
+pois o grande tamanho amostral pode tornar estatisticamente significativas
+diferenças pequenas do ponto de vista prático.
+
+\section{Desenvolvimento do modelo (AJUSTANDO)}
+
+\subsection{Desenvolvimento da abordagem de riscos competitivos - sem considerar fragilidade compartilhada}
+Seja $T_{i}$ o tempo até o parto da $i$-ésima observação no $j$-ésimo cluster, para $i=1, \ldots, n_j$. O parto pode acontecer por duas causas: óbito fetal ou nascido vivo e seja $\delta_{i}$ a indicadora da causa do parto, com $P(\delta_{i}=k)=p_k$, com $k= 1$ (óbito fetal) e $k=2$ (nascido vivo), em que $p_1+p_2=1$.
+
+Seja $F_k(t)=P(T_{ik}\leq t\mid \delta_i=k)$, em que $F_1(\cdot)$ e $F_2(\cdot)$ são próprias e $T_{ik}$ é o tempo até o parto da $k$-ésima causa. Ainda, seja $T_i = T_{ik}$ em $\{\delta_i=k\}$. 
+\begin{eqnarray}
+F(t)=P(T_i\leq t)&=& P(T_{i1}\leq t\mid \delta_i=1)P(\delta_i=1) + P(T_{i2}\leq t\mid \delta_i=2)P(\delta_i=2) \nonumber \\
+&=& p_1F_1(t) + p_2F_2(t)  \nonumber 
+\end{eqnarray}
+
+A $j$-ésima função de risco causa específica é dada por:
+\begin{eqnarray}
+\lambda_k(t)dt=P(T_i \in (t, t+dt), causa ~ k\mid T_i>t), \nonumber 
+\end{eqnarray}
+e 
+\begin{eqnarray}
+\lambda(t)= \lambda_1(t) + \lambda_2(t) = \frac{F'(t)}{1-F(t)}. \nonumber 
+\end{eqnarray}
+Ainda, 
+\begin{eqnarray}
+p_k = P(\delta_i = k) = \int_0^{\infty} \frac{P(t\leq T_{ik} \leq t+\Delta, \delta_i = k)}{\Delta}dt = \int_0^{\infty} f_k(t)dt = \int_0^{\infty} \lambda_k(t)S(t)dt. \nonumber 
+\end{eqnarray}
+A função distribuição condicional à $k$-ésima causa fica:
+\begin{eqnarray}
+F_k(t)= P(T_{ik} \leq t\mid \delta_i = k)= \frac{P(T_{ik} \leq t,  \delta_i = k)}{P(\delta_i = k)} = \frac{\int_0^{t} \lambda_k(u)S(u)du}{p_k} \nonumber 
+\end{eqnarray}
+Consequentemente, 
+\begin{eqnarray}
+dF_k(t)= \frac{\lambda_k(t)S(t)}{p_k}. \nonumber 
+\end{eqnarray}
+Assim,
+\begin{eqnarray}
+\lambda_k(t)= \frac{p_kf_k(t)}{S(t)}, \nonumber 
+\end{eqnarray}
+em que $f_k(t) = dF_k(t) = P(t\leq T_{ik} \leq t+\Delta\mid \delta_i =k)$.
+
+Ideia: definimos uma distribuição para $F_k(t)$, indexada por $\theta$, e conseguimos obter $f_k(t) = dF_k(t)$. 
+A função de verossimilhança para $\theta$ é dada por:
+\begin{eqnarray}
+L(\theta) \propto \prod_{i=1}^n\left[p_1f_1(t_i)\right]^{I(\delta_i=1)}\left[p_2f_2(t_i)\right]^{I(\delta_i=2)}  \nonumber 
+\end{eqnarray}
+
+\textbf{REFERENCIA PARA ESSA PARTE:} Maller, R. A., \& Zhou, X. (2002). ANALYSIS OF PARAMETRIC MODELS FOR COMPETING RISKS. Statistica Sinica, 12(3), 725–750. http://www.jstor.org/stable/24306992
+
+\subsection{Desenvolvimento dentro do \texorpdfstring{$j$}{j}-ésimo cluster}
+
+Seja $T_{j i}$ o tempo até o parto da $i$-ésima observação no $j$-ésimo cluster, para $i=1, \ldots, n_j$ e $j=1,2, \ldots, R$ e $R$ sendo o número de clusters (RRAS). O parto pode acontecer por duas causas: óbito fetal ou nascido vivo e seja $\delta_{ji}$ a indicadora da causa do parto, com $P(\delta_{ji}=k)=p_k$, com $k= 1$ (óbito fetal) e $k=2$ (nascido vivo), em que $p_1+p_2=1$.
+
+Para cada \textit{cluster} (no caso, cada RRAS), seja $Z_{kj}$ a variável de fragilidade associada à $k$-ésima causa de falha. 
+Essa variável atua como um efeito aleatório multiplicativo no modelo de riscos, capturando a dependência não observada entre indivíduos pertencentes a um mesmo \textit{cluster}. 
+
+Em termos práticos, todos os indivíduos da mesma RRAS compartilham o mesmo valor de fragilidade $Z_{kj}$ para uma dada causa, o que introduz uma correlação entre os tempos de falha desses indivíduos. 
+Dessa forma, $Z_{kj}$ permite modelar de forma explícita tanto a heterogeneidade não explicada (diferenças entre clusters não capturadas pelas covariáveis observadas) quanto a correlação intra-cluster, aspecto essencial quando indivíduos de uma mesma região estão sujeitos a fatores ambientais, socioeconômicos ou de acesso à saúde semelhantes.
+
+Ainda, seja $\mathbf{x}_{kji}$ o vetor de covariáveis do $i$-ésimo indivíduo no $j$-ésimo cluster para a $k$-ésima causa e seja $\mathbf{X}_{kj}$ a matriz de covariáveis dos $n_j$ indivíduos do $j$-ésimo cluster.
+
+A distribuição conjunta de $(T_j,\delta_j)$ condicional a $Z_{1j}$, $Z_{2j}$, $\mathbf{X}_{1j}$ e $\mathbf{X}_{2j}$ para o $j$-ésimo cluster é dada por:
+
+\[
+\begin{aligned}
+& P\Bigl(
+    T_{j1} \in (t_{j1}, t_{j1} + \Delta),\, \delta_{j1} = k_1,\,
+    T_{j2} \in (t_{j2}, t_{j2} + \Delta),\, \delta_{j2} = k_2,\,
+    \ldots, \\
+& \qquad
+    T_{j n_j} \in (t_{j n_j}, t_{j n_j} + \Delta),\, \delta_{j n_j} = k_{n_j}
+    \,\bigm|\,
+    Z_{1j}, Z_{2j}, \mathbf{X}_{1j}, \mathbf{X}_{2j}
+  \Bigr) \\
+& \qquad = 
+  \prod_{i=1}^{n_j} 
+    P\Bigl(
+      T_{ji} \in (t_{ji}, t_{ji} + \Delta),\, \delta_{ji} = k_i
+      \,\bigm|\,
+      Z_{1j}, Z_{2j}, \mathbf{x}_{1ji}, \mathbf{x}_{2ji}
+    \Bigr) \\
+& \qquad = 
+  \prod_{i=1}^{n_j} 
+    P\Bigl(
+      T_{ji} \in (t_{ji}, t_{ji} + \Delta)
+      \,\bigm|\,
+      \delta_{ji} = k_i, Z_{1j}, Z_{2j}, \mathbf{x}_{1ji}, \mathbf{x}_{2ji}
+    \Bigr)
+    P\Bigl(
+      \delta_{ji} = k_i
+      \,\bigm|\,
+      Z_{1j}, Z_{2j}, \mathbf{x}_{1ji}, \mathbf{x}_{2ji}
+    \Bigr).
+\end{aligned}
+\]
+
+Seja $\theta$ o vetor de parâmetros relacionados às distribuições de $F_1(\cdot)$ e $F_2(\cdot)$. 
+A função de verossimilhança para $\theta$ é dada por
+\[
+  L(\theta)
+  = \prod_{j=1}^{R} \prod_{i=1}^{n_j}
+      \bigl[
+        f_1(t_{ji} \mid Z_{1j}, \mathbf{x}_{1ji})\, p_1
+      \bigr]^{I(\delta_{ji} = 1)}
+      \bigl[
+        f_2(t_{ji} \mid Z_{2j}, \mathbf{x}_{2ji})\, (1 - p_1)
+      \bigr]^{I(\delta_{ji} = 2)}.
+\]
+
+Assumimos que $T_{ji}\mid (\delta_{ji} = 1, Z_{1j})$ segue distribuição Weibull com parâmetro de forma $\alpha_1$ e escala $\exp(\mathbf{x}_{1ji}'\mathbf{\beta}_{1} + w_{1j})$, com $\exp(w_{1j})=Z_{1j}$, e que $T_{ji}\mid (\delta_{ji} = 2, Z_{2j})$ segue distribuição Weibull com parâmetro de forma $\alpha_2$ e escala $\exp(\mathbf{x}_{2ji}'\mathbf{\beta}_{2} + w_{2j})$, com $\exp(w_{2j})=Z_{2j}$.
+
+Definimos as prioris:
+
+\textbf{TAREFA JOSÉ CARLOS:} CONTINUAR AQUI, DEFININDO AS PRIORIS CERTINHO E, APÓS ISSO, DESENVOLVER A POSTERIORI 
+\begin{itemize}
+\item $\alpha_1$ (Gamma)
+\item $\alpha_2$ (Gamma)
+\item $\boldsymbol{\beta}_1$ (Normal)
+\item $\boldsymbol{\beta}_2$ (Normal)
+\item $Z_{1 j}$, $j=1, \ldots, R$ (ICAR)
+\item $Z_{2 j}$, $j=1, \ldots, R$ (ICAR)
+\item priori para $p_1$
+\end{itemize}
+TAMBÉM CONSIDERAR REGRESSORES PARA $p_1$? ACHO QUE PODEMOS CONSIDERAR COVARIAVEIS PARA A PROBABILIDADE DE ÓBITO FETAL

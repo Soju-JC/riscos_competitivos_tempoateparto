@@ -1,0 +1,127 @@
+"variavel","evento","grupo","tempo","cif"
+"idademae_categorico","Óbito fetal","<20",30,0.0048593286650552
+"idademae_categorico","Óbito fetal","<20",35,0.00660370305763911
+"idademae_categorico","Óbito fetal","<20",40,0.00782476513244786
+"idademae_categorico","Óbito fetal","20-34",30,0.0034178453925876
+"idademae_categorico","Óbito fetal","20-34",35,0.00484073769706332
+"idademae_categorico","Óbito fetal","20-34",40,0.00614747552770429
+"idademae_categorico","Óbito fetal","35+",30,0.00416467666443786
+"idademae_categorico","Óbito fetal","35+",35,0.00608463081478651
+"idademae_categorico","Óbito fetal","35+",40,0.00778488871907537
+"idademae_categorico","Nascimento vivo","<20",30,0.016596476363727
+"idademae_categorico","Nascimento vivo","<20",35,0.0775000622990855
+"idademae_categorico","Nascimento vivo","<20",40,0.915024047446984
+"idademae_categorico","Nascimento vivo","20-34",30,0.0116241589690129
+"idademae_categorico","Nascimento vivo","20-34",35,0.0646283492416565
+"idademae_categorico","Nascimento vivo","20-34",40,0.937090736971098
+"idademae_categorico","Nascimento vivo","35+",30,0.0130671506352087
+"idademae_categorico","Nascimento vivo","35+",35,0.0850797592893304
+"idademae_categorico","Nascimento vivo","35+",40,0.959174706275671
+"sexo","Óbito fetal","Masculino",30,0.00385574778684882
+"sexo","Óbito fetal","Masculino",35,0.00547732395888804
+"sexo","Óbito fetal","Masculino",40,0.00691071721713505
+"sexo","Óbito fetal","Feminino",30,0.00352920047947008
+"sexo","Óbito fetal","Feminino",35,0.00501605890632374
+"sexo","Óbito fetal","Feminino",40,0.00634838429443138
+"sexo","Nascimento vivo","Masculino",30,0.0128324731639153
+"sexo","Nascimento vivo","Masculino",35,0.0727387020183618
+"sexo","Nascimento vivo","Masculino",40,0.940678339345844
+"sexo","Nascimento vivo","Feminino",30,0.0118280423169932
+"sexo","Nascimento vivo","Feminino",35,0.0672678141092841
+"sexo","Nascimento vivo","Feminino",40,0.939306104890344
+"escmae2010","Óbito fetal","Baixa escolaridade",30,0.0064875375640799
+"escmae2010","Óbito fetal","Baixa escolaridade",35,0.00920982853102351
+"escmae2010","Óbito fetal","Baixa escolaridade",40,0.0120558599964646
+"escmae2010","Óbito fetal","Média escolaridade",30,0.00359890404885365
+"escmae2010","Óbito fetal","Média escolaridade",35,0.00516801235889283
+"escmae2010","Óbito fetal","Média escolaridade",40,0.00655353846047267
+"escmae2010","Óbito fetal","Alta escolaridade",30,0.00279323786296458
+"escmae2010","Óbito fetal","Alta escolaridade",35,0.00386328420847838
+"escmae2010","Óbito fetal","Alta escolaridade",40,0.0046692931440602
+"escmae2010","Nascimento vivo","Baixa escolaridade",30,0.0147958281774792
+"escmae2010","Nascimento vivo","Baixa escolaridade",35,0.0846031465441046
+"escmae2010","Nascimento vivo","Baixa escolaridade",40,0.925048612338695
+"escmae2010","Nascimento vivo","Média escolaridade",30,0.0125736493718371
+"escmae2010","Nascimento vivo","Média escolaridade",35,0.0691689268061199
+"escmae2010","Nascimento vivo","Média escolaridade",40,0.933740678007198
+"escmae2010","Nascimento vivo","Alta escolaridade",30,0.0109089140419264
+"escmae2010","Nascimento vivo","Alta escolaridade",35,0.0661344228350669
+"escmae2010","Nascimento vivo","Alta escolaridade",40,0.958455798053072
+"qtdfilvivo_categorico","Óbito fetal","Não",30,0.00409385142940972
+"qtdfilvivo_categorico","Óbito fetal","Não",35,0.00557919058184952
+"qtdfilvivo_categorico","Óbito fetal","Não",40,0.00682155758898282
+"qtdfilvivo_categorico","Óbito fetal","Sim",30,0.00337568620506464
+"qtdfilvivo_categorico","Óbito fetal","Sim",35,0.00498789917950534
+"qtdfilvivo_categorico","Óbito fetal","Sim",40,0.00648574464317337
+"qtdfilvivo_categorico","Nascimento vivo","Não",30,0.0149542478866008
+"qtdfilvivo_categorico","Nascimento vivo","Não",35,0.0715850952634185
+"qtdfilvivo_categorico","Nascimento vivo","Não",40,0.933370619624814
+"qtdfilvivo_categorico","Nascimento vivo","Sim",30,0.0102377368514255
+"qtdfilvivo_categorico","Nascimento vivo","Sim",35,0.0688344843869901
+"qtdfilvivo_categorico","Nascimento vivo","Sim",40,0.945347086948823
+"qtdfilmort_categorico","Óbito fetal","Não",30,0.0026875489917785
+"qtdfilmort_categorico","Óbito fetal","Não",35,0.00390371699484105
+"qtdfilmort_categorico","Óbito fetal","Não",40,0.00499227850507691
+"qtdfilmort_categorico","Óbito fetal","Sim",30,0.00737677646275964
+"qtdfilmort_categorico","Óbito fetal","Sim",35,0.010171586102001
+"qtdfilmort_categorico","Óbito fetal","Sim",40,0.0126336803079994
+"qtdfilmort_categorico","Nascimento vivo","Não",30,0.0115601065644426
+"qtdfilmort_categorico","Nascimento vivo","Não",35,0.0670168466612673
+"qtdfilmort_categorico","Nascimento vivo","Não",40,0.93931399791142
+"qtdfilmort_categorico","Nascimento vivo","Sim",30,0.015190836066353
+"qtdfilmort_categorico","Nascimento vivo","Sim",35,0.0811730595560625
+"qtdfilmort_categorico","Nascimento vivo","Sim",40,0.942535291601312
+"gravidez","Óbito fetal","Única",30,0.00344910884017939
+"gravidez","Óbito fetal","Única",35,0.00493420016174262
+"gravidez","Óbito fetal","Única",40,0.00630166048753847
+"gravidez","Óbito fetal","Múltipla",30,0.0126495465975768
+"gravidez","Óbito fetal","Múltipla",35,0.0167644593461861
+"gravidez","Óbito fetal","Múltipla",40,0.0187457136325535
+"gravidez","Nascimento vivo","Única",30,0.0103347231995631
+"gravidez","Nascimento vivo","Única",35,0.0598783779525905
+"gravidez","Nascimento vivo","Única",40,0.938983122052661
+"gravidez","Nascimento vivo","Múltipla",30,0.085117732225863
+"gravidez","Nascimento vivo","Múltipla",35,0.439457441133887
+"gravidez","Nascimento vivo","Múltipla",40,0.977139373618837
+"parto","Óbito fetal","Vaginal",30,0.00803464287577608
+"parto","Óbito fetal","Vaginal",35,0.0101893880106433
+"parto","Óbito fetal","Vaginal",40,0.0119789221057025
+"parto","Óbito fetal","Cesáreo",30,0.000900785834806634
+"parto","Óbito fetal","Cesáreo",35,0.0020704629635854
+"parto","Óbito fetal","Cesáreo",40,0.00319308411591904
+"parto","Nascimento vivo","Vaginal",30,0.0131736839359316
+"parto","Nascimento vivo","Vaginal",35,0.0613032816820577
+"parto","Nascimento vivo","Vaginal",40,0.928710805029478
+"parto","Nascimento vivo","Cesáreo",30,0.0118043278053765
+"parto","Nascimento vivo","Cesáreo",35,0.0757029826766784
+"parto","Nascimento vivo","Cesáreo",40,0.947283861816764
+"peso_categorico","Óbito fetal","<2500g",30,0.0352382261135868
+"peso_categorico","Óbito fetal","<2500g",35,0.0484501069907144
+"peso_categorico","Óbito fetal","<2500g",40,0.0533383066020142
+"peso_categorico","Óbito fetal","2500g-3999g",30,2.85156871924167e-05
+"peso_categorico","Óbito fetal","2500g-3999g",35,0.000230501804805368
+"peso_categorico","Óbito fetal","2500g-3999g",40,0.00117864840395322
+"peso_categorico","Óbito fetal","4000g+",30,5.73789304567363e-05
+"peso_categorico","Óbito fetal","4000g+",35,0.000229515721826945
+"peso_categorico","Óbito fetal","4000g+",40,0.0018935047050723
+"peso_categorico","Nascimento vivo","<2500g",30,0.110445827362139
+"peso_categorico","Nascimento vivo","<2500g",35,0.468540803706394
+"peso_categorico","Nascimento vivo","<2500g",40,0.936590824319284
+"peso_categorico","Nascimento vivo","2500g-3999g",30,0.000962404442744064
+"peso_categorico","Nascimento vivo","2500g-3999g",35,0.0243761599349842
+"peso_categorico","Nascimento vivo","2500g-3999g",40,0.942583663838069
+"peso_categorico","Nascimento vivo","4000g+",30,0.000344273582740418
+"peso_categorico","Nascimento vivo","4000g+",35,0.00849208170759697
+"peso_categorico","Nascimento vivo","4000g+",40,0.887766812026624
+"lococornasc","Óbito fetal","Hospital",30,0.003621498926697
+"lococornasc","Óbito fetal","Hospital",35,0.00514774606369976
+"lococornasc","Óbito fetal","Hospital",40,0.00649733471647341
+"lococornasc","Óbito fetal","Outros",30,0.0189633375474083
+"lococornasc","Óbito fetal","Outros",35,0.0265486725663717
+"lococornasc","Óbito fetal","Outros",40,0.0349768225874421
+"lococornasc","Nascimento vivo","Hospital",30,0.012331173032877
+"lococornasc","Nascimento vivo","Hospital",35,0.0700923348705361
+"lococornasc","Nascimento vivo","Hospital",40,0.940155911383174
+"lococornasc","Nascimento vivo","Outros",30,0.0143278550358196
+"lococornasc","Nascimento vivo","Outros",35,0.0636325326590813
+"lococornasc","Nascimento vivo","Outros",40,0.909397387273493
