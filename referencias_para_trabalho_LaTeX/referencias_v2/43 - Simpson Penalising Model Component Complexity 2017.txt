@@ -1,0 +1,6 @@
+Simpson, D.; Rue, H.; Riebler, A.; Martins, T. G.; Sorbye, S. H.
+Penalising model component complexity: a principled, practical approach to
+constructing priors. Statistical Science, v. 32, n. 1, p. 1-28, 2017.
+
+DOI: 10.1214/16-STS576
+Link: https://projecteuclid.org/journals/statistical-science/volume-32/issue-1/Penalising-Model-Component-Complexity--A-Principled-Practical-Approach-to/10.1214/16-STS576

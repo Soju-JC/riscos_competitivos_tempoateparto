@@ -12,19 +12,19 @@
 
 A Tabela \ref{tab:idade_gestacional_por_causa} apresenta a distribuição da idade 
 gestacional ao parto (em semanas) segundo o desfecho da gestação. Entre os 
-óbitos fetais (n = 3.268), a idade gestacional apresentou mediana de 29 semanas 
+óbitos fetais (n = 3.266), a idade gestacional apresentou mediana de 29 semanas 
 e intervalo interquartílico de 24 a 35 semanas. Como medida complementar, a média 
-foi de 29,39 semanas (DP = 6,19). Em conjunto, esses valores mostram que uma parte importante dos 
-óbitos fetais ocorreu em idades gestacionais mais precoces, desde o final do 
-segundo trimestre até o terceiro trimestre da gestação, com variabilidade 
-considerável no momento do desfecho. Os valores mínimo e máximo 
-observados (3 e 43 semanas, respectivamente) indicam a presença de registros em 
-semanas gestacionais extremas, mas, como atendem à definição de óbito fetal 
-adotada, foram mantidos na análise.
+foi de 29,39 semanas (DP = 6,19). Em conjunto, esses valores mostram que uma parte 
+importante dos óbitos fetais ocorreu em idades gestacionais mais precoces, desde 
+o final do segundo trimestre até o terceiro trimestre da gestação, com variabilidade 
+considerável no momento do desfecho. Os valores mínimo e máximo observados (3 e 43 
+semanas, respectivamente) indicam a presença de registros em semanas gestacionais 
+extremas, mas, como atendem à definição de óbito fetal adotada, foram mantidos 
+na análise.
 
 Entre os nascimentos vivos (n = 485.922), a idade gestacional mostrou forte 
-concentração em torno do termo, com mediana de 39 semanas e intervalo 
-interquartílico de 38 a 39 semanas. A média foi de 38,26 semanas (DP = 2,13). Esses valores 
+concentração em torno do termo, com mediana de 39 semanas e intervalo interquartílico 
+de 38 a 39 semanas. A média foi de 38,26 semanas (DP = 2,13). Esses valores 
 mostram baixa dispersão e reforçam que a maior parte das gestações com nascimento 
 vivo chegou a uma idade gestacional adequada para o parto.
 
@@ -33,10 +33,13 @@ vivo chegou a uma idade gestacional adequada para o parto.
   \setlength{\tabcolsep}{2.5pt}
   \renewcommand{\arraystretch}{0.95}
 
-  \begin{center}
-    \begin{longtable}{%
-      L{0.20\textwidth} % Causa (desfecho) - um pouco menor
-      L{0.08\textwidth} % n                  (valores pequenos, pode ser estreita)
+  \begin{table}[H]
+    \centering
+    \caption{Medidas descritivas da idade gestacional (semanas) segundo o desfecho da gestação.}
+    \label{tab:idade_gestacional_por_causa}
+    \begin{tabular}{%
+      L{0.19\textwidth} % Causa (desfecho) - um pouco menor
+      L{0.09\textwidth} % n
       L{0.06\textwidth} % Mín.               (abreviado)
       L{0.09\textwidth} % Média              (ganha espaço)
       L{0.09\textwidth} % Mediana            (ganha espaço)
@@ -46,8 +49,6 @@ vivo chegou a uma idade gestacional adequada para o parto.
       L{0.08\textwidth} % DP
     }
 
-    \caption{Medidas descritivas da idade gestacional (semanas) segundo o desfecho da gestação.}%
-    \label{tab:idade_gestacional_por_causa}\\
     % Cabeçalho
     \toprule
     \textbf{Causa} &
@@ -60,34 +61,10 @@ vivo chegou a uma idade gestacional adequada para o parto.
     \textbf{Máx.} &
     \textbf{DP} \\
     \midrule
-    \endfirsthead
-
-    \caption[]{Medidas descritivas da idade gestacional (semanas) segundo o desfecho da
-    gestação (continuação).}\\
-    \toprule
-    \textbf{Causa} &
-    \textbf{n} &
-    \textbf{Mín.} &
-    \textbf{Média} &
-    \textbf{Mediana} &
-    \textbf{Q1} &
-    \textbf{Q3} &
-    \textbf{Máx.} &
-    \textbf{DP} \\
-    \midrule
-    \endhead
-
-    \midrule
-    \multicolumn{9}{r}{\footnotesize Continuação na próxima página} \\
-    \midrule
-    \endfoot
-
-    \bottomrule
-    \endlastfoot
     % Corpo da tabela
     % Linha 1: Óbito fetal
     Óbito fetal &
-    3\,268 &
+    3\,266 &
     3 &
     29{,}39 &
     29 &
@@ -106,23 +83,24 @@ vivo chegou a uma idade gestacional adequada para o parto.
     39 &
     45 &
     2{,}13 \\
-    \end{longtable}
-  \end{center}
+    \bottomrule
+    \multicolumn{9}{l}{\footnotesize Fonte: tabela elaborada pelo autor.} \\
+    \end{tabular}
+  \end{table}
 \endgroup
 
 A Figura \ref{fig:histograma_ambas_causas} reforça esse comportamento. Na mediana, 
 os óbitos fetais ocorreram cerca de 10 semanas antes dos nascimentos vivos e ao 
-longo de uma faixa mais ampla de idades gestacionais, mostrando maior 
-variabilidade. Já os nascimentos vivos se concentraram de forma bem mais homogênea 
-próximo ao termo, o que está de acordo com o que se espera para a maior parte das 
-gestações.
+longo de uma faixa mais ampla de idades gestacionais, mostrando maior variabilidade. 
+Já os nascimentos vivos se concentraram de forma bem mais homogênea próximo ao termo, 
+o que está de acordo com o que se espera para a maior parte das gestações.
 
 %---------------------- Histogramas da idade gestacional por causa
 \begin{figure}[H]
   \centering
   \caption{Distribuição da idade gestacional segundo o desfecho da gestação.}
   \includegraphics[width=0.9\linewidth]{figuras/histograma_ambas_causas.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:histograma_ambas_causas}
 \end{figure}
 
@@ -139,7 +117,7 @@ dos desfechos em torno do termo.
   \centering
   \caption{Curvas de Kaplan-Meier da idade gestacional para cada desfecho}
   \includegraphics[width=0.9\linewidth]{figuras/0_ambos_km_global.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:0_ambos_km_global}
 \end{figure}
 
@@ -164,7 +142,7 @@ para óbito fetal.
   \centering
   \caption{Gráficos de incidência acumulada da idade gestacional para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_global_painel.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elborada pelo autor.}
   \label{fig:cif_global_painel}
 \end{figure}
 
@@ -172,16 +150,20 @@ para óbito fetal.
 
 Os resultados descritivos da Tabela \ref{tab:tabela-descritiva-conjunta} já apontam
 diferenças entre os grupos de óbito fetal e nascido vivo e indicam heterogeneidade
-inicial para a análise de sobrevivência com riscos competitivos. Como o tamanho
-amostral é grande, os testes de Log-rank e de Gray tendem a detectar até diferenças
-pequenas. Por isso, estatísticas $\chi^2$ muito elevadas e valores-p muito pequenos
-devem ser lidos em conjunto com os gráficos e com a magnitude das diferenças
-observadas.
+inicial para a análise de sobrevivência com riscos competitivos. Nas variáveis 
+numéricas, o grupo de óbito fetal apresentou, em média, peso ao nascer bem menor 
+que o grupo de nascidos vivos (1.381,68 $\pm$ 996,53 e 3.132,56 $\pm$ 553,44, 
+respectivamente), além de idade gestacional ao parto muito menor (29,39 $\pm$ 6,19 
+e 38,26 $\pm$ 2,13, respectivamente). Assim, é possível notar que os óbitos fetais 
+se concentraram em gestações mais precoces e com pesos menores no momento do 
+desfecho. Além disso, o número médio de filhos mortos previamente foi maior 
+nesse grupo (0,56 $\pm$ 0,83 contra 0,28 $\pm$ 0,62 em nascidos vivos), o que 
+sugere histórico reprodutivo menos favorável em parte dessas gestantes.
 
-\newpage
 \begin{table}[H]
 \centering
-\renewcommand{\arraystretch}{1.1}
+\small
+\renewcommand{\arraystretch}{1.0}
 \caption{Medidas descritivas e testes de Log-rank (LR) e de Gray (GR).}
 \begin{tabular}{lll}
 \specialrule{0.16em}{0pt}{0pt}
@@ -218,7 +200,7 @@ Idade gestacional ao parto (semagestac) & 29,39 $\pm$ 6,19 & 38,26 $\pm$ 2,13 \\
 
 \specialrule{0.16em}{0pt}{0pt}
 
-\begin{tabular}{@{}l@{}}Idade materna (idademae)\\< 20 anos\\20--34 anos\\$\geq 35$ anos\end{tabular} &
+\begin{tabular}{@{}l@{}}Faixa etária materna (idademae)\\< 20 anos\\20--34 anos\\$\geq 35$ anos\end{tabular} &
 \begin{tabular}{@{}l@{}}
 {\scriptsize L: 47{,}01 (***)};
 {\scriptsize G: 40{,}36 (***)}\\
@@ -262,7 +244,7 @@ Idade gestacional ao parto (semagestac) & 29,39 $\pm$ 6,19 & 38,26 $\pm$ 2,13 \\
 382\,064 (78,6\,\%)\\103\,858 (21,4\,\%)\end{tabular} \\
 \hline
 
-\begin{tabular}{@{}l@{}}Tipo de gestação (gravidez)\\Única\\Múltipla\end{tabular} &
+\begin{tabular}{@{}l@{}}Tipo de gravidez (gravidez)\\Única\\Múltipla\end{tabular} &
 \begin{tabular}{@{}l@{}}
 {\scriptsize L: 460 (***)};
 {\scriptsize G: 301 (***)}\\
@@ -284,7 +266,7 @@ Idade gestacional ao parto (semagestac) & 29,39 $\pm$ 6,19 & 38,26 $\pm$ 2,13 \\
 189\,360 (39,0\,\%)\\296\,562 (61,0\,\%)\end{tabular} \\
 \hline
 
-\begin{tabular}{@{}l@{}}Faixa de peso ao nascer (peso)\\< 2\,500 g\\2\,500--3\,999 g\\$\geq 4\,000$ g\end{tabular} &
+\begin{tabular}{@{}l@{}}Peso ao nascer (peso)\\< 2\,500 g\\2\,500--3\,999 g\\$\geq 4\,000$ g\end{tabular} &
 \begin{tabular}{@{}l@{}}
 {\scriptsize L: 24{\,}947 (***)};
 {\scriptsize G: 18{\,}759 (***)}\\
@@ -295,7 +277,7 @@ Idade gestacional ao parto (semagestac) & 29,39 $\pm$ 6,19 & 38,26 $\pm$ 2,13 \\
 48\,219 (9,9\,\%)\\420\,310 (86,5\,\%)\\17\,393 (3,6\,\%)\end{tabular} \\
 \hline
 
-\begin{tabular}{@{}l@{}}Local de ocorrência do parto (lococornasc)\\Hospital\\Outros\end{tabular} &
+\begin{tabular}{@{}l@{}}Local de ocorrência (lococornasc)\\Hospital\\Outros\end{tabular} &
 \begin{tabular}{@{}l@{}}
 {\scriptsize L: 287 (***)};
 {\scriptsize G: 288 (***)}\\
@@ -321,29 +303,23 @@ Idade gestacional ao parto (semagestac) & 29,39 $\pm$ 6,19 & 38,26 $\pm$ 2,13 \\
 \fonte{n (\%): frequências em relação ao total de indivíduos de cada grupo,
 considerando registros com informação válida de idade gestacional e da variável.
 L e G: testes de Log-rank e de Gray, com estatística do teste ($\chi^2$) e
-valor-p. Significância: *** $p<0{,}001$; ** $p<0{,}01$. Fonte: elaboração do
-autor.}
+valor-p. Significância: *** $p<0{,}001$; ** $p<0{,}01$. Fonte: tabela elaborada 
+pelo autor.}
 \label{tab:tabela-descritiva-conjunta} 
 \end{table}
 
-Nas variáveis numéricas, o grupo de óbito fetal apresentou, em média, peso ao
-nascer bem menor que o grupo de nascidos vivos (1.381,68 $\pm$ 996,53 e
-3.132,56 $\pm$ 553,44, respectivamente), além de idade gestacional ao parto muito
-menor (29,39 $\pm$ 6,19 e 38,26 $\pm$ 2,13, respectivamente). Assim, é possível notar que 
-os óbitos fetais se concentraram em gestações mais precoces e com pesos menores
-no momento do desfecho. Além disso, o número médio de filhos mortos previamente
-foi maior nesse grupo (0,56 $\pm$ 0,83 contra 0,28 $\pm$ 0,62 em nascidos vivos),
-o que sugere histórico reprodutivo menos favorável em parte dessas gestantes.
-
-Entre as variáveis categóricas, a idade materna chama atenção. O grupo com menos de 20 anos correspondeu a
-9,6\% dos óbitos fetais e 8,2\% dos nascidos vivos, no grupo de 20--34 anos esses valores foram de 65,3\% para óbitos fetais e 70,4\% para nascidos vivos, enquanto o grupo com 35 anos 
-ou mais correspondeu a 25,0\% e 21,4\%, respectivamente. Nos gráficos de Kaplan-Meier da Figura \ref{fig:kmglobal_idade_mae}, as curvas
-por idade materna sugerem diferenças no tempo até o desfecho. Para óbito fetal, o
-teste de Log-rank foi significativo ($\chi^2=47{,}01$; $p<0{,}001$). Nos óbitos
-fetais, as medianas (Q1--Q3) foram de 28 semanas (24--33) nas gestantes com menos
-de 20 anos, 29 semanas (24--35) entre 20 e 34 anos e 30 semanas (24--35) no grupo com 35 anos ou
-mais. Para nascimento vivo, o Log-rank também foi significativo
-($\chi^2=5\,756$; $p<0{,}001$), com medianas de 39 semanas (38--40), 39 semanas (38--39) e 38 semanas (37--39), respectivamente. 
+Em relação a faixa etária materna, o grupo com menos de 20 anos correspondeu a 9,6\% 
+dos óbitos fetais e 8,2\% dos nascidos vivos, no grupo de 20--34 anos esses valores 
+foram de 65,3\% para óbitos fetais e 70,4\% para nascidos vivos, enquanto o grupo 
+com 35 anos ou mais correspondeu a 25,0\% e 21,4\%, respectivamente. Nos gráficos 
+de Kaplan-Meier da Figura \ref{fig:kmglobal_idade_mae}, as curvas por idade materna 
+sugerem diferenças no tempo até o desfecho. Para óbito fetal, o teste de Log-rank 
+foi significativo ($\chi^2=47{,}01$; $p<0{,}001$). Nos óbitos fetais, as medianas 
+(Q1--Q3) foram de 28 semanas (24--33) nas gestantes com menos de 20 anos, 29 semanas 
+(24--35) entre 20 e 34 anos e 30 semanas (24--35) no grupo com 35 anos ou mais. Para 
+nascimento vivo, o Log-rank também foi significativo ($\chi^2=5\,756$; $p<0{,}001$) 
+com medianas de 39 semanas (38--40), 39 semanas (38--39) e 38 semanas (37--39), 
+respectivamente. 
 
 %---------------------------------------------------------
 %---------------------- idademae
@@ -354,7 +330,7 @@ mais. Para nascimento vivo, o Log-rank também foi significativo
   \centering
   \caption{Gráficos de Kaplan-Meier da variável idademae para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_idade_mae.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:kmglobal_idade_mae}
 \end{figure}
 %---------------------- CIF
@@ -376,11 +352,11 @@ teste de Gray também apontou diferença para nascimento vivo
   \centering
   \caption{Gráficos de incidência acumulada da variável idademae para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_idademae_painel_ambos.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:cif_idademae_painel_ambos}
 \end{figure}
 
-Assim, a idade materna apresentou heterogeneidade nos dois desfechos. Na
+Assim, a faixa etária materna apresentou heterogeneidade nos dois desfechos. Na
 perspectiva do óbito fetal, o grupo de 20 a 34 anos teve menor probabilidade
 acumulada de óbito fetal, enquanto os extremos de idade, especialmente menores de
 20 anos durante boa parte do acompanhamento e 35 anos ou mais ao final da
@@ -406,14 +382,15 @@ escolaridade, 38--40 na média e 38--39 na alta.
   \caption{Gráficos de Kaplan-Meier da variável escmae2010 referente a escolaridade materna,
   para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_escmae2010.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:kmglobal_escmae2010}
 \end{figure}
 %---------------------- CIF
 Na Figura \ref{fig:cif_escmae2010_painel_ambos}, na semana 40, a CIF de óbito
 fetal foi de 1,21\% na baixa escolaridade, 0,66\% na escolaridade média e 0,47\%
 na alta escolaridade. O Gray reforçou essa diferença no óbito fetal
-($\chi^2=344$; $p<0{,}001$). Entre os nascidos vivos, as curvas também apresentaram diferenças, mas com menor contraste visual, alcançando 92,50\% na baixa
+($\chi^2=344$; $p<0{,}001$). Entre os nascidos vivos, as curvas também apresentaram 
+diferenças, mas com menor contraste visual, alcançando 92,50\% na baixa 
 escolaridade, 93,37\% na média e 95,85\% na alta escolaridade na semana 40
 ($\chi^2=1\,702\,884$; $p<0{,}001$). Em conjunto, os resultados sugerem situação
 mais favorável para gestação no grupo de maior escolaridade, embora parte dessa diferença
@@ -423,7 +400,7 @@ provavelmente represente condições sociais e assistenciais associadas.
   \caption{Gráficos de incidência acumulada da variável escmae2010 referente a escolaridade
   materna, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_escmae2010_painel_ambos.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:cif_escmae2010_painel_ambos}
 \end{figure}
 
@@ -438,21 +415,21 @@ condições sociais e assistenciais, e não como efeito isolado da escolaridade.
 
 %---------------------- KM
 Nos gráficos de Kaplan-Meier da Figura \ref{fig:kmglobal_filvivo}, a presença de
-filhos vivos previamente sugere pouco contraste entre os grupos. Essa impressão é coerente com os testes para óbito fetal, que não
-foram significativos (Log-rank: $\chi^2=1{,}56$, $p=0{,}212$; Gray:
-$\chi^2=2{,}09$, $p=0{,}148$). Para nascimento vivo, o Log-rank foi significativo
-($\chi^2=1\,113$; $p<0{,}001$), mas a diferença foi pequena na escala das
-semanas. Entre os óbitos fetais, mulheres sem filhos vivos prévios tiveram
-mediana de 28 semanas (23--34), enquanto aquelas com esse antecedente tiveram
-mediana de 30 semanas (25--35). Entre os nascidos vivos, as medianas foram de 39
-semanas nos dois grupos, com Q1--Q3 de 38--40 no grupo sem filhos vivos prévios
-e 38--39 no grupo com esse antecedente.
+filhos vivos previamente sugere pouco contraste entre os grupos. Essa impressão 
+é coerente com os testes para óbito fetal, que não foram significativos 
+(Log-rank: $\chi^2=1{,}56$, $p=0{,}212$; Gray: $\chi^2=2{,}09$, $p=0{,}148$). Para 
+nascimento vivo, o Log-rank foi significativo ($\chi^2=1\,113$; $p<0{,}001$), mas 
+a diferença foi pequena na escala das semanas. Entre os óbitos fetais, mulheres 
+sem filhos vivos prévios tiveram mediana de 28 semanas (23--34), enquanto aquelas 
+com esse antecedente tiveram mediana de 30 semanas (25--35). Entre os nascidos 
+vivos, as medianas foram de 39 semanas nos dois grupos, com Q1--Q3 de 38--40 no 
+grupo sem filhos vivos prévios e 38--39 no grupo com esse antecedente.
 \begin{figure}[H]
   \centering
   \caption{Gráficos de Kaplan-Meier da variável qtdfilvivo referente a quantidade de filhos
   vivos anteriores, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_filvivo.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:kmglobal_filvivo}
 \end{figure}
 %---------------------- CIF
@@ -470,7 +447,7 @@ nascidos vivos, mas pequena do ponto de vista absoluto.
   \caption{Gráficos de incidência acumulada da variável qtdfilvivo referente a quantidade de
   filhos vivos anteriores, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_filvivo_painel_ambos.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:cif_filvivo_painel_ambos}
 \end{figure}
 
@@ -497,7 +474,7 @@ prévios e de 39 semanas (38--39) para as demais.
   \caption{Gráficos de Kaplan-Meier da variável qtdfilmort referente a quantidade de filhos
   mortos anteriores, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_filmort.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:kmglobal_filmort}
 \end{figure}
 %---------------------- CIF
@@ -508,13 +485,14 @@ esse antecedente os valores foram de 0,27\% e 0,50\%. O teste de Gray para óbit
 foi significativo ($\chi^2=736$; $p<0{,}001$). Entre os nascidos vivos, a
 diferença foi menor, mas na mesma direção, com CIF de 94,25\% na semana 40 entre
 mulheres com filhos mortos prévios e de 93,93\% entre as demais
-($\chi^2=3\,306\,460$; $p<0{,}001$). Embora há evidência de diferença entre os grupos, no caso de nascidos vivos os resultados são similares em magnitude.
+($\chi^2=3\,306\,460$; $p<0{,}001$). Embora há evidência de diferença entre os 
+grupos, no caso de nascidos vivos os resultados são similares em magnitude.
 \begin{figure}[H]
   \centering
   \caption{Gráficos de incidência acumulada da variável qtdfilmort referente a quantidade de
   filhos mortos anteriores, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_filmort_painel_ambos.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:cif_filmort_painel_ambos}
 \end{figure}
 
@@ -528,8 +506,8 @@ vivos a diferença existiu, mas foi menor em magnitude.
 %---------------------------------------------------------
 
 %---------------------- KM
-Nos gráficos de Kaplan-Meier da Figura \ref{fig:kmglobal_gravidez}, o tipo de
-gestação sugere uma das separações mais claras da análise. De forma descritiva, as
+Nos gráficos de Kaplan-Meier da Figura \ref{fig:kmglobal_gravidez}, o tipo de 
+gravidez sugere uma das separações mais claras da análise. De forma descritiva, as
 gestações múltiplas terminaram mais cedo que as gestações únicas nas duas
 perspectivas. Entre os óbitos fetais, as gestações múltiplas tiveram mediana de
 26 semanas (22--32), contra 30 semanas (24--35) nas gestações únicas. Entre os
@@ -542,7 +520,7 @@ para óbito fetal ($\chi^2=460$; $p<0{,}001$) e para nascimento vivo
   \caption{Gráficos de Kaplan-Meier da variável gravidez referente ao tipo de gravidez, para
   cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_gravidez.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:kmglobal_gravidez}
 \end{figure}
 %---------------------- CIF
@@ -561,11 +539,11 @@ partos pré-termo em gestações múltiplas.
   \caption{Gráficos de incidência acumulada da variável gravidez referente ao tipo de
   gravidez, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_gravidez_painel_ambos.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:cif_gravidez_painel_ambos}
 \end{figure}
 
-Portanto, o tipo de gestação foi uma das variáveis com conclusão mais clara:
+Portanto, o tipo de gravidez foi uma das variáveis com conclusão mais clara:
 gestações múltiplas se associaram a desfechos em idades gestacionais mais
 precoces e a maior probabilidade acumulada de eventos antes do termo,
 principalmente no ambito dos nascidos vivos.
@@ -591,7 +569,7 @@ cesáreo.
   \caption{Gráficos de Kaplan-Meier da variável parto referente ao tipo de parto, para cada
   desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_parto.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:kmglobal_parto}
 \end{figure}
 %---------------------- CIF
@@ -611,7 +589,7 @@ do parto, e não como causa isolada do tempo até o parto.
   \caption{Gráficos de incidência acumulada da variável parto referente ao tipo de parto,
   para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_parto_painel_ambos.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:cif_parto_painel_ambos}
 \end{figure}
 
@@ -627,8 +605,9 @@ ligeiramente mais precoces em cesáreas.
 
 %---------------------- KM 
 Nos gráficos de Kaplan-Meier da Figura \ref{fig:kmglobal_peso_categorico}, a
-faixa de peso ao nascer apresenta o contraste mais evidente entre as variáveis em comuns das bases de dados. O Log-rank foi significativo para óbito fetal ($\chi^2=24\,947$;
-$p<0{,}001$) e para nascimento vivo ($\chi^2=136\,887$; $p<0{,}001$). Entre os
+faixa de peso ao nascer apresenta o contraste mais evidente entre as variáveis 
+em comuns das bases de dados. O Log-rank foi significativo para óbito fetal ($\chi^2=24\,947$; 
+$p<0{,}001$) e para nascimento vivo ($\chi^2=136\,887$; $p<0{,}001$). Entre os 
 óbitos fetais, o grupo com menos de 2.500 g teve mediana de 27 semanas (23--32),
 enquanto as faixas de 2.500 a 3.999 g e de 4.000 g ou mais tiveram mediana de 37
 semanas, com Q1--Q3 de 36--39 e 36,5--38, respectivamente. Entre os nascidos
@@ -639,7 +618,7 @@ Q1--Q3 de 38--39 e 39--40.
   \centering
   \caption{Gráficos de Kaplan-Meier da variável peso, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_peso_categorico.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:kmglobal_peso_categorico}
 \end{figure}
 %---------------------- CIF 
@@ -658,7 +637,7 @@ não como causa do parto ou do óbito fetal.
   \centering
   \caption{Gráficos de incidência acumulada da variável peso, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_peso_categorico_painel_ambos.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:cif_peso_categorico_painel_ambos}
 \end{figure}
 
@@ -687,7 +666,7 @@ nascidos vivos, respectivamente.
   \caption{Gráficos de Kaplan-Meier da variável lococornasc referente ao local de
   ocorrência, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_lococornasc.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:kmglobal_lococornasc}
 \end{figure}
 %---------------------- CIF 
@@ -705,7 +684,7 @@ na semana 30 e 90,94\% na semana 40 nos partos fora do hospital, contra 1,23\% e
   \caption{Gráficos de incidência acumulada da variável lococornasc referente ao local de
   ocorrência, para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/cif_lococornasc_painel_ambos.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:cif_lococornasc_painel_ambos}
 \end{figure}
 
@@ -734,7 +713,7 @@ práticos.
   \centering
   \caption{Gráficos de Kaplan-Meier da variável sexo para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/kmglobal_sexo.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:ambos_KM_sexo}
 \end{figure}
 %---------------------- CIF
@@ -751,7 +730,7 @@ existe, mas a magnitude absoluta da diferença foi pequena.
   \centering
   \caption{Gráficos de incidência acumulada da variável sexo para cada desfecho.}
   \includegraphics[width=0.9\linewidth]{figuras/ambos_cif_sexo.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:ambos_cif_sexo}
 \end{figure}
 
@@ -775,7 +754,6 @@ variáveis disponíveis exclusivamente em uma das bases de dados e serve como po
 a leitura dos gráficos de Kaplan-Meier apresentados a seguir.
 
 %---------------- Tabela das variáveis exclusivas
-\newpage
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.0}
@@ -898,7 +876,7 @@ SINASC \\
 \specialrule{0.16em}{0pt}{0pt}
 \end{tabular}
 \fonte{Média $\pm$ DP (desvio padrão) das variáveis numéricas. n (\%): frequências em
-relação ao total de indivíduos de cada grupo. Fonte: elaboração do autor.}
+relação ao total de indivíduos de cada grupo. Fonte: tabela elaborada pelo autor.}
 \label{tab:tabela-descritiva-exclusivas}
 \end{table}
 
@@ -920,7 +898,7 @@ correspondeu a óbitos anteriores ao parto (95,1\%), como mostra a Tabela
   \caption{Gráfico de Kaplan-Meier da variável obitoparto referente ao momento do óbito em
   relação ao parto.}
   \includegraphics[width=0.9\linewidth]{figuras/km_obitos_obitoparto.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_obitos_obitoparto}
 \end{figure}
 
@@ -948,7 +926,7 @@ até o parto.
   \caption{Gráfico de Kaplan-Meier da variável apgar5 referente ao índice de Apgar no quinto
   minuto.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_apgar.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_apgar}
 \end{figure}
 
@@ -972,7 +950,7 @@ Log-rank foi significativo ($\chi^2=6\,412$; $p<0{,}001$).
   \caption{Gráfico de Kaplan-Meier da variável consultas referente ao número de consultas
   pré-natal.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_consultas.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_consultas}
 \end{figure}
 
@@ -981,7 +959,7 @@ nascimento vivo, com partos mais precoces entre gestações com menor número de
 consultas. Partos prematuros deixam menos tempo para a gestante realizar várias 
 consultas. Então, a associação entre poucas consultas e parto mais precoce pode 
 refletir tanto falhas de acompanhamento quanto a própria menor duração da 
-gestação. Por isso, não devemos concluir automaticamente que mais consultas, sozinhas, 
+gestação. Por isso, não se deve concluir automaticamente que mais consultas, sozinhas, 
 causam partos mais tardios. Além disso, embora tenha sido detectado diferença entre as 
 curvas através do Log-Rank, a diferença em magnitude é sutil.
 
@@ -999,7 +977,7 @@ significativo ($\chi^2=605$; $p<0{,}001$).
   \centering
   \caption{Gráfico de Kaplan-Meier da variável idanomal referente a anomalia identificada.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_anomalia.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_anomalia}
 \end{figure}
 
@@ -1028,7 +1006,7 @@ feita com cautela.
   \caption{Gráfico de Kaplan-Meier da variável mesprenat referente ao mês de gestação em que
   se iniciou o pré-natal.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_mesprenat.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_mesprenat}
 \end{figure}
 
@@ -1053,7 +1031,7 @@ diferença foi pequena.
   \caption{Gráfico de Kaplan-Meier da variável paridade referente a se é a primeira gravidez
   ou se teve mais de uma.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_paridade.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_paridade}
 \end{figure}
 
@@ -1077,7 +1055,7 @@ Como complemento, as médias $\pm$ DP (mediana) foram de 38,34 $\pm$ 2,20 (39) e
   \caption{Gráfico de Kaplan-Meier da variável qtdgestant referente ao número total de
   gestações anteriores.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_qtdgestant.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_qtdgestant}
 \end{figure}
 
@@ -1101,7 +1079,7 @@ significativo ($\chi^2=3\,071$; $p<0{,}001$).
   \caption{Gráfico de Kaplan-Meier da variável qtdpartces referente ao número total de
   partos cesáreos anteriores.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_qtdpartces.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_qtdpartces}
 \end{figure}
 
@@ -1124,7 +1102,7 @@ antecedente. Isso sugere pouca relevância clínica nessa diferença.
   \caption{Gráfico de Kaplan-Meier da variável qtdpartnor referente ao número total de
   partos vaginais anteriores.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_qtdpartnor.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_qtdpartnor}
 \end{figure}
 
@@ -1150,7 +1128,7 @@ baixo número de observações em algumas categorias, como indígenas e amarelas
   \centering
   \caption{Gráfico de Kaplan-Meier da variável racacormae referente a raça/cor da mãe.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_racamae.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_racamae}
 \end{figure}
 
@@ -1172,7 +1150,7 @@ Log-rank foi significativo ($\chi^2=5\,319$; $p<0{,}001$).
   \caption{Gráfico de Kaplan-Meier da variável stcesparto referente a se cesária ocorreu
   antes do trabalho de parto iniciar.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_stcesparto.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_stcesparto}
 \end{figure}
 
@@ -1197,7 +1175,7 @@ Esse padrão sugere que, nesta base, a indução ocorreu com mais frequência
   \caption{Gráfico de Kaplan-Meier da variável sttrabpart referente a trabalho de parto
   induzido.}
   \includegraphics[width=0.9\linewidth]{figuras/km_nascidosvivos_indtrabalhoparto.png}
-  \fonte{Fonte: figura feita pelo autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:km_nascidosvivos_indtrabalhoparto}
 \end{figure}
 
@@ -1226,42 +1204,40 @@ causais.
 
 A Figura \ref{fig:mapas_RRAS} apresenta dois mapas do estado de São Paulo segundo
 a divisão em 18 RRAS adotada nesta análise, mostrando a participação percentual
-de óbitos fetais e de nascidos vivos no total estadual. Esses percentuais devem
-ser lidos como distribuição do volume de eventos, e não como risco individual,
-pois regiões mais populosas tendem naturalmente a concentrar mais registros. Em
-ambos os mapas, a RRAS 6 concentrou as maiores proporções, com 23,79\% dos
-óbitos fetais e 26,15\% dos nascidos vivos, resultado compatível com sua densidade 
-populacional. Fora da RRAS 6, a participação de óbitos fetais foi
-mais alta nas RRAS 2 (10,96\%), 15 (7,10\%), 7 (6,00\%), 8 (5,21\%), 5
-(4,99\%), 13 (4,99\%) e 17 (4,96\%). Para os nascidos vivos, destacaram-se as
-RRAS 15 (8,76\%), 2 (7,56\%), 8 (6,15\%), 17 (5,52\%), 13 (5,49\%), 1 (5,40\%)
-e 5 (5,13\%).
+de óbitos fetais e de nascidos vivos no total estadual. Esses mapas descrevem a
+contribuição de cada RRAS para o volume estadual de eventos. Em ambos os mapas, a
+RRAS 6 concentrou as maiores proporções, com 23,79\% dos óbitos fetais e 26,15\% dos
+nascidos vivos, resultado compatível com sua densidade populacional. Fora da RRAS 6,
+a concentração de óbitos fetais foi mais alta nas RRAS 2 (10,96\%), 15 (7,10\%), 
+7 (6,00\%), 8 (5,21\%), 5 (4,99\%), 13 (4,99\%) e 17 (4,96\%). Para os nascidos vivos, 
+destacaram-se as RRAS 15 (8,76\%), 2 (7,56\%), 8 (6,15\%), 17 (5,52\%), 13 (5,49\%), 
+1 (5,40\%) e 5 (5,13\%). 
 
 \begin{figure}[H]
   \centering
   \caption{Mapas do estado de São Paulo por RRAS identificando a contribuição de
   óbitos fetais e de nascidos vivos de cada RRAS em relação ao total estadual.}
   \includegraphics[width=0.9\linewidth]{figuras/mapas_RRAS.png}
-  \fonte{Fonte: elaboração do autor.}
+  \fonte{Fonte: figura elaborada pelo autor.}
   \label{fig:mapas_RRAS}
 \end{figure}
 
-A Tabela \ref{tab:indicadores-rras-compacta} detalha os valores absolutos,
-percentuais, taxas e prematuridade por RRAS. A maior taxa de óbitos fetais por 
-1000 nascidos vivos foi observada na RRAS 4, com 10,65 óbitos fetais, seguida 
-pelas RRAS 2 (9,74), 7 (8,85), 3 (8,65) e 9 (8,32). Assim, o maior número absoluto 
-de óbitos fetais não coincidiu necessariamente com a maior taxa: embora a RRAS 6 
-tenha concentrado 777 óbitos fetais, sua taxa foi de 6,12 por 1000 nascidos vivos. 
-A RRAS 15 também reuniu número absoluto alto de óbitos fetais (232), mas com taxa mais
-baixa, de 5,45 por 1000 nascidos vivos.
-
-Entre os nascidos vivos, a RRAS 6 também liderou em número absoluto, com
-127.062 registros (26,15\%). Além disso, as maiores taxas de nascidos vivos por 1000 habitantes 
-foram observadas nas RRAS 5 (12,01), 2 (11,83), 4 (11,52), 3 (11,47), 8 (11,36) 
-e 16 (11,36). Em contraste, as menores taxas ocorreram nas RRAS 12 (9,26), 18 (9,35) 
-e 1 (9,62). Esse padrão mostra que a participação no total estadual reflete 
-principalmente o tamanho populacional, enquanto as taxas permitem distinguir 
-melhor a intensidade relativa dos eventos em cada região.
+A Tabela \ref{tab:indicadores-rras-compacta} detalha as contagens, as
+participações percentuais, os indicadores com denominador regional e a prematuridade
+por RRAS. A maior razão de mortalidade fetal por 1.000 nascidos vivos foi observada 
+na RRAS 4, com 10,65 óbitos fetais por 1.000 nascidos vivos, seguida pelas RRAS 2 
+(9,74), 7 (8,85), 3 (8,65) e 9 (8,32). Assim, o maior número absoluto de óbitos fetais 
+não coincidiu necessariamente com a maior razão de mortalidade fetal por 1.000
+nascidos vivos, embora a RRAS 6 tenha concentrado 777 óbitos fetais, sua razão
+foi de 6,12 por 1.000 nascidos vivos. A RRAS 15 também reuniu número absoluto
+alto de óbitos fetais (232), mas com valor mais baixo, de 5,45 por 1.000 nascidos vivos. 
+Entre os nascidos vivos, a RRAS 6 também liderou em número absoluto, com 127.062 
+registros (26,15\%). Além disso, os maiores valores de nascidos vivos por 1.000
+habitantes foram observados nas RRAS 5 (12,01), 2 (11,83), 4 (11,52), 3 (11,47),
+8 (11,36) e 16 (11,36). Em contraste, os menores valores ocorreram nas RRAS 12
+(9,26), 18 (9,35) e 1 (9,62). Esse comportamento sugere que a participação no total
+estadual reflete principalmente o tamanho populacional, enquanto os indicadores
+com denominador regional ajudam a comparar a intensidade dos eventos entre regiões.
 
 \begin{table}[H]
 \centering
@@ -1276,10 +1252,10 @@ melhor a intensidade relativa dos eventos em cada região.
 \makecell[c]{\textbf{População}} &
 \makecell[c]{\textbf{Óbitos}\\\textbf{fetais}\\\textbf{(n)}} &
 \makecell[c]{\textbf{Óbitos}\\\textbf{fetais}\\\textbf{(\%)}} &
-\makecell[c]{\textbf{Óbitos fetais}\\\textbf{por 1000}\\\textbf{nascidos vivos}} &
+\makecell[c]{\textbf{Razão de}\\\textbf{mortalidade}\\\textbf{fetal por 1.000}\\\textbf{nascidos vivos}} &
 \makecell[c]{\textbf{Nascidos}\\\textbf{vivos}\\\textbf{(n)}} &
 \makecell[c]{\textbf{Nascidos}\\\textbf{vivos}\\\textbf{(\%)}} &
-\makecell[c]{\textbf{Nascidos vivos}\\\textbf{por 1000}\\\textbf{habitantes}} &
+\makecell[c]{\textbf{Nascidos vivos}\\\textbf{por 1.000}\\\textbf{habitantes}} &
 \makecell[c]{\textbf{Prematuridade}\\\textbf{entre nascidos}\\\textbf{vivos (\%)}} \\
 \specialrule{0.16em}{0pt}{0pt}
 
@@ -1310,48 +1286,43 @@ População: soma da população municipal por RRAS com base no Censo 2022. %
 Óbitos fetais (n) e Nascidos vivos (n): contagens absolutas por RRAS. %
 Óbitos fetais (\%) e Nascidos vivos (\%): proporção em relação ao total estadual de %
 óbitos fetais e nascidos vivos, respectivamente. %
-Óbitos fetais por 1000 nascidos vivos: óbitos fetais divididos por nascidos %
-vivos, com multiplicação do resultado por 1000. %
-Nascidos vivos por 1000 habitantes: nascidos vivos divididos pela população, com %
-multiplicação do resultado por 1000. %
+Razão de mortalidade fetal: óbitos fetais divididos por nascidos vivos, com multiplicação do %
+resultado por 1.000. %
+Nascidos vivos por 1.000 habitantes: nascidos vivos divididos pela população, com %
+multiplicação do resultado por 1.000. %
 Prematuridade entre nascidos vivos (\%): percentual de nascidos vivos com idade gestacional inferior a 37 %
 semanas. %
-Fonte: elaboração do autor.%
+Fonte: tabela elaborada pelo autor.%
 }
-
 \label{tab:indicadores-rras-compacta}
 \end{table}
 
-A Figura \ref{fig:mapas_RRAS_taxas_prematuridade} complementa esses resultados. No mapa de
-mortalidade fetal, destacam-se RRAS do interior, como as RRAS 4, 2, 7, 3 e 9, assim como 
-relatado na Tabela 4.4. Esse padrão indica que a distribuição relativa dos óbitos fetais 
-não acompanha apenas o volume populacional. Uma região pode ter menos nascimentos no 
-total, mas ainda assim apresentar uma taxa de mortalidade fetal mais alta. Já no mapa 
-de prematuridade, as maiores proporções  ocorreram nas RRAS 5 (13,27\%), 9 (13,09\%), 
-18 (12,96\%), 17 (12,53\%) e 16 (12,53\%). A RRAS 6, apesar de concentrar o maior 
-número de nascidos vivos, apresentou o menor percentual de prematuridade (10,95\%). 
-Do ponto de vista obstétrico, essa separação é importante porque a prematuridade se
-associa a maior necessidade de cuidado neonatal, enquanto a mortalidade fetal
-resume uma perda gestacional antes do nascimento vivo. A comparação dos dois
-mapas sugere que as RRAS podem diferir tanto no risco de perda fetal quanto no
-perfil de nascimentos pré-termo, reforçando a utilidade de incorporar estrutura
-regional e espacial na modelagem.
+A Figura \ref{fig:mapas_RRAS_razao_prematuridade} complementa esses resultados. No mapa da
+razão de mortalidade fetal, destacam-se RRAS do interior, como as RRAS 4, 2, 7, 3 e 9, assim como 
+relatado na Tabela 4.4. Isso sugere que a razão de mortalidade fetal não acompanha 
+apenas o volume total de nascimentos ou o tamanho populacional das regiões. Uma RRAS 
+pode ter menos nascimentos no total, mas ainda assim apresentar mais óbitos fetais 
+por 1.000 nascidos vivos. No mapa de prematuridade, por outro lado, as maiores proporções 
+ocorreram na RRAS 5 (13,27\%), 9 (13,09\%), 18 (12,96\%), 17 (12,53\%) e 16 (12,53\%). 
+A RRAS 6, apesar de concentrar o maior número de nascidos vivos, apresentou o menor 
+percentual de prematuridade (10,95\%), reforçando que as RRAS podem diferir tanto na 
+razão de mortalidade fetal quanto no perfil de nascimentos pré-termo.
 
 \begin{figure}[H]
   \centering
-  \caption{Mapas do estado de São Paulo por RRAS identificando a taxa de
-  mortalidade fetal por 1000 nascidos vivos e o percentual de prematuridade entre
+  \caption{Mapas do estado de São Paulo por RRAS identificando a razão de
+  mortalidade fetal por 1.000 nascidos vivos e o percentual de prematuridade entre
   nascidos vivos.}
-  \includegraphics[width=0.9\linewidth]{figuras/mapas_RRAS_taxas_prematuridade.png}
-  \fonte{Fonte: elaboração do autor.}
-  \label{fig:mapas_RRAS_taxas_prematuridade}
+  \includegraphics[width=0.9\linewidth]{figuras/mapas_RRAS_razao_prematuridade.png}
+  \fonte{Fonte: figura elaborada pelo autor.}
+  \label{fig:mapas_RRAS_razao_prematuridade}
 \end{figure}
 
-Em conjunto, os resultados por RRAS mostram heterogeneidade regional tanto nas
-frequências absolutas quanto nas taxas. Essa variação reforça a importância de
-considerar a RRAS como nível de agrupamento na modelagem, com inclusão de
-fragilidade compartilhada e termo espacial, já que regiões com organização
-assistencial e contexto territorial distintos podem apresentar comportamentos
+Assim, os resultados por RRAS mostram heterogeneidade regional tanto nas 
+frequências absolutas quanto nos indicadores com denominador regional. Essa variação 
+reforça a importância de considerar a RRAS como nível de agrupamento na modelagem, 
+com inclusão de fragilidade compartilhada e termo espacial, já que regiões com organização 
+assistencial e contexto territorial distintos podem apresentar comportamentos 
 também distintos no tempo até o parto.
 
 \section{Resultados do modelo}

@@ -1,0 +1,6 @@
+Besag, J.; York, J.; Mollie, A. Bayesian image restoration, with two
+applications in spatial statistics. Annals of the Institute of Statistical
+Mathematics, v. 43, n. 1, p. 1-20, 1991.
+
+DOI: 10.1007/BF00116466
+Link: https://doi.org/10.1007/BF00116466

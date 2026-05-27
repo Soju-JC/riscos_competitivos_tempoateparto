@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.4.9)  27 APR 2026 19:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.4.9)  20 MAY 2026 18:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -436,7 +436,12 @@ Package tocloft Info: The document has chapter divisions on input line 51.
 \c@equdepth=\count321
 \cftbeforeequtitleskip=\skip107
 \cftafterequtitleskip=\skip108
-(c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
+(c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xurl/xurl.sty
+Package: xurl 2022/01/09 v 0.10 modify URL breaks
+(c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip18
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)) (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2026-01-29 v7.01p Hypertext links for LaTeX
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
@@ -493,10 +498,6 @@ Package hyperref Info: Backreferencing OFF on input line 4221.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4468.
 \c@Hy@tempcnt=\count326
-(c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip18
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
 LaTeX Info: Redefining \url on input line 4807.
 \XeTeXLinkMargin=\dimen187
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
@@ -856,12 +857,12 @@ Package biblatex Info: ... and expl3
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty
 Package: blx-case-expl3 2025/07/10 v3.21 expl3 case changing code for biblatex
 ))
-LaTeX Font Info:    Trying to load font information for T1+ntxtlf on input line 320.
+LaTeX Font Info:    Trying to load font information for T1+ntxtlf on input line 335.
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 File: t1ntxtlf.fd 2021/05/24 v1.1 font definition file for T1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 320.
+(Font)              scaled to size 12.0pt on input line 335.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -872,44 +873,44 @@ Package babel Info: 'brazilian' activates 'portuges' shorthands.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 320.
-LaTeX Font Info:    Trying to load font information for OML+ntxmi on input line 320.
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 335.
+LaTeX Font Info:    Trying to load font information for OML+ntxmi on input line 335.
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 320.
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 320.
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 320.
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 320.
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 320.
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 320.
-LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 320.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 335.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 335.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 335.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 335.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 335.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 335.
+LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 335.
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 320.
-LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line 320.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 335.
+LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line 335.
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 320.
-LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input line 320.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 335.
+LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input line 335.
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 320.
-LaTeX Font Info:    ... okay on input line 320.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 320.
-LaTeX Font Info:    ... okay on input line 320.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 335.
+LaTeX Font Info:    ... okay on input line 335.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 335.
+LaTeX Font Info:    ... okay on input line 335.
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -918,8 +919,8 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \c@mv@tabular=\count472
 \c@mv@boldtabular=\count473
-LaTeX Info: Command `\dddot' is already robust on input line 320.
-LaTeX Info: Command `\ddddot' is already robust on input line 320.
+LaTeX Info: Command `\dddot' is already robust on input line 335.
+LaTeX Info: Command `\ddddot' is already robust on input line 335.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -954,7 +955,7 @@ LaTeX Info: Command `\ddddot' is already robust on input line 320.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 320.
+Package hyperref Info: Link coloring OFF on input line 335.
 (./main.out) (./main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
@@ -983,12 +984,12 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
 (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 320.
-Package biblatex Info: Reference segment=0 on input line 320.
+Package biblatex Info: Reference section=0 on input line 335.
+Package biblatex Info: Reference segment=0 on input line 335.
 (./capa.tex
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 12.0pt on input line 16.
-<figuras/instituicao.png, id=96, 1084.05pt x 208.78pt>
+<figuras/instituicao.png, id=108, 1084.05pt x 208.78pt>
 File: figuras/instituicao.png Graphic file (type png)
 <use figuras/instituicao.png>
 Package pdftex.def Info: figuras/instituicao.png  used on input line 38.
@@ -1088,14 +1089,14 @@ LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
 
 ]) (./resumo.tex
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 14.4pt on input line 11.
+(Font)              scaled to size 14.4pt on input line 12.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 14.4pt on input line 11.
+(Font)              scaled to size 14.4pt on input line 12.
 )
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.355 \clearpage
+l.370 \clearpage
                  [1
 
 ] (./abstract.tex) [2
@@ -1126,535 +1127,476 @@ l.355 \clearpage
 
 ] (./introducao.tex
 Cap\'{\i }tulo 1.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
+(Font)              scaled to size 12.0pt on input line 21.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.8pt on input line 39.
+(Font)              scaled to size 8.8pt on input line 23.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.6pt on input line 39.
+(Font)              scaled to size 6.6pt on input line 50.
 [8
 
 
-{c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}]
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 12.0pt on input line 65.
-[9] [10] [11] [12] [13]) (./objetivo.tex [14]
+] [9{c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}] [10] [11] [12] [13]) (./objetivo.tex [14]
 Cap\'{\i }tulo 2.
 ) (./materiais_metodos.tex [15
 
 ]
 Cap\'{\i }tulo 3.
-LaTeX Font Info:    Trying to load font information for T1+ntxtt on input line 11.
+LaTeX Font Info:    Trying to load font information for T1+ntxtt on input line 13.
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/t1ntxtt.fd
 File: t1ntxtt.fd 2012/04/20 v3.1
 )
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 12.0pt on input line 11.
-<figuras/flux_obitos_fetais.png, id=411, 3982.88pt x 4111.36pt>
+(Font)              scaled to size 12.0pt on input line 13.
+<figuras/flux_obitos_fetais.png, id=467, 3986.895pt x 4111.36pt>
 File: figuras/flux_obitos_fetais.png Graphic file (type png)
 <use figuras/flux_obitos_fetais.png>
-Package pdftex.def Info: figuras/flux_obitos_fetais.png  used on input line 25.
-(pdftex.def)             Requested size: 364.19667pt x 375.90346pt.
+Package pdftex.def Info: figuras/flux_obitos_fetais.png  used on input line 46.
+(pdftex.def)             Requested size: 364.19667pt x 375.52705pt.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 26.
+(Font)              scaled to size 10.0pt on input line 47.
 [16
 
-]
-<figuras/flux_nascidos_vivos.png, id=422, 4111.36pt x 2581.645pt>
+] [17 <./figuras/flux_obitos_fetais.png>]
+<figuras/flux_nascidos_vivos.png, id=488, 4111.36pt x 2581.645pt>
 File: figuras/flux_nascidos_vivos.png Graphic file (type png)
 <use figuras/flux_nascidos_vivos.png>
-Package pdftex.def Info: figuras/flux_nascidos_vivos.png  used on input line 41.
+Package pdftex.def Info: figuras/flux_nascidos_vivos.png  used on input line 79.
 (pdftex.def)             Requested size: 364.19667pt x 228.6745pt.
-[17 <./figuras/flux_obitos_fetais.png>] [18 <./figuras/flux_nascidos_vivos.png>]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.95pt on input line 57.
+(Font)              scaled to size 10.95pt on input line 98.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 10.95pt on input line 59.
+(Font)              scaled to size 10.95pt on input line 100.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 8.0pt on input line 59.
+(Font)              scaled to size 8.0pt on input line 100.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 6.1pt on input line 59.
+(Font)              scaled to size 6.1pt on input line 100.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 10.95pt on input line 64.
+(Font)              scaled to size 10.95pt on input line 105.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 10.95pt on input line 70.
-[19]
+(Font)              scaled to size 10.95pt on input line 111.
+[18 <./figuras/flux_nascidos_vivos.png>] [19]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 10.0pt on input line 245.
-[20] [21] [22] [23] [24
-pdfTeX warning (ext4): destination with the same identifier (name{equation.3.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.422 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{equation.3.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.422 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{equation.3.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.422 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{equation.3.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.422 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{equation.3.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.422 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{equation.3.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.422 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{equation.3.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.422 
-      ]
-Overfull \hbox (3.95525pt too wide) detected at line 464
-[][]
- []
+(Font)              scaled to size 10.0pt on input line 299.
+[20] [21] [22] [23] [24] [25] [26] [27]) (./resultados.tex [28]
+Cap\'{\i }tulo 4.
+<figuras/histograma_ambas_causas.png, id=588, 722.7pt x 361.35pt>
+File: figuras/histograma_ambas_causas.png Graphic file (type png)
+<use figuras/histograma_ambas_causas.png>
+Package pdftex.def Info: figuras/histograma_ambas_causas.png  used on input line 102.
+(pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
+[29
 
-[25]
-LaTeX Font Info:    Trying to load font information for TS1+ntxtlf on input line 485.
+]
+<figuras/0_ambos_km_global.png, id=595, 722.7pt x 361.35pt>
+File: figuras/0_ambos_km_global.png Graphic file (type png)
+<use figuras/0_ambos_km_global.png>
+Package pdftex.def Info: figuras/0_ambos_km_global.png  used on input line 119.
+(pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
+[30 <./figuras/histograma_ambas_causas.png> <./figuras/0_ambos_km_global.png>]
+<figuras/cif_global_painel.png, id=603, 722.7pt x 361.35pt>
+File: figuras/cif_global_painel.png Graphic file (type png)
+<use figuras/cif_global_painel.png>
+Package pdftex.def Info: figuras/cif_global_painel.png  used on input line 144.
+(pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
+LaTeX Font Info:    Trying to load font information for TS1+ntxtlf on input line 182.
 (c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 485.
-) (./resultados.tex [26{c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc}]
-Cap\'{\i }tulo 4.
-
-Overfull \hbox (4.3657pt too wide) in paragraph at lines 72--72
-[]|\T1/ntxtlf/b/n/12 Mediana|  
- []
-
-
-Overfull \hbox (1.58008pt too wide) in paragraph at lines 101--101
-[]|\T1/ntxtlf/m/n/12 485922|  
- []
-
-<figuras/histograma_ambas_causas.png, id=478, 722.7pt x 361.35pt>
-File: figuras/histograma_ambas_causas.png Graphic file (type png)
-<use figuras/histograma_ambas_causas.png>
-Package pdftex.def Info: figuras/histograma_ambas_causas.png  used on input line 124.
-(pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[27
-
-]
-<figuras/0_ambos_km_global.png, id=484, 722.7pt x 361.35pt>
-File: figuras/0_ambos_km_global.png Graphic file (type png)
-<use figuras/0_ambos_km_global.png>
-Package pdftex.def Info: figuras/0_ambos_km_global.png  used on input line 141.
-(pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[28 <./figuras/histograma_ambas_causas.png> <./figuras/0_ambos_km_global.png>]
-<figuras/cif_global_painel.png, id=492, 722.7pt x 361.35pt>
-File: figuras/cif_global_painel.png Graphic file (type png)
-<use figuras/cif_global_painel.png>
-Package pdftex.def Info: figuras/cif_global_painel.png  used on input line 166.
-(pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[29 <./figuras/cif_global_painel.png>]
+(Font)              scaled to size 10.95pt on input line 182.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 208.
+(Font)              scaled to size 8.0pt on input line 190.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 190.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.5pt on input line 208.
-
-Overfull \hbox (3.97604pt too wide) in paragraph at lines 186--325
- [][] 
- []
-
+(Font)              scaled to size 5.5pt on input line 190.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
+(Font)              scaled to size 7.3pt on input line 307.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 10.0pt on input line 325.
+(Font)              scaled to size 10.0pt on input line 307.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 7.3pt on input line 325.
-
-Overfull \vbox (25.69939pt too high) has occurred while \output is active []
-
-[30]
-<figuras/kmglobal_idade_mae.png, id=505, 722.7pt x 361.35pt>
+(Font)              scaled to size 7.3pt on input line 307.
+[31 <./figuras/cif_global_painel.png>] [32{c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc}]
+<figuras/kmglobal_idade_mae.png, id=616, 722.7pt x 361.35pt>
 File: figuras/kmglobal_idade_mae.png Graphic file (type png)
 <use figuras/kmglobal_idade_mae.png>
-Package pdftex.def Info: figuras/kmglobal_idade_mae.png  used on input line 356.
+Package pdftex.def Info: figuras/kmglobal_idade_mae.png  used on input line 332.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-<figuras/cif_idademae_painel_ambos.png, id=507, 722.7pt x 361.35pt>
+<figuras/cif_idademae_painel_ambos.png, id=618, 722.7pt x 361.35pt>
 File: figuras/cif_idademae_painel_ambos.png Graphic file (type png)
 <use figuras/cif_idademae_painel_ambos.png>
-Package pdftex.def Info: figuras/cif_idademae_painel_ambos.png  used on input line 378.
+Package pdftex.def Info: figuras/cif_idademae_painel_ambos.png  used on input line 354.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[31 <./figuras/kmglobal_idade_mae.png>]
-<figuras/kmglobal_escmae2010.png, id=514, 722.7pt x 361.35pt>
+[33 <./figuras/kmglobal_idade_mae.png>]
+<figuras/kmglobal_escmae2010.png, id=625, 722.7pt x 361.35pt>
 File: figuras/kmglobal_escmae2010.png Graphic file (type png)
 <use figuras/kmglobal_escmae2010.png>
-Package pdftex.def Info: figuras/kmglobal_escmae2010.png  used on input line 408.
+Package pdftex.def Info: figuras/kmglobal_escmae2010.png  used on input line 384.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[32 <./figuras/cif_idademae_painel_ambos.png>]
-<figuras/cif_escmae2010_painel_ambos.png, id=521, 722.7pt x 361.35pt>
+[34 <./figuras/cif_idademae_painel_ambos.png>]
+<figuras/cif_escmae2010_painel_ambos.png, id=632, 722.7pt x 361.35pt>
 File: figuras/cif_escmae2010_painel_ambos.png Graphic file (type png)
 <use figuras/cif_escmae2010_painel_ambos.png>
-Package pdftex.def Info: figuras/cif_escmae2010_painel_ambos.png  used on input line 425.
+Package pdftex.def Info: figuras/cif_escmae2010_painel_ambos.png  used on input line 402.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[33 <./figuras/kmglobal_escmae2010.png> <./figuras/cif_escmae2010_painel_ambos.png>]
-<figuras/kmglobal_filvivo.png, id=529, 722.7pt x 361.35pt>
+[35 <./figuras/kmglobal_escmae2010.png> <./figuras/cif_escmae2010_painel_ambos.png>]
+<figuras/kmglobal_filvivo.png, id=641, 722.7pt x 361.35pt>
 File: figuras/kmglobal_filvivo.png Graphic file (type png)
 <use figuras/kmglobal_filvivo.png>
-Package pdftex.def Info: figuras/kmglobal_filvivo.png  used on input line 454.
+Package pdftex.def Info: figuras/kmglobal_filvivo.png  used on input line 431.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-<figuras/cif_filvivo_painel_ambos.png, id=531, 722.7pt x 361.35pt>
+<figuras/cif_filvivo_painel_ambos.png, id=643, 722.7pt x 361.35pt>
 File: figuras/cif_filvivo_painel_ambos.png Graphic file (type png)
 <use figuras/cif_filvivo_painel_ambos.png>
-Package pdftex.def Info: figuras/cif_filvivo_painel_ambos.png  used on input line 472.
+Package pdftex.def Info: figuras/cif_filvivo_painel_ambos.png  used on input line 449.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[34 <./figuras/kmglobal_filvivo.png>]
-<figuras/kmglobal_filmort.png, id=538, 722.7pt x 361.35pt>
+[36 <./figuras/kmglobal_filvivo.png>]
+<figuras/kmglobal_filmort.png, id=650, 722.7pt x 361.35pt>
 File: figuras/kmglobal_filmort.png Graphic file (type png)
 <use figuras/kmglobal_filmort.png>
-Package pdftex.def Info: figuras/kmglobal_filmort.png  used on input line 499.
+Package pdftex.def Info: figuras/kmglobal_filmort.png  used on input line 476.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[35 <./figuras/cif_filvivo_painel_ambos.png>]
-<figuras/cif_filmort_painel_ambos.png, id=546, 722.7pt x 361.35pt>
+[37 <./figuras/cif_filvivo_painel_ambos.png>]
+<figuras/cif_filmort_painel_ambos.png, id=657, 722.7pt x 361.35pt>
 File: figuras/cif_filmort_painel_ambos.png Graphic file (type png)
 <use figuras/cif_filmort_painel_ambos.png>
-Package pdftex.def Info: figuras/cif_filmort_painel_ambos.png  used on input line 516.
+Package pdftex.def Info: figuras/cif_filmort_painel_ambos.png  used on input line 494.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[36 <./figuras/kmglobal_filmort.png>]
-<figuras/kmglobal_gravidez.png, id=553, 722.7pt x 361.35pt>
+[38 <./figuras/kmglobal_filmort.png>]
+<figuras/kmglobal_gravidez.png, id=664, 722.7pt x 361.35pt>
 File: figuras/kmglobal_gravidez.png Graphic file (type png)
 <use figuras/kmglobal_gravidez.png>
-Package pdftex.def Info: figuras/kmglobal_gravidez.png  used on input line 544.
+Package pdftex.def Info: figuras/kmglobal_gravidez.png  used on input line 522.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[37 <./figuras/cif_filmort_painel_ambos.png>]
-<figuras/cif_gravidez_painel_ambos.png, id=560, 722.7pt x 361.35pt>
+[39 <./figuras/cif_filmort_painel_ambos.png>]
+<figuras/cif_gravidez_painel_ambos.png, id=671, 722.7pt x 361.35pt>
 File: figuras/cif_gravidez_painel_ambos.png Graphic file (type png)
 <use figuras/cif_gravidez_painel_ambos.png>
-Package pdftex.def Info: figuras/cif_gravidez_painel_ambos.png  used on input line 563.
+Package pdftex.def Info: figuras/cif_gravidez_painel_ambos.png  used on input line 541.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[38 <./figuras/kmglobal_gravidez.png>]
-<figuras/kmglobal_parto.png, id=567, 722.7pt x 361.35pt>
+[40 <./figuras/kmglobal_gravidez.png>]
+<figuras/kmglobal_parto.png, id=678, 722.7pt x 361.35pt>
 File: figuras/kmglobal_parto.png Graphic file (type png)
 <use figuras/kmglobal_parto.png>
-Package pdftex.def Info: figuras/kmglobal_parto.png  used on input line 593.
+Package pdftex.def Info: figuras/kmglobal_parto.png  used on input line 571.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[39 <./figuras/cif_gravidez_painel_ambos.png>]
-<figuras/cif_parto_painel_ambos.png, id=574, 722.7pt x 361.35pt>
+[41 <./figuras/cif_gravidez_painel_ambos.png>]
+<figuras/cif_parto_painel_ambos.png, id=686, 722.7pt x 361.35pt>
 File: figuras/cif_parto_painel_ambos.png Graphic file (type png)
 <use figuras/cif_parto_painel_ambos.png>
-Package pdftex.def Info: figuras/cif_parto_painel_ambos.png  used on input line 613.
+Package pdftex.def Info: figuras/cif_parto_painel_ambos.png  used on input line 591.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[40 <./figuras/kmglobal_parto.png>]
-<figuras/kmglobal_peso_categorico.png, id=581, 722.7pt x 361.35pt>
+[42 <./figuras/kmglobal_parto.png>]
+<figuras/kmglobal_peso_categorico.png, id=693, 722.7pt x 361.35pt>
 File: figuras/kmglobal_peso_categorico.png Graphic file (type png)
 <use figuras/kmglobal_peso_categorico.png>
-Package pdftex.def Info: figuras/kmglobal_peso_categorico.png  used on input line 641.
+Package pdftex.def Info: figuras/kmglobal_peso_categorico.png  used on input line 620.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[41 <./figuras/cif_parto_painel_ambos.png>]
-<figuras/cif_peso_categorico_painel_ambos.png, id=590, 722.7pt x 361.35pt>
+[43 <./figuras/cif_parto_painel_ambos.png>]
+<figuras/cif_peso_categorico_painel_ambos.png, id=700, 722.7pt x 361.35pt>
 File: figuras/cif_peso_categorico_painel_ambos.png Graphic file (type png)
 <use figuras/cif_peso_categorico_painel_ambos.png>
-Package pdftex.def Info: figuras/cif_peso_categorico_painel_ambos.png  used on input line 660.
+Package pdftex.def Info: figuras/cif_peso_categorico_painel_ambos.png  used on input line 639.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[42 <./figuras/kmglobal_peso_categorico.png> <./figuras/cif_peso_categorico_painel_ambos.png>]
-<figuras/kmglobal_lococornasc.png, id=598, 722.7pt x 361.35pt>
+[44 <./figuras/kmglobal_peso_categorico.png> <./figuras/cif_peso_categorico_painel_ambos.png>]
+<figuras/kmglobal_lococornasc.png, id=709, 722.7pt x 361.35pt>
 File: figuras/kmglobal_lococornasc.png Graphic file (type png)
 <use figuras/kmglobal_lococornasc.png>
-Package pdftex.def Info: figuras/kmglobal_lococornasc.png  used on input line 689.
+Package pdftex.def Info: figuras/kmglobal_lococornasc.png  used on input line 668.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-<figuras/cif_lococornasc_painel_ambos.png, id=600, 722.7pt x 361.35pt>
+<figuras/cif_lococornasc_painel_ambos.png, id=711, 722.7pt x 361.35pt>
 File: figuras/cif_lococornasc_painel_ambos.png Graphic file (type png)
 <use figuras/cif_lococornasc_painel_ambos.png>
-Package pdftex.def Info: figuras/cif_lococornasc_painel_ambos.png  used on input line 707.
+Package pdftex.def Info: figuras/cif_lococornasc_painel_ambos.png  used on input line 686.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[43 <./figuras/kmglobal_lococornasc.png>]
-<figuras/kmglobal_sexo.png, id=607, 722.7pt x 361.35pt>
+[45 <./figuras/kmglobal_lococornasc.png>]
+<figuras/kmglobal_sexo.png, id=718, 722.7pt x 361.35pt>
 File: figuras/kmglobal_sexo.png Graphic file (type png)
 <use figuras/kmglobal_sexo.png>
-Package pdftex.def Info: figuras/kmglobal_sexo.png  used on input line 736.
+Package pdftex.def Info: figuras/kmglobal_sexo.png  used on input line 715.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[44 <./figuras/cif_lococornasc_painel_ambos.png>]
-<figuras/ambos_cif_sexo.png, id=614, 722.7pt x 361.35pt>
+[46 <./figuras/cif_lococornasc_painel_ambos.png>]
+<figuras/ambos_cif_sexo.png, id=725, 722.7pt x 361.35pt>
 File: figuras/ambos_cif_sexo.png Graphic file (type png)
 <use figuras/ambos_cif_sexo.png>
-Package pdftex.def Info: figuras/ambos_cif_sexo.png  used on input line 753.
+Package pdftex.def Info: figuras/ambos_cif_sexo.png  used on input line 732.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[45 <./figuras/kmglobal_sexo.png> <./figuras/ambos_cif_sexo.png>] [46]
-<figuras/km_obitos_obitoparto.png, id=628, 542.025pt x 289.08pt>
+[47 <./figuras/kmglobal_sexo.png> <./figuras/ambos_cif_sexo.png>]
+LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
+(Font)              scaled to size 12.0pt on input line 765.
+[48]
+<figuras/km_obitos_obitoparto.png, id=740, 542.025pt x 289.08pt>
 File: figuras/km_obitos_obitoparto.png Graphic file (type png)
 <use figuras/km_obitos_obitoparto.png>
-Package pdftex.def Info: figuras/km_obitos_obitoparto.png  used on input line 922.
+Package pdftex.def Info: figuras/km_obitos_obitoparto.png  used on input line 900.
 (pdftex.def)             Requested size: 409.71692pt x 218.52092pt.
-[47]
-<figuras/km_nascidosvivos_apgar.png, id=635, 542.025pt x 361.35pt>
+[49]
+<figuras/km_nascidosvivos_apgar.png, id=746, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_apgar.png Graphic file (type png)
 <use figuras/km_nascidosvivos_apgar.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_apgar.png  used on input line 950.
+Package pdftex.def Info: figuras/km_nascidosvivos_apgar.png  used on input line 928.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[48 <./figuras/km_obitos_obitoparto.png>]
-<figuras/km_nascidosvivos_consultas.png, id=642, 542.025pt x 361.35pt>
+[50 <./figuras/km_obitos_obitoparto.png>]
+<figuras/km_nascidosvivos_consultas.png, id=753, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_consultas.png Graphic file (type png)
 <use figuras/km_nascidosvivos_consultas.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_consultas.png  used on input line 974.
+Package pdftex.def Info: figuras/km_nascidosvivos_consultas.png  used on input line 952.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[49 <./figuras/km_nascidosvivos_apgar.png>]
-<figuras/km_nascidosvivos_anomalia.png, id=649, 542.025pt x 361.35pt>
+[51 <./figuras/km_nascidosvivos_apgar.png>]
+<figuras/km_nascidosvivos_anomalia.png, id=760, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_anomalia.png Graphic file (type png)
 <use figuras/km_nascidosvivos_anomalia.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_anomalia.png  used on input line 1001.
+Package pdftex.def Info: figuras/km_nascidosvivos_anomalia.png  used on input line 979.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[50 <./figuras/km_nascidosvivos_consultas.png>]
-<figuras/km_nascidosvivos_mesprenat.png, id=656, 542.025pt x 361.35pt>
+[52 <./figuras/km_nascidosvivos_consultas.png>]
+<figuras/km_nascidosvivos_mesprenat.png, id=767, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_mesprenat.png Graphic file (type png)
 <use figuras/km_nascidosvivos_mesprenat.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_mesprenat.png  used on input line 1030.
+Package pdftex.def Info: figuras/km_nascidosvivos_mesprenat.png  used on input line 1008.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[51 <./figuras/km_nascidosvivos_anomalia.png>]
-<figuras/km_nascidosvivos_paridade.png, id=663, 542.025pt x 361.35pt>
+[53 <./figuras/km_nascidosvivos_anomalia.png>]
+<figuras/km_nascidosvivos_paridade.png, id=775, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_paridade.png Graphic file (type png)
 <use figuras/km_nascidosvivos_paridade.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_paridade.png  used on input line 1055.
+Package pdftex.def Info: figuras/km_nascidosvivos_paridade.png  used on input line 1033.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[52 <./figuras/km_nascidosvivos_mesprenat.png>]
-<figuras/km_nascidosvivos_qtdgestant.png, id=670, 542.025pt x 361.35pt>
+[54 <./figuras/km_nascidosvivos_mesprenat.png>]
+<figuras/km_nascidosvivos_qtdgestant.png, id=782, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_qtdgestant.png Graphic file (type png)
 <use figuras/km_nascidosvivos_qtdgestant.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_qtdgestant.png  used on input line 1079.
+Package pdftex.def Info: figuras/km_nascidosvivos_qtdgestant.png  used on input line 1057.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[53 <./figuras/km_nascidosvivos_paridade.png>]
-<figuras/km_nascidosvivos_qtdpartces.png, id=678, 542.025pt x 361.35pt>
+[55 <./figuras/km_nascidosvivos_paridade.png>]
+<figuras/km_nascidosvivos_qtdpartces.png, id=789, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_qtdpartces.png Graphic file (type png)
 <use figuras/km_nascidosvivos_qtdpartces.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_qtdpartces.png  used on input line 1103.
+Package pdftex.def Info: figuras/km_nascidosvivos_qtdpartces.png  used on input line 1081.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[54 <./figuras/km_nascidosvivos_qtdgestant.png>]
-<figuras/km_nascidosvivos_qtdpartnor.png, id=685, 542.025pt x 361.35pt>
+[56 <./figuras/km_nascidosvivos_qtdgestant.png>]
+<figuras/km_nascidosvivos_qtdpartnor.png, id=796, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_qtdpartnor.png Graphic file (type png)
 <use figuras/km_nascidosvivos_qtdpartnor.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_qtdpartnor.png  used on input line 1126.
+Package pdftex.def Info: figuras/km_nascidosvivos_qtdpartnor.png  used on input line 1104.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[55 <./figuras/km_nascidosvivos_qtdpartces.png>]
-<figuras/km_nascidosvivos_racamae.png, id=692, 542.025pt x 361.35pt>
+[57 <./figuras/km_nascidosvivos_qtdpartces.png>]
+<figuras/km_nascidosvivos_racamae.png, id=803, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_racamae.png Graphic file (type png)
 <use figuras/km_nascidosvivos_racamae.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_racamae.png  used on input line 1152.
+Package pdftex.def Info: figuras/km_nascidosvivos_racamae.png  used on input line 1130.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[56 <./figuras/km_nascidosvivos_qtdpartnor.png>]
-<figuras/km_nascidosvivos_stcesparto.png, id=699, 542.025pt x 361.35pt>
+[58 <./figuras/km_nascidosvivos_qtdpartnor.png>]
+<figuras/km_nascidosvivos_stcesparto.png, id=810, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_stcesparto.png Graphic file (type png)
 <use figuras/km_nascidosvivos_stcesparto.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_stcesparto.png  used on input line 1174.
+Package pdftex.def Info: figuras/km_nascidosvivos_stcesparto.png  used on input line 1152.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[57 <./figuras/km_nascidosvivos_racamae.png>]
-<figuras/km_nascidosvivos_indtrabalhoparto.png, id=706, 542.025pt x 361.35pt>
+[59 <./figuras/km_nascidosvivos_racamae.png>]
+<figuras/km_nascidosvivos_indtrabalhoparto.png, id=818, 542.025pt x 361.35pt>
 File: figuras/km_nascidosvivos_indtrabalhoparto.png Graphic file (type png)
 <use figuras/km_nascidosvivos_indtrabalhoparto.png>
-Package pdftex.def Info: figuras/km_nascidosvivos_indtrabalhoparto.png  used on input line 1199.
+Package pdftex.def Info: figuras/km_nascidosvivos_indtrabalhoparto.png  used on input line 1177.
 (pdftex.def)             Requested size: 409.71692pt x 273.15117pt.
-[58 <./figuras/km_nascidosvivos_stcesparto.png>] [59 <./figuras/km_nascidosvivos_indtrabalhoparto.png>]
-<figuras/mapas_RRAS.png, id=719, 722.7pt x 361.35pt>
+[60 <./figuras/km_nascidosvivos_stcesparto.png>] [61 <./figuras/km_nascidosvivos_indtrabalhoparto.png>]
+<figuras/mapas_RRAS.png, id=830, 722.7pt x 361.35pt>
 File: figuras/mapas_RRAS.png Graphic file (type png)
 <use figuras/mapas_RRAS.png>
-Package pdftex.def Info: figuras/mapas_RRAS.png  used on input line 1244.
+Package pdftex.def Info: figuras/mapas_RRAS.png  used on input line 1220.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[60 <./figuras/mapas_RRAS.png>]
+[62 <./figuras/mapas_RRAS.png>]
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 10.0pt on input line 1275.
-<figuras/mapas_RRAS_taxas_prematuridade.png, id=728, 722.7pt x 361.35pt>
-File: figuras/mapas_RRAS_taxas_prematuridade.png Graphic file (type png)
-<use figuras/mapas_RRAS_taxas_prematuridade.png>
-Package pdftex.def Info: figuras/mapas_RRAS_taxas_prematuridade.png  used on input line 1345.
+(Font)              scaled to size 10.0pt on input line 1251.
+<figuras/mapas_RRAS_razao_prematuridade.png, id=838, 722.7pt x 361.35pt>
+File: figuras/mapas_RRAS_razao_prematuridade.png Graphic file (type png)
+<use figuras/mapas_RRAS_razao_prematuridade.png>
+Package pdftex.def Info: figuras/mapas_RRAS_razao_prematuridade.png  used on input line 1316.
 (pdftex.def)             Requested size: 409.71692pt x 204.85786pt.
-[61]) [62 <./figuras/mapas_RRAS_taxas_prematuridade.png>]
+[63]) [64 <./figuras/mapas_RRAS_razao_prematuridade.png>]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/sc' will be
-(Font)              scaled to size 12.0pt on input line 431.
-[63
+(Font)              scaled to size 12.0pt on input line 447.
+[65
 
 
-{c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf-pc.enc}] [64] Excluding 'comment' comment. Excluding 'comment' comment. [65] (./main.aux)
+{c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf-pc.enc}] [66] [67] Excluding 'comment' comment. Excluding 'comment' comment. [68] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2020/03/25>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: A42B8AC0F35188304AAFDD68824291CC;5393.
+(rerunfilecheck)             Checksum: C602B2BE94E21D3D7544800E3650429E;5976.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 26865 strings out of 469439
- 466481 string characters out of 5465386
- 1323414 words of memory out of 5000000
- 54946 multiletter control sequences out of 15000+600000
- 754515 words of font info for 215 fonts, out of 8000000 for 9000
+ 26976 strings out of 469439
+ 469637 string characters out of 5465386
+ 1324830 words of memory out of 5000000
+ 55018 multiletter control sequences out of 15000+600000
+ 756631 words of font info for 220 fonts, out of 8000000 for 9000
  38 hyphenation exceptions out of 8191
- 75i,18n,117p,835b,2386s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,18n,117p,693b,2386s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/NewTXBMI.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/NewTXMI.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/NewTXMI7.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qtmr.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txexs.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txmiaX.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txsys.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmb.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmr.pfb><c:/Users/josec/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmri.pfb>
-Output written on main.pdf (67 pages, 4026312 bytes).
+Output written on main.pdf (70 pages, 5653898 bytes).
 PDF statistics:
- 886 PDF objects out of 1000 (max. 8388607)
- 710 compressed objects within 8 object streams
- 176 named destinations out of 1000 (max. 500000)
- 375 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1028 PDF objects out of 1200 (max. 8388607)
+ 848 compressed objects within 9 object streams
+ 207 named destinations out of 1000 (max. 500000)
+ 399 words of extra memory for PDF output out of 10000 (max. 10000000)
 

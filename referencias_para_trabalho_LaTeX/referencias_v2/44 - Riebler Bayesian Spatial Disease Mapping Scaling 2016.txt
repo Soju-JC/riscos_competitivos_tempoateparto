@@ -1,0 +1,6 @@
+Riebler, A.; Sorbye, S. H.; Simpson, D.; Rue, H. An intuitive Bayesian
+spatial model for disease mapping that accounts for scaling. Statistical
+Methods in Medical Research, v. 25, n. 4, p. 1145-1165, 2016.
+
+DOI: 10.1177/0962280216660421
+Link: https://journals.sagepub.com/doi/10.1177/0962280216660421

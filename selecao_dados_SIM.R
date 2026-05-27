@@ -341,16 +341,62 @@ library(scales)
 #     rras_int = as.integer(rras_fac)
 #   )
 # 
+# Observação: dois registros completos de óbito fetal apresentaram CODMUNRES = 350000,
+# sem município de residência identificável na tabela de RRAS. Por gerarem rras_id = NA,
+# foram desconsiderados neste filtro, resultando em 3.266 óbitos fetais na base final.
 # sim_df2_clean <- sim_df2_clean %>% filter(!is.na(rras_id))
 # 
 # # saveRDS(sim_df2_clean, file = "dataset_sim_df.rds")
 # #-------------------------------------------------------------------------------
 
 sim_df2_clean <- readRDS("dataset_sim_df.rds")
+
+# Diretorio exclusivo para os datasets finais solicitados pela orientadora.
+dir_datasets_finais <- "datasets_finais"
+dir.create(dir_datasets_finais, recursive = TRUE, showWarnings = FALSE)
+
+anexar_dados_rras_finais <- function(df) {
+  # Mantem apenas as variaveis de RRAS que sao usadas ou interpretaveis.
+  # rras_fac e rras_int eram codificacoes auxiliares antigas e nao entram nas
+  # analises finais; municipio, regiao de saude e DRS ficam para consultas futuras.
+  caminho_mapa_rras <- file.path("scripts", "analysis_outputs", "mapa_municipio_rras_oficial.csv")
+
+  df <- df %>%
+    mutate(
+      codmunres = str_pad(str_trim(as.character(codmunres)), width = 6, pad = "0")
+    ) %>%
+    select(-any_of(c("rras_fac", "rras_int")))
+
+  if (!file.exists(caminho_mapa_rras)) {
+    for (var in c("municipio_residencia", "regiao_de_saude", "drs")) {
+      if (!var %in% names(df)) df[[var]] <- NA_character_
+    }
+    return(df)
+  }
+
+  mapa_rras <- read.csv(caminho_mapa_rras, stringsAsFactors = FALSE, fileEncoding = "UTF-8") %>%
+    transmute(
+      codmunres = str_pad(str_trim(as.character(cod_mun6)), width = 6, pad = "0"),
+      municipio_residencia = str_trim(as.character(municipio_residencia)),
+      rras_id = suppressWarnings(as.integer(rras_id)),
+      rras_nome = str_trim(as.character(rras_nome)),
+      regiao_de_saude = str_trim(as.character(regiao_de_saude)),
+      drs = str_trim(as.character(drs))
+    ) %>%
+    distinct(codmunres, .keep_all = TRUE)
+
+  df %>%
+    select(-any_of(c("municipio_residencia", "rras_id", "rras_nome", "regiao_de_saude", "drs"))) %>%
+    left_join(mapa_rras, by = "codmunres")
+}
+
+sim_df2_clean <- anexar_dados_rras_finais(sim_df2_clean)
+
 ################################################################################
 ##################### DESCRITIVA SÓ DO SIM-DOFET ISOLADO #######################
 ################################################################################
 dados_sp_cln <- sim_df2_clean[, c(
+  "codmunres",
   "sexo", 
   "idademae", 
   "escmae2010", 
@@ -361,8 +407,20 @@ dados_sp_cln <- sim_df2_clean[, c(
   "parto", 
   "peso", 
   "lococornasc", 
-  "obitoparto"
+  "obitoparto",
+  "municipio_residencia",
+  "rras_id",
+  "rras_nome",
+  "regiao_de_saude",
+  "drs"
   )]
+
+# Salva a base no ponto em que ela entra na descritiva, antes das recodificacoes
+# feitas abaixo; as variaveis de RRAS ja acompanham cada registro.
+saveRDS(
+  dados_sp_cln,
+  file = file.path(dir_datasets_finais, "sim_pre_recodificacao.rds")
+)
 
 # Recodificações principais e criação de objetos de tempo/evento
 # Recodificação essencial para análises seguintes
@@ -512,6 +570,13 @@ knitr::kable(cat_summary_all,
 # Como todos os casos são óbitos (não há censura), criamos um status = 1
 dados_eda_clean <- dados_eda_clean %>%
   mutate(status_evento = 1L)
+
+# Salva a base ja recodificada, com o status de evento incluido, imediatamente
+# antes do primeiro ajuste de Kaplan-Meier.
+saveRDS(
+  dados_eda_clean,
+  file = file.path(dir_datasets_finais, "sim_pos_recodificacao.rds")
+)
 
 resumo_tempo_km <- function(df, var, rotulo = var) {
   # Resumo observado da idade gestacional por grupo usado no grafico de KM.

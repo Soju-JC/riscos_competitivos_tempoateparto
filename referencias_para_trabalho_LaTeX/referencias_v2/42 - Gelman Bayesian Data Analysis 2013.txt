@@ -1,0 +1,6 @@
+Gelman, A.; Carlin, J. B.; Stern, H. S.; Dunson, D. B.; Vehtari, A.;
+Rubin, D. B. Bayesian Data Analysis. 3. ed. Boca Raton: Chapman and Hall/CRC,
+2013.
+
+DOI: 10.1201/b16018
+Link: https://doi.org/10.1201/b16018

@@ -1,0 +1,5 @@
+Brasil. Ministerio da Saude. DATASUS.
+Sistema de Informacao sobre Nascidos Vivos (SINASC), 2023.
+
+Referencia online citada no arquivo BibTeX como DATASUSSINASC2023.
+URL: https://opendatasus.saude.gov.br/dataset/sistema-de-informacao-sobre-nascidos-vivos-sinasc

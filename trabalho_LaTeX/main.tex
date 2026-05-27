@@ -206,6 +206,8 @@
 % listas de figuras e tabelas.
 \renewcommand{\cftequtitlefont}{\hfill\large\bfseries}
 \renewcommand{\cftafterequtitle}{\hfill}
+\setlength{\cftmyequationindent}{0pt}
+\setlength{\cftmyequationnumwidth}{3.2em}
 
 % Ajustes de espaçamento antes dos títulos das listas e do sumário.
 % Para evitar espaço extra entre a margem superior e o título nas
@@ -217,6 +219,10 @@
 \setlength{\cftbeforelottitleskip}{0pt}
 \setlength{\cftbeforeequtitleskip}{0pt}
 \setlength{\cftbeforetoctitleskip}{0pt}
+
+% Permite que URLs longas sejam quebradas adequadamente nas referências.
+\usepackage{xurl}
+\urlstyle{same}
 
 % Hiperlinks no documento; utilizamos cor preta para não distrair o leitor.
 \usepackage[hidelinks]{hyperref}
@@ -282,11 +288,20 @@
 \definecolor{CiteBlue}{RGB}{0,0,255}
 % Apenas o número das citações em sobrescrito azul:
 \renewcommand*{\mkbibsuperscript}[1]{\textsuperscript{\textcolor{CiteBlue}{#1}}}
-% Substitui o formato padrão do número do rótulo para colorir número + colchetes:
-% Com colchetes
-%\DeclareFieldFormat{labelnumber}{\textcolor{CiteBlue}{\mkbibbrackets{#1}}}
-% Sem colchetes
-\DeclareFieldFormat{labelnumber}{\textcolor{CiteBlue}{#1}}
+% Mantém a numeração da lista de referências em preto; a cor azul fica
+% restrita às citações sobrescritas no texto.
+\DeclareFieldFormat{labelnumber}{#1}
+
+% Acabamento tipográfico da lista de referências mantendo a estrutura Vancouver:
+% artigos preservam o título em fonte normal, enquanto o periódico é destacado.
+\DeclareFieldFormat[article]{journaltitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[book]{title}{\mkbibemph{#1}}
+\DeclareFieldFormat[report]{title}{\mkbibemph{#1}}
+\DeclareFieldFormat[manual]{title}{\mkbibemph{#1}}
+\DeclareFieldFormat[online]{title}{\mkbibemph{#1}}
+
+\setlength{\bibhang}{1.2cm}
+\setlength{\bibitemsep}{0.5\baselineskip}
 
 \addbibresource{references.bib}
 
@@ -428,6 +443,7 @@
 % do documento.
 \begingroup
 \singlespacing
+\setlength{\emergencystretch}{3em}
 \printbibliography[
   heading = bibintoc,        % usa \chapter* + entrada no sumário automaticamente
   title   = {Referências}    % força o título exato

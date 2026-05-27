@@ -1,0 +1,7 @@
+Saldanha RF, Bastos RR, Barcellos C.
+Microdatasus: a package for downloading and preprocessing microdata from
+Brazilian Health Informatics Department (DATASUS).
+Cadernos de Saúde Pública. 2019;35:e00032419.
+
+Referência citada no arquivo BibTeX como saldanha2019microdatasus.
+

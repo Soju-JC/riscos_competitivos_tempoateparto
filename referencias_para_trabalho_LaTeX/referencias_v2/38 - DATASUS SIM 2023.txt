@@ -1,0 +1,6 @@
+Brasil. Ministério da Saúde. DATASUS.
+Sistema de Informações sobre Mortalidade (SIM): declarações de óbito fetal, 2023.
+
+Referência online citada no arquivo BibTeX como DATASUSSIM2023.
+URL: https://opendatasus.saude.gov.br/dataset/sim
+

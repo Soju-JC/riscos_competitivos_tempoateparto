@@ -1,0 +1,7 @@
+R Core Team.
+R: A Language and Environment for Statistical Computing.
+R Foundation for Statistical Computing, Vienna, Austria, 2025.
+
+Referência citada no arquivo BibTeX como rsoftware.
+URL: https://www.R-project.org/
+

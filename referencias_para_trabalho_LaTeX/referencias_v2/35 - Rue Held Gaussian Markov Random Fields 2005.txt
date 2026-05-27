@@ -1,0 +1,5 @@
+Rue, H.; Held, L. Gaussian Markov Random Fields: Theory and Applications.
+Boca Raton: Chapman and Hall/CRC, 2005.
+
+DOI: 10.1201/9780203492024
+Link: https://doi.org/10.1201/9780203492024

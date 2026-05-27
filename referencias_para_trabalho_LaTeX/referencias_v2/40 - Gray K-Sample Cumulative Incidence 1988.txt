@@ -1,0 +1,7 @@
+Gray RJ.
+A class of K-sample tests for comparing the cumulative incidence of a competing risk.
+The Annals of Statistics. 1988;16(3):1141-1154.
+
+Referencia metodologica original para o teste de Gray.
+DOI: 10.1214/aos/1176350951
+Link: https://projecteuclid.org/euclid.aos/1176350951

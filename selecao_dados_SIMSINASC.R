@@ -46,18 +46,277 @@ anexar_rras_oficial <- function(df, mapa_rras, codmun_col = "codmunres") {
 
   df %>%
     mutate(codmunres = padronizar_codmun6(.data[[codmun_col]])) %>%
-    select(-any_of(c("municipio_residencia", "rras_id", "rras_nome", "regiao_de_saude", "drs"))) %>%
+    select(-any_of(c(
+      "municipio_residencia", "rras_id", "rras_nome", "regiao_de_saude", "drs",
+      "rras_fac", "rras_int"
+    ))) %>%
     left_join(mapa_rras, by = c("codmunres" = "cod_mun6"))
 }
 
+# Diretorio exclusivo para os datasets finais solicitados pela orientadora.
+dir_datasets_finais <- "datasets_finais"
+dir.create(dir_datasets_finais, recursive = TRUE, showWarnings = FALSE)
+
 caminho_rras_oficial <- "suporte/shinyremap/inst/app/data/RRAS-MUNICIPIO.xlsx"
-mapa_rras_oficial <- ler_mapeamento_rras_oficial(caminho_rras_oficial)
+caminho_rras_oficial_csv <- file.path("scripts", "analysis_outputs", "mapa_municipio_rras_oficial.csv")
+
+if (file.exists(caminho_rras_oficial)) {
+  mapa_rras_oficial <- ler_mapeamento_rras_oficial(caminho_rras_oficial)
+} else if (file.exists(caminho_rras_oficial_csv)) {
+  # Usa a copia ja exportada do mapeamento oficial quando o Excel original nao
+  # esta disponivel no projeto local, mantendo as mesmas colunas de RRAS.
+  mapa_rras_oficial <- read.csv(caminho_rras_oficial_csv, stringsAsFactors = FALSE) %>%
+    mutate(
+      cod_mun6 = padronizar_codmun6(cod_mun6),
+      rras_id = suppressWarnings(as.integer(rras_id)),
+      rras_nome = str_trim(as.character(rras_nome)),
+      municipio_residencia = str_trim(as.character(municipio_residencia)),
+      regiao_de_saude = str_trim(as.character(regiao_de_saude)),
+      drs = str_trim(as.character(drs))
+    ) %>%
+    distinct(cod_mun6, .keep_all = TRUE)
+} else {
+  stop("Nao foi encontrado um arquivo de mapeamento de RRAS para anexar aos dados.", call. = FALSE)
+}
 
 dados_simsp <- readRDS("dataset_sim_df.rds") # selecao_dados_SIM
 dados_simsp <- anexar_rras_oficial(dados_simsp, mapa_rras_oficial)
 
 dados_sinascsp <- readRDS("dataset_sinasc_df.rds") # selecao_dados_SINASC
 dados_sinascsp <- anexar_rras_oficial(dados_sinascsp, mapa_rras_oficial)
+
+unificar_todas_variaveis_com_na <- function(dados_sinasc, dados_sim) {
+  # Mantem todas as colunas usadas nas duas fontes. Quando uma coluna existe so
+  # em uma base, ela entra como NA na outra, que e a forma padrao de ausente em R.
+  todas_vars <- union(names(dados_sinasc), names(dados_sim))
+  vars_comuns <- intersect(names(dados_sinasc), names(dados_sim))
+
+  classes_sinasc <- vapply(dados_sinasc[vars_comuns], function(x) class(x)[1], character(1))
+  classes_sim <- vapply(dados_sim[vars_comuns], function(x) class(x)[1], character(1))
+  vars_com_tipo_diferente <- vars_comuns[classes_sinasc != classes_sim]
+
+  if (length(vars_com_tipo_diferente) > 0) {
+    # Em conflitos de tipo entre as fontes, padroniza para texto para preservar
+    # os codigos originais antes da etapa de recodificacao.
+    dados_sinasc <- dados_sinasc %>%
+      mutate(across(all_of(vars_com_tipo_diferente), as.character))
+    dados_sim <- dados_sim %>%
+      mutate(across(all_of(vars_com_tipo_diferente), as.character))
+  }
+
+  alinhar_colunas <- function(df) {
+    vars_faltantes <- setdiff(todas_vars, names(df))
+    for (var in vars_faltantes) {
+      df[[var]] <- NA
+    }
+    df[, todas_vars, drop = FALSE]
+  }
+
+  bind_rows(
+    alinhar_colunas(dados_sinasc),
+    alinhar_colunas(dados_sim)
+  )
+}
+
+recodificar_todas_variaveis_dissertacao <- function(df) {
+  # Aplica, em uma unica base, as mesmas recodificacoes usadas nas analises
+  # isoladas e combinadas da dissertacao.
+  df %>%
+    mutate(
+      semagestac = suppressWarnings(as.numeric(semagestac)),
+      idademae = suppressWarnings(as.numeric(idademae)),
+      peso = suppressWarnings(as.numeric(peso)),
+      qtdfilvivo = suppressWarnings(as.numeric(qtdfilvivo)),
+      qtdfilmort = suppressWarnings(as.numeric(qtdfilmort)),
+      qtdgestant = suppressWarnings(as.numeric(qtdgestant)),
+      qtdpartnor = suppressWarnings(as.numeric(qtdpartnor)),
+      qtdpartces = suppressWarnings(as.numeric(qtdpartces)),
+      apgar5 = suppressWarnings(as.numeric(apgar5)),
+      mesprenat = suppressWarnings(as.numeric(mesprenat)),
+      evento = suppressWarnings(as.integer(evento))
+    ) %>%
+    mutate(
+      sexo = case_when(as.character(sexo) %in% c("1", "2") ~ as.character(sexo), TRUE ~ NA_character_) %>%
+        factor(levels = c("1", "2"), labels = c("Masculino", "Feminino")),
+      gravidez = case_when(
+        as.character(gravidez) == "1" ~ "Única",
+        as.character(gravidez) == "2" ~ "Múltipla",
+        as.character(gravidez) == "3" ~ "Múltipla",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Única", "Múltipla")),
+      parto = factor(as.character(parto), levels = c("1", "2"), labels = c("Vaginal", "Cesáreo")),
+      lococornasc = case_when(
+        as.character(lococornasc) == "1" ~ "Hospital",
+        as.character(lococornasc) == "2" ~ "Outros",
+        as.character(lococornasc) == "3" ~ "Outros",
+        as.character(lococornasc) == "4" ~ "Outros",
+        as.character(lococornasc) == "5" ~ "Outros",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Hospital", "Outros")),
+      escmae2010 = case_when(
+        as.character(escmae2010) == "0" ~ "Baixa escolaridade",
+        as.character(escmae2010) == "1" ~ "Baixa escolaridade",
+        as.character(escmae2010) == "2" ~ "Baixa escolaridade",
+        as.character(escmae2010) == "3" ~ "Média escolaridade",
+        as.character(escmae2010) == "4" ~ "Alta escolaridade",
+        as.character(escmae2010) == "5" ~ "Alta escolaridade",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(
+          levels = c("Baixa escolaridade", "Média escolaridade", "Alta escolaridade"),
+          ordered = TRUE
+        ),
+      consultas = case_when(
+        as.character(consultas) == "1" ~ "Nenhuma",
+        as.character(consultas) == "2" ~ "De 1 a 3",
+        as.character(consultas) == "3" ~ "De 4 a 6",
+        as.character(consultas) == "4" ~ "7 e mais",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Nenhuma", "De 1 a 3", "De 4 a 6", "7 e mais")),
+      idanomal = case_when(
+        as.character(idanomal) == "1" ~ "Sim",
+        as.character(idanomal) == "2" ~ "Não",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Sim", "Não")),
+      racacormae = case_when(
+        as.character(racacormae) == "1" ~ "Branca",
+        as.character(racacormae) == "2" ~ "Preta",
+        as.character(racacormae) == "3" ~ "Amarela",
+        as.character(racacormae) == "4" ~ "Parda",
+        as.character(racacormae) == "5" ~ "Indígena",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Branca", "Preta", "Amarela", "Parda", "Indígena")),
+      idademae_categorico = case_when(
+        idademae < 20 ~ "<20",
+        idademae >= 20 & idademae < 35 ~ "20–34",
+        idademae >= 35 ~ "35+",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("<20", "20–34", "35+")),
+      peso_categorico = case_when(
+        peso < 2500 ~ "<2500g",
+        peso >= 2500 & peso < 4000 ~ "2500g-3999g",
+        peso >= 4000 ~ "4000g+",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("<2500g", "2500g-3999g", "4000g+")),
+      qtdfilvivo_categorico = case_when(
+        qtdfilvivo == 0 ~ "Não",
+        qtdfilvivo == 1 ~ "Sim",
+        qtdfilvivo > 1 ~ "Sim",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Não", "Sim")),
+      qtdfilmort_categorico = case_when(
+        qtdfilmort == 0 ~ "Não",
+        qtdfilmort == 1 ~ "Sim",
+        qtdfilmort > 1 ~ "Sim",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Não", "Sim")),
+      obitoparto = case_when(
+        as.character(obitoparto) == "1" ~ "Antes",
+        as.character(obitoparto) == "2" ~ "Durante",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Antes", "Durante")),
+      sttrabpart = case_when(
+        as.character(sttrabpart) == "1" ~ "Sim",
+        as.character(sttrabpart) == "2" ~ "Não",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Sim", "Não")),
+      stcesparto = case_when(
+        as.character(stcesparto) == "1" ~ "Sim",
+        as.character(stcesparto) == "2" ~ "Não",
+        as.character(stcesparto) == "3" ~ "Não se aplica",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Sim", "Não", "Não se aplica")),
+      paridade = case_when(
+        as.character(paridade) == "0" ~ "Nulípara",
+        as.character(paridade) == "1" ~ "Multípara",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Nulípara", "Multípara")),
+      apgar5_categorico = case_when(
+        apgar5 > 7 ~ "7+",
+        apgar5 <= 7 ~ "7 ou menos",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("7+", "7 ou menos")),
+      qtdgestant_categorico = case_when(
+        qtdgestant == 0 ~ "Não",
+        qtdgestant > 0 ~ "Sim",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Não", "Sim")),
+      qtdpartnor_categorico = case_when(
+        qtdpartnor == 0 ~ "Não",
+        qtdpartnor > 0 ~ "Sim",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Não", "Sim")),
+      qtdpartces_categorico = case_when(
+        qtdpartces == 0 ~ "Não",
+        qtdpartces > 0 ~ "Sim",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Não", "Sim")),
+      mesprenat_categorico = case_when(
+        mesprenat == 1 ~ "Primeiro trimestre",
+        mesprenat == 2 ~ "Primeiro trimestre",
+        mesprenat == 3 ~ "Primeiro trimestre",
+        mesprenat == 4 ~ "Segundo trimestre",
+        mesprenat == 5 ~ "Segundo trimestre",
+        mesprenat == 6 ~ "Segundo trimestre",
+        mesprenat == 7 ~ "Terceiro trimestre",
+        mesprenat == 8 ~ "Terceiro trimestre",
+        mesprenat == 9 ~ "Terceiro trimestre",
+        TRUE ~ NA_character_
+      ) %>%
+        factor(levels = c("Primeiro trimestre", "Segundo trimestre", "Terceiro trimestre")),
+      tempo = semagestac,
+      status_fd = ifelse(evento == 1L, 1L, 0L),
+      status_lv = ifelse(evento == 0L, 1L, 0L),
+      fstatus = case_when(
+        evento == 1L ~ 1L,
+        evento == 0L ~ 2L,
+        TRUE ~ 0L
+      ),
+      evento_lab = factor(
+        evento,
+        levels = c(1, 0),
+        labels = c("Óbito fetal", "Nascimento vivo")
+      ),
+      fstatus_cr = factor(
+        fstatus,
+        levels = c(0, 1, 2),
+        labels = c("Censura", "Óbito fetal", "Nascimento vivo")
+      )
+    )
+}
+
+dados_simsinasc_todas_variaveis_pre <- unificar_todas_variaveis_com_na(
+  dados_sinascsp,
+  dados_simsp
+) %>%
+  # uf_resid foi usada apenas no preparo inicial para restringir a base a SP.
+  # Como todos os registros finais ja pertencem ao estado, ela nao entra nos
+  # datasets finais.
+  select(-any_of("uf_resid"))
+
+# Salva a base unificada ampla antes das recodificacoes; colunas exclusivas de
+# uma fonte ficam como NA na outra.
+saveRDS(
+  dados_simsinasc_todas_variaveis_pre,
+  file = file.path(dir_datasets_finais, "simsinasc_todas_variaveis_pre_recodificacao.rds")
+)
 
 # Identificar nomes de variáveis em comum
 vars_comuns <- intersect(names(dados_sinascsp), names(dados_simsp))
@@ -67,6 +326,13 @@ dados_simsp_comum    <- dados_simsp[ , vars_comuns]
 
 # Joint
 dados_sp_cln <- rbind(dados_sinascsp_comum, dados_simsp_comum)
+
+# Salva a base combinada apenas com variaveis comuns, no ponto anterior as
+# recodificacoes feitas para a descritiva e os modelos.
+saveRDS(
+  dados_sp_cln,
+  file = file.path(dir_datasets_finais, "simsinasc_comum_pre_recodificacao.rds")
+)
 
 #------------------------------- Variáveis
 dplyr::glimpse(dados_sp_cln, width = 80)
@@ -282,16 +548,16 @@ rras_indicadores <- pop_rras %>%
     perc_fd_total = 100 * n_of / sum(n_of, na.rm = TRUE),
     perc_lv_total = 100 * n_lv / sum(n_lv, na.rm = TRUE),
     
-    # Taxa adotada na dissertação: obitos fetais por 1000 nascidos vivos.
+    # Razao adotada na dissertacao: obitos fetais por 1.000 nascidos vivos.
     # O denominador fica explicito para evitar confusao com "nascimentos",
     # que poderia incluir tanto nascidos vivos quanto obitos fetais.
-    taxa_mortalidade_fetal_1000_lv = 1000 * n_of / ifelse(n_lv == 0, NA_real_, n_lv),
+    razao_mortalidade_fetal_1000_lv = 1000 * n_of / ifelse(n_lv == 0, NA_real_, n_lv),
     
-    # Razao classica usando total de nascimentos, mantida apenas para auditoria.
-    taxa_fd_1000_total_nasc = 1000 * n_of / n_total_nasc,
+    # Razao usando total de nascimentos, mantida apenas para auditoria.
+    razao_fd_1000_total_nasc = 1000 * n_of / n_total_nasc,
     
-    # Taxa demográfica de NV por 1000 habitantes
-    taxa_lv_1000_pop  = 1000 * n_lv / pop_rras
+    # Nascidos vivos por 1.000 habitantes.
+    nascidos_vivos_1000_pop  = 1000 * n_lv / pop_rras
   )
 
 # =============================================================================
@@ -455,10 +721,10 @@ ggplot2::ggsave(
 )
 
 # Painel complementar: intensidade relativa dos desfechos por RRAS.
-p_taxa_fd <- ggplot() +
+p_razao_fd <- ggplot() +
   geom_sf(
     data = map_rras_proj,
-    aes(fill = taxa_mortalidade_fetal_1000_lv),
+    aes(fill = razao_mortalidade_fetal_1000_lv),
     color = "white",
     linewidth = 0.2
   ) +
@@ -478,14 +744,14 @@ p_taxa_fd <- ggplot() +
     max.overlaps = Inf
   ) +
   scale_fill_distiller(
-    name = "Taxa de mortalidade fetal\npor 1000 nascidos vivos",
-    palette = "Reds",
+    name = "Razão de mortalidade fetal\npor 1.000 nascidos vivos",
+    palette = pal_fd,
     direction = 1,
     na.value = "grey90"
   ) +
   labs(
-    title = "Taxa de mortalidade fetal por RRAS",
-    subtitle = "Obitos fetais por 1000 nascidos vivos"
+    title = "Razão de mortalidade fetal por RRAS",
+    subtitle = "Óbitos fetais por 1.000 nascidos vivos"
   ) +
   coord_sf(crs = 31983) +
   tema_mapa
@@ -514,7 +780,7 @@ p_prematuridade <- ggplot() +
   ) +
   scale_fill_distiller(
     name = "% prematuridade\n(<37 semanas)",
-    palette = "YlOrBr",
+    palette = pal_lv,
     direction = 1,
     na.value = "grey90"
   ) +
@@ -525,19 +791,19 @@ p_prematuridade <- ggplot() +
   coord_sf(crs = 31983) +
   tema_mapa
 
-painel_rras_taxas <- ggpubr::ggarrange(
-  p_taxa_fd + theme(legend.position = "bottom"),
+painel_rras_razao_prematuridade <- ggpubr::ggarrange(
+  p_razao_fd + theme(legend.position = "bottom"),
   p_prematuridade + theme(legend.position = "bottom"),
   ncol = 2,
   common.legend = FALSE,
   legend = "bottom"
 )
 
-print(painel_rras_taxas)
+print(painel_rras_razao_prematuridade)
 
 ggplot2::ggsave(
-  filename = file.path(dir_saida_figuras, "mapas_RRAS_taxas_prematuridade.png"),
-  plot = painel_rras_taxas,
+  filename = file.path(dir_saida_figuras, "mapas_RRAS_razao_prematuridade.png"),
+  plot = painel_rras_razao_prematuridade,
   width = 10,
   height = 5,
   units = "in",
@@ -545,8 +811,8 @@ ggplot2::ggsave(
 )
 
 ggplot2::ggsave(
-  filename = "mapas_RRAS_taxas_prematuridade.png",
-  plot = painel_rras_taxas,
+  filename = "mapas_RRAS_razao_prematuridade.png",
+  plot = painel_rras_razao_prematuridade,
   width = 10,
   height = 5,
   units = "in",
@@ -564,10 +830,10 @@ tabela_rras_compacta <- map_rras %>%
     pop_rras,
     obitos_fetais = n_of,
     perc_fd_total = round(perc_fd_total, 2),
-    taxa_mortalidade_fetal_1000_lv = round(taxa_mortalidade_fetal_1000_lv, 2),
+    razao_mortalidade_fetal_1000_lv = round(razao_mortalidade_fetal_1000_lv, 2),
     nascidos_vivos = n_lv,
     perc_lv_total  = round(perc_lv_total, 2),
-    taxa_lv_1000_pop = round(taxa_lv_1000_pop, 2),
+    nascidos_vivos_1000_pop = round(nascidos_vivos_1000_pop, 2),
     prematuros_lv = n_prematuro_lv,
     perc_prematuridade_lv = round(perc_prematuridade_lv, 2)
   ) %>%
@@ -585,7 +851,7 @@ knitr::kable(
   caption = paste0(
     "Indicadores essenciais por RRAS (SP), organizados pela ordem numérica do nome da RRAS. ",
     "População agregada com base no Censo 2022. ",
-    "Óbitos fetais por 1.000 nascidos vivos = 1.000 × óbitos fetais/nascidos vivos. ",
+    "Razão de mortalidade fetal = 1.000 × óbitos fetais/nascidos vivos. ",
     "Nascidos vivos por 1.000 habitantes = 1.000 × nascidos vivos/população. ",
     "Prematuridade = percentual de nascidos vivos com idade gestacional inferior a 37 semanas. ",
     "Percentuais referem-se à participação de cada RRAS no total estadual."
@@ -920,6 +1186,24 @@ dados_eda_clean$fstatus_cr <- factor(
   dados_eda_clean$fstatus,
   levels = c(0, 1, 2),
   labels = c("Censura", "Óbito fetal", "Nascimento vivo")
+)
+
+# Salva a base combinada recodificada imediatamente antes das rotinas de
+# Kaplan-Meier, log-rank e riscos competitivos.
+saveRDS(
+  dados_eda_clean,
+  file = file.path(dir_datasets_finais, "simsinasc_comum_pos_recodificacao.rds")
+)
+
+dados_simsinasc_todas_variaveis_pos <- recodificar_todas_variaveis_dissertacao(
+  dados_simsinasc_todas_variaveis_pre
+)
+
+# Salva a versao ampla, com variaveis comuns e exclusivas das duas fontes, no
+# mesmo estagio recodificado usado antes dos modelos.
+saveRDS(
+  dados_simsinasc_todas_variaveis_pos,
+  file = file.path(dir_datasets_finais, "simsinasc_todas_variaveis_pos_recodificacao.rds")
 )
 
 #-------------------------------------------------------------------------------
